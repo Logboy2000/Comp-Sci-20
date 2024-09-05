@@ -1,0 +1,69 @@
+<!doctype html>
+<style>
+    canvas {
+        outline: black 3px solid;
+    }
+
+    input {
+        width: 75px;
+        height: 25px;
+    }
+
+    body {
+        text-align: center;
+    }
+    button {
+        width: 150px;
+        height: 50px;
+    }
+</style>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Function Challenges</title>
+    <script type="text/javascript" src="challenges.js"></script>
+</head>
+
+<body onload="go()">
+    <h1>Challenge 1</h1>
+    <p>Create a function that draws a rectangle on a canvas</p>
+    <canvas id="can1" width="600px" height="200px"></canvas>
+
+    <h1>Challenge 2</h1>
+    <p>Create a function that draws a circle on a canvas</p>
+    <canvas id="can2" width="600px" height="200px"></canvas>
+
+    <h1>Challenge 3</h1>
+    <p>Create a functon that draws a face on a canvas</p>
+    <canvas id="can3" width="600px" height="200px"></canvas>
+
+    <h1>Challenge 4</h1>
+    <p>Create a funciton that calculates the area of a circle</p>
+    <button onclick="calculateAreaButton()">Calculate area</button>
+    <br>
+    <input type="number" id="areaInput" placeholder="radius"> cm
+    <p id="areaOutput">Area = </p>
+
+    <h1>Challenge 5</h1>
+    <p>Create a funciton that generates a random number</p>
+    <button onclick="randomNumberButton()">Generate Random Number!</button>
+    <br>
+    <input type="number" id="minRandomInput" placeholder="min">
+    <input type="number" id="maxRandomInput" placeholder="max">
+    <p id="randomOutput">Random Number = </p>
+    <h1>Challenge 6</h1>
+    <p>Create a function that returns true if it is the weekend and false if it is not</p>
+    <select name="days" id="daysDropdown" onclick="isWeekendButton()">
+        <option>Sunday</option>
+        <option>Monday</option>
+        <option>Tuesday</option>
+        <option>Wednesday</option>
+        <option>Thursday</option>
+        <option>Friday</option>
+        <option>Saturday</option>
+    </select>
+    <p id="weekendOutput">It is the weekend</p>
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+
+<style>
+	html {
+		background-color: grey;
+	}
+</style>
+
+<html>
+
+<head>
+	<title>Drawing</title>
+	<script>
+
+		function loaded() {
+			draw(document.getElementById("myCanvas"))
+		}
+		function draw(canvas) {
+			var ctx = canvas.getContext("2d")
+
+			ctx.font = "50px Comic Sans MS"
+			ctx.fillText("wowie", 200, 50)
+
+			happyFace(ctx, 100, 100, "yellow")
+
+			var img = new Image()
+			img.src = "images/colgate.png"
+
+			ctx.drawImage(img, 500, 0)
+		}
+		function circle(ctx, x, y, radius, color, fill = true, half_circle = false) {
+			ctx.beginPath()
+			if (half_circle) {
+				ctx.arc(x, y, radius, 0, 1 * Math.PI)
+			} else {
+				ctx.arc(x, y, radius, 0, 2 * Math.PI)
+			}
+			ctx.closePath()
+			ctx.fillStyle = color
+			if (fill) {
+				ctx.fill()
+			} else {
+				ctx.stroke()
+			}
+		}
+		function happyFace(ctx, x, y, skin_color = "blue") {
+			circle(ctx, x, y, 100, skin_color)
+
+			circle(ctx, x, y + 30, 50, "black", true, true)
+
+			circle(ctx, x, y - 30, 50, "white")
+
+			circle(ctx, x, y - 30, 25, "black")
+		}
+
+
+
+	</script>
+</head>
+
+
+<body onLoad="loaded()">
+	<canvas id="myCanvas" width="1200" height="700"></canvas>
+</body>
+
+</html>

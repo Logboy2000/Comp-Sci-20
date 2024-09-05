@@ -1,0 +1,127 @@
+function go() {
+    var canvas1 = document.getElementById("can1")
+    var ctx1 = canvas1.getContext("2d")
+
+    var canvas2 = document.getElementById("can2")
+    var ctx2 = canvas2.getContext("2d")
+
+    var canvas3 = document.getElementById("can3")
+    var ctx3 = canvas3.getContext("2d")
+
+    // Challenge 1
+    rectangle(ctx1, 5, 7, 60, 30, "black")
+    rectangle(ctx1, 250, 7, 30, 100, "green")
+    rectangle(ctx1, 350, 40, 100, 150, "purple")
+
+    // Challenge 2
+    ctx2.globalAlpha = 0.75;
+    circle(ctx2, 250, 70, 50, "red")
+    circle(ctx2, 220, 120, 50, "green")
+    circle(ctx2, 280, 120, 50, "blue")
+
+    // Challenge 3
+    smileyFace(ctx3, 100, 100, true, "purple")
+    smileyFace(ctx3, 300, 100, false, "orange")
+    smileyFace(ctx3, 500, 100, false, "blue")
+
+    // Challenges 4-6 are triggered by buttons
+}
+function rectangle(ctx, x, y, w, h, color) {
+    ctx.beginPath()
+    ctx.rect(x, y, w, h)
+    ctx.fillStyle = color
+    ctx.fill()
+    ctx.closePath()
+}
+
+function circle(ctx, x, y, radius, color, fill = true, half_circle = false) {
+    ctx.beginPath()
+    if (half_circle) {
+        ctx.arc(x, y, radius, 0, 1 * Math.PI)
+    } else {
+        ctx.arc(x, y, radius, 0, 2 * Math.PI)
+    }
+    ctx.closePath()
+    ctx.fillStyle = color
+    if (fill) {
+        ctx.fill()
+    } else {
+        ctx.stroke()
+    }
+}
+
+
+function smileyFace(ctx, x, y, two_eyes, skin_color = "blue") {
+    circle(ctx, x, y, 100, skin_color)
+    circle(ctx, x, y + 30, 50, "black", true, true)
+    if (two_eyes) {
+        circle(ctx, x - 30, y - 30, 25, "white")
+        circle(ctx, x - 30, y - 30, 15, "black")
+        circle(ctx, x + 30, y - 30, 25, "white")
+        circle(ctx, x + 30, y - 30, 15, "black")
+    } else {
+        circle(ctx, x, y - 30, 50, "white")
+        circle(ctx, x, y - 30, 25, "black")
+    }
+}
+
+
+function areaOfCircle(radius) {
+    return Math.PI * radius ^ 2
+}
+function calculateAreaButton() {
+    console.log("Button!")
+    var areaInput = document.getElementById("areaInput").value
+    document.getElementById("areaOutput").innerHTML = "Area = " + areaOfCircle(areaInput) + "cm"
+}
+
+function random(min, max) {
+    return ((Math.random() * (max - min)) + min)
+}
+function randomNumberButton() {
+    var min = parseFloat(document.getElementById("minRandomInput").value)
+    var max = parseFloat(document.getElementById("maxRandomInput").value)
+    document.getElementById("randomOutput").innerHTML = "Random Number = " + random(min, max)
+}
+
+
+function isWeekend(day) {
+    if (day == "Sunday" || day == "Saturday") {
+        return true
+    } else {
+        return false
+    }
+}
+function isWeekendButton() {
+    var currentDay = document.getElementById("daysDropdown").value
+    if (isWeekend(currentDay)) {
+        document.getElementById("weekendOutput").innerHTML = "It's the weekend!"
+    } else {
+        document.getElementById("weekendOutput").innerHTML = "It's not the weekend"
+    }
+}
+/*
+
+Challenge 1 - create a function that draws a rectangle on a canvas.
+Does this function have an output?
+How many input parameters should this function have to maximize it's reusability?  Call this function 3 times from the go function to draw different rectangles on the canvas.
+
+Challenge 2 - create a function that draws a circle on a canvas.
+Does this function have an output?
+How many input parameters should this function have to maximize it's reusability?  Call this function 3 times from the go function to draw different circles on the canvas.
+
+Challenge 3 - create a functoin that draws a face on a canvas.Does this function have an output?
+How many input parameters should this function have to maximize it's reusability?  Call this function 3 times from the go function to draw different rectangles on the canvas.
+
+Challenge 4 - create a funciton that calculates the area of a circle https://www.w3schools.com/jsref/jsref_pi.asp shows you how to get pi but 3.14 is acceptable.  
+How many input parameters should this function have to maximize it's reusability?  
+Call the function and deal with the output in 2 different ways from the go function.
+
+Challenge 5 - create a funciton that generates a random number.
+How many input parameters should this function have to maximize it's reusability?  
+Call the function and deal with the output in 3 different ways from the go function.
+
+Challenge 6 - create a function that returns true if it is the weekend and false if it is not ... call it isWeekend.  How many parameters should this function have to maximize it's reusability?
+Call the function and deal with the output in 2 different ways from the go function
+
+*/
