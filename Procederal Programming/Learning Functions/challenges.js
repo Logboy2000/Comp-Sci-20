@@ -1,10 +1,9 @@
-function go() {
+function go() {// start of go
+    // define canvases
     var canvas1 = document.getElementById("can1")
     var ctx1 = canvas1.getContext("2d")
-
     var canvas2 = document.getElementById("can2")
     var ctx2 = canvas2.getContext("2d")
-
     var canvas3 = document.getElementById("can3")
     var ctx3 = canvas3.getContext("2d")
 
@@ -25,65 +24,58 @@ function go() {
     smileyFace(ctx3, 500, 100, false, "blue")
 
     // Challenges 4-6 are triggered by buttons
-}
-function rectangle(ctx, x, y, w, h, color) {
-    ctx.beginPath()
-    ctx.rect(x, y, w, h)
-    ctx.fillStyle = color
-    ctx.fill()
-    ctx.closePath()
-}
+}// end of go
+function rectangle(context, x, y, w, h, color) {
+    context.beginPath()
+    context.rect(x, y, w, h)
+    context.fillStyle = color
+    context.fill()
+    context.closePath()
+}// end of rectangle
 
-function circle(ctx, x, y, radius, color, fill = true, half_circle = false) {
-    ctx.beginPath()
+function circle(context, x, y, radius, color, fill = true, half_circle = false) {
+    context.beginPath()
     if (half_circle) {
-        ctx.arc(x, y, radius, 0, 1 * Math.PI)
+        context.arc(x, y, radius, 0, 1 * Math.PI)
     } else {
-        ctx.arc(x, y, radius, 0, 2 * Math.PI)
+        context.arc(x, y, radius, 0, 2 * Math.PI)
     }
-    ctx.closePath()
-    ctx.fillStyle = color
+    context.closePath()
+    context.fillStyle = color
     if (fill) {
-        ctx.fill()
+        context.fill()
     } else {
-        ctx.stroke()
+        context.stroke()
     }
-}
+}// end of circle
 
 
-function smileyFace(ctx, x, y, two_eyes, skin_color = "blue") {
-    circle(ctx, x, y, 100, skin_color)
-    circle(ctx, x, y + 30, 50, "black", true, true)
+function smileyFace(context, x, y, two_eyes, skin_color = "blue") {
+    circle(context, x, y, 100, skin_color)
+    circle(context, x, y + 30, 50, "black", true, true)
     if (two_eyes) {
-        circle(ctx, x - 30, y - 30, 25, "white")
-        circle(ctx, x - 30, y - 30, 15, "black")
-        circle(ctx, x + 30, y - 30, 25, "white")
-        circle(ctx, x + 30, y - 30, 15, "black")
+        // left eye
+        circle(context, x - 30, y - 30, 25, "white")
+        circle(context, x - 30, y - 30, 15, "black")
+        // right eye
+        circle(context, x + 30, y - 30, 25, "white")
+        circle(context, x + 30, y - 30, 15, "black")
     } else {
-        circle(ctx, x, y - 30, 50, "white")
-        circle(ctx, x, y - 30, 25, "black")
+        // one big eye
+        circle(context, x, y - 30, 50, "white")
+        circle(context, x, y - 30, 25, "black")
     }
-}
+}// end of smileyFace
 
 
 function areaOfCircle(radius) {
     return Math.PI * radius ^ 2
-}
-function calculateAreaButton() {
-    console.log("Button!")
-    var areaInput = document.getElementById("areaInput").value
-    document.getElementById("areaOutput").innerHTML = "Area = " + areaOfCircle(areaInput) + "cm"
-}
+}// end of areaOfCircle
+
 
 function random(min, max) {
     return ((Math.random() * (max - min)) + min)
-}
-function randomNumberButton() {
-    var min = parseFloat(document.getElementById("minRandomInput").value)
-    var max = parseFloat(document.getElementById("maxRandomInput").value)
-    document.getElementById("randomOutput").innerHTML = "Random Number = " + random(min, max)
-}
-
+}// end of random
 
 function isWeekend(day) {
     if (day == "Sunday" || day == "Saturday") {
@@ -91,7 +83,20 @@ function isWeekend(day) {
     } else {
         return false
     }
-}
+}// end of isWeekend
+
+//Functions are run when the respective button is clicked
+function calculateAreaButton() {
+    var areaInput = document.getElementById("areaInput").value
+    document.getElementById("areaOutput").innerHTML = "Area = " + areaOfCircle(areaInput) + "cm"
+}// end of calculateAreaButton
+
+function randomNumberButton() {
+    var min = parseFloat(document.getElementById("minRandomInput").value)
+    var max = parseFloat(document.getElementById("maxRandomInput").value)
+    document.getElementById("randomOutput").innerHTML = "Random Number = " + random(min, max)
+}// end of randomAreaButton
+
 function isWeekendButton() {
     var currentDay = document.getElementById("daysDropdown").value
     if (isWeekend(currentDay)) {
@@ -99,7 +104,8 @@ function isWeekendButton() {
     } else {
         document.getElementById("weekendOutput").innerHTML = "It's not the weekend"
     }
-}
+}// end of isWeekendButton
+
 /*
 
 Challenge 1 - create a function that draws a rectangle on a canvas.
