@@ -4,29 +4,30 @@ var context
 
 var FRAME_LENGTH_MILLISECONDS = 17 //approx 60fps
 
-var CANVAS_WIDTH = 800
-var CANVAS_HEIGHT = 500
-
-var GAME_AREA_WIDTH = CANVAS_WIDTH
+var GAME_AREA_WIDTH = 500
 var GAME_AREA_HEIGHT = 450
 
 var UI_AREA_Y = GAME_AREA_HEIGHT
-var UI_AREA_HEIGHT = CANVAS_HEIGHT - GAME_AREA_HEIGHT
+var UI_AREA_HEIGHT
 
 var LEVEL_LENGTH_SECONDS = 30
-var TIMERLOW = 1/4 // time at which timer colour changes to red
-var TIMERWARN = 1/2 // time at which timer colour changes to orange
+var TIMERLOW = 1 / 4 // time at which timer colour changes to red
+var TIMERWARN = 1 / 2 // time at which timer colour changes to orange
 
 
 var level_hits_increase = 5
-var level_hits = 10 
+var level_hits = 10
 var SPEED_INCREASE = 10
 
+var mouseX = 0
+var mouseY = 0
 
 var misses = 0
 var hits = 0
 var level = 1
-var timeRemaining = 69
+var timeRemainingSeconds = 69
+var totalTimeSeconds = 20
+var timeRemainingPercentage
 
 var mole = {
 	x: 100,
@@ -37,49 +38,55 @@ var mole = {
 	nextY: 0,
 	nextMiddleX: 0,
 	nextMiddleY: 0,
-	width: 36,
-	height: 42,
+	width: 50,
+	height: 46,
 	frames_since_popup: 0,
 	popup_frames: 100,
 	img: new Image(),
 }
 bgImg = new Image()
-bgImg.src = 'images/grass.jpg'
-mole.img.src = 'images/mole.png'
+bgImg.src = "images/grass.jpg"
+mole.img.src = "images/mole.png"
 mole.img.onload = ready
-
+//Event listenersm vvbv 
+document.onkeydown = hit
+document.onclick = hit
 
 function ready() {
 	canvas = document.getElementById("canvas")
 	// Check if canvas is found
 	if (!canvas) {
-		error('Canvas element not found')
+		error("Canvas element not found")
 	}
 	context = canvas.getContext("2d")
-	canvas.width = CANVAS_WIDTH
-	canvas.height = CANVAS_HEIGHT
-	canvas.addEventListener('click', function (event) { onClick(event) }, false)
+	canvas.imageSmoothingEnabled = false
+
+	canvas.addEventListener("mousemove", function (event) {
+		let rect = canvas.getBoundingClientRect();
+		mouseX = event.clientX - rect.left;
+		mouseY = event.clientY - rect.top;
+	})
+
+
+
 
 	//Start game update loop
 	setInterval(update, FRAME_LENGTH_MILLISECONDS)
-
-
 }
 
-function onClick(event) {
-	var clickX = event.pageX - canvas.offsetLeft
-	var clickY = event.pageY - canvas.offsetTop
-	fancyLog("Click X", clickX)
-	fancyLog("Click Y", clickY)
 
-	if (checkMoleCollision(clickX, clickY) == true) {
+
+function hit() {
+	if (checkMoleCollision(mouseX, mouseY) == true) {
 		mole.frames_since_popup = 0
 		hits += 1
 		moveMole()
+	} else {
+		misses += 1
 	}
 }
 
-function checkMoleCollision(x, y) {
+function checkMoleCollision(x, y) { // Returns true if the x,y coordinates fall inside the mole"s hitbox 
 	if (x >= mole.x && x <= mole.x + mole.width && y >= mole.y && y <= mole.y + mole.height) {
 		return true
 	}
@@ -92,6 +99,11 @@ function randomRange(min, max) {
 
 
 function update() {
+	timeRemainingPercentage = timeRemainingSeconds / timeRemainingPercentage
+	GAME_AREA_WIDTH = canvas.width
+	GAME_AREA_HEIGHT = canvas.height - 50
+	UI_AREA_Y = GAME_AREA_HEIGHT
+	updateCanvasSize()
 	mole.middleX = mole.x + 18
 	mole.middleY = mole.y + 21
 	mole.nextMiddleX = mole.nextX + 18
@@ -108,36 +120,33 @@ function update() {
 }
 
 function draw() {
-	//Clear the canvas
+	//Reset the canvas
 	context.fillStyle = "white"
-	context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+	context.fillRect(0, 0, canvas.width, canvas.height)
+	context.globalAlpha = 1.0
 	//Draw Background
-	context.drawImage(bgImg, 0, 0)
+	context.drawImage(bgImg, 0, 0,canvas.width, canvas.height)
 	//Set Font
 	context.font = "15px smw"
 	//Draw UI Box
 	context.fillStyle = "black"
-	context.fillRect(0, UI_AREA_Y, CANVAS_WIDTH, UI_AREA_HEIGHT)
+	context.fillRect(0, UI_AREA_Y, canvas.width, UI_AREA_HEIGHT)
 	//Draw Text
 	context.fillStyle = "white"
 	context.textAlign = "center"
 	var textPosition = {
-		x: CANVAS_WIDTH / 2,
-		y: 490
+		x: canvas.width / 2,
+		y: UI_AREA_Y +40
 	}
 	context.fillText("Level " + level, textPosition.x, textPosition.y)
 	context.fillText("Hits " + hits + "/" + level_hits, textPosition.x - 150, textPosition.y)
 	context.fillText("Misses " + misses, textPosition.x + 150, textPosition.y)
+	context.fillText(mouseX + ", " + mouseY, textPosition.x - 300, textPosition.y)
 	//Draw Timer Bar
-	if (timeRemaining < TIMERWARN){
-		context.fillStyle = "orange"
-	} else if (timeRemaining < TIMERLOW){
-		context.fillStyle = "red"
-	} else {
-		context.fillStyle = "green"
-	}
-	
-	context.fillRect(5, UI_AREA_Y, CANVAS_WIDTH - 10, 10)
+	context.fillStyle = "green"
+	drawTimer(5, UI_AREA_Y, canvas.width - 10, 10, timeRemainingSeconds, totalTimeSeconds)
+
+
 
 
 	//Draw line to next position
@@ -146,10 +155,25 @@ function draw() {
 	drawCircle(mole.nextMiddleX, mole.nextMiddleY, 10, "red", true, false)
 	// Draw the mole
 	context.drawImage(mole.img, mole.x, mole.y)
+	context.globalAlpha = 0.5
+	context.fillRect(mole.x, mole.y, mole.width, mole.height)
 
 
 
 }
+
+function drawTimer(x, y, width, height, timeRemainingSeconds, totalTime) {
+	if (timeRemainingPercentage < 0.1) {
+		context.fillStyle = "red"
+	} else if (timeRemainingSeconds < 0.4) {
+		context.fillStyle = "orange"
+	} else {
+		context.fillStyle = "green"
+	}
+	context.fillRect(x, y, width, height)
+}
+
+
 function fancyLog(name, value) {
 	console.log(name + ": " + value)
 }
@@ -189,4 +213,12 @@ function drawCircle(x, y, radius, color, fill = true, half_circle = false) {
 	} else {
 		context.stroke()
 	}
+}
+function updateCanvasSize() {
+	UI_AREA_HEIGHT = canvas.height - GAME_AREA_HEIGHT
+	canvas.width = canvas.parentNode.clientWidth
+	canvas.height = window.innerHeight - 20//canvas.parentNode.clientHeight
+}
+function changeLevel(level){
+	
 }
