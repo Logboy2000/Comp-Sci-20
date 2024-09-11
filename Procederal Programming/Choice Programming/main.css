@@ -6,32 +6,76 @@
 }
 
 canvas {
-	outline: black 3px solid;
+	outline: black 10px solid;
 }
 
 body {
 	text-align: center;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	color: #FF8713;
+	font-family: "smw";
+	background-color: black;
+}
+div {
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
 }
 
-a {
-	width: 80px;
-	height: 30px;
+
+
+
+p {
+	text-align: center;
+}
+
+#hover_effect {
+	transition: transform 0.3s, rotate 0.5s;
+	display: inline-flex;
+	transform: scale(1);
+	rotate: 0deg;
+	color: #EE1C24;
+}
+
+#hover_effect:hover {
+	transition: transform 0.1s, rotate 0.3s;
+	display: inline-flex;
+	transform: scale(1.1);
+	rotate: 5deg;
+	color: #FE7E13;
+}
+
+#hover_effect_color {
+	color: #EE1C24;
+}
+
+#hover_effect_color:hover {
+	color: #FE7E13;
+}
+
+.button {
+	transition: transform 0.3s, rotate 0.5s, background-color 0.5s, color 0.5s;
+	width: 200px;
+	height: 50px;
 	outline-width: 10px;
-	transition: transform 0.3s, background-color 0.3s;
 	border-radius: 5px;
 	margin: 10px;
 	flex-direction: column;
 	text-decoration: none;
-	text-align: center;
 	padding: 12px;
+	background-color: #EE1C24;
+	color: #FE7E13;
 	display: inline-flex;
-	background-color: rgb(0, 255, 55);
 	border-radius: 5px;
 }
 
-a:hover {
-	transition: transform 0.1s, background-color 0.1s;
-	background-color: rgb(0, 255, 55);
-	transform: scale(1.25);
+.button:hover {
+	transition: transform 0.1s, rotate 0.3s, background-color 0.5s, color 0.5s;
+	display: inline-flex;
+	transform: scale(1.1);
+	rotate: 5deg;
+	background-color: #FE7E13;
+	color: #EE1C24;
 }
