@@ -1,11 +1,11 @@
 var canvas
 var context
 var intervalNum
-var debugMode = false
+var debugMode = true
 const fps = 60
 
 var isGameOver = false
-var isGameWon = false
+var isLevelWon = false
 
 var canvasMiddleX
 var canvasMiddleY
@@ -13,7 +13,7 @@ var canvasMiddleY
 var gameAreaWidth = 500
 var gameAreaHeight = 450
 
-var uiAreaHeight = 36
+var uiAreaHeight = 70
 
 
 const TIMER_DANGER = 0.1 // percentage of time where timer colour changes to danger color
@@ -43,19 +43,20 @@ var timeRemainingFrames = 2000
 var timeTotalFrames = 2000
 var startingTimeTotalFrames = 2000
 var timeRemainingPercentage
+var missPenaltyFrames = 30
 
-const levelCompleteScreenFramesTotal = 240
-var levelCompleteScreenFramesRemaining = 240
+const levelCompleteScreenFramesTotal = 120
+var levelCompleteScreenFramesRemaining = 120
 
 const gameOverScreenFramesTotal = 240
 var gameOverScreenFramesRemaining = 240
-var canRestart
+var canRestart = false
 
 var mole = {
 	x: 0,
 	y: 0,
-	w: 56,
-	h: 62,
+	w: 150,
+	h: 150,
 	middleX: 0,
 	middleY: 0,
 	nextX: 0,
@@ -66,9 +67,16 @@ var mole = {
 	popupFrames: 100,
 	img: new Image(),
 }
+mole.img.src = "images/mole.png"
+
 bgImg = new Image()
 bgImg.src = "images/grass.jpg"
-mole.img.src = "images/mole.png"
+
+cursorImg = new Image()
+cursorImg.src = "images/cursor.png"
+
+
+
 //Event listeners
 mole.img.onload = start
 document.onkeydown = thingPressed
@@ -76,21 +84,17 @@ document.onclick = thingPressed
 
 function start() {
 	canvas = document.getElementById("canvas")
-	// Check if canvas is found
-	if (!canvas) {
-		error("Canvas element not found")
-	}
 	context = canvas.getContext("2d")
-	canvas.imageSmoothingEnabled = false
+
+	context.imageSmoothingEnabled = false
 
 	canvas.addEventListener("mousemove", function (event) {
-		let rect = canvas.getBoundingClientRect()
+		var rect = canvas.getBoundingClientRect()
 		mouseX = event.clientX - rect.left
 		mouseY = event.clientY - rect.top
 	})
 	mole.nextX = randomRange(0, gameAreaWidth - mole.w)
 	mole.nextY = randomRange(0, gameAreaHeight - mole.h)
-
 
 	resetGame()
 	//Start game update loop with the framerate of 'fps'
@@ -111,7 +115,7 @@ function update() {
 	if (isGameOver) {
 		gameOverDraw()
 		gameOverUpdate()
-	} else if (isGameWon) {
+	} else if (isLevelWon) {
 		levelCompleteDraw()
 		levelCompleteUpdate()
 
@@ -120,13 +124,13 @@ function update() {
 		gamingUpdate()
 	}
 
+
 }
 function thingPressed() {
-	if (isGameOver) {
-		if (canRestart) {
-			resetGame()
-		}
-	} else {
+	if (isGameOver && canRestart) {
+		resetGame()
+	}
+	if (!isGameOver && !isLevelWon) {
 		totalClicks += 1
 		if (checkMoleCollision(mouseX, mouseY) == true) {
 			mole.framesSincePopup = 0
@@ -136,6 +140,7 @@ function thingPressed() {
 		} else {
 			misses += 1
 			totalMisses += 1
+			timeRemainingFrames -= missPenaltyFrames
 		}
 	}
 }
@@ -148,6 +153,12 @@ function checkMoleCollision(x, y) { // Returns true if the x,y coordinates fall 
 function randomRange(min, max) {
 	return ((Math.random() * (max - min)) + min)
 }
+
+
+
+
+
+
 function drawTimer(x, y, width, height, timeRemaining, totalTime, changeColor = false) {
 	timeRemainingPercentage = timeRemaining / totalTime
 	if (changeColor) {
@@ -159,17 +170,13 @@ function drawTimer(x, y, width, height, timeRemaining, totalTime, changeColor = 
 			context.fillStyle = "green"
 		}
 	}
-
 	context.fillRect(x, y, width * (timeRemaining / totalTime), height)
 }
-function drawDebugInfo() {
-	context.fillStyle = "white"
-	context.textAlign = "left"
-	context.fillText("X: " + mouseX.toFixed(2), 5, 20)
-	context.fillText("Y: " + mouseY.toFixed(2), 5, 40)
-	context.globalAlpha = 0.5
-	context.fillRect(mole.x, mole.y, mole.w, mole.h)
-}
+
+
+
+
+
 function moveMole() {
 	mole.x = mole.nextX
 	mole.y = mole.nextY
@@ -206,6 +213,8 @@ function resetLevel() {
 	// Change difficulty based on level
 	mole.popupFrames = Math.pow(molePopupTimeLevelMultiplier, level) * 100
 	timeTotalFrames = Math.pow(timerLevelMultiplier, level) * startingTimeTotalFrames
+
+	// Reset Values and move the mole
 	hits = 0
 	misses = 0
 	escapedMoles = 0
@@ -219,6 +228,7 @@ function resetGame() {
 	resetLevel()
 }
 function gameOverUpdate() {
+	// Calculates player accuracy
 	accuracyPercent = ((totalHits / totalClicks) * 100).toFixed(2)
 	//adds an extra delay to prevent accidental restarting
 	gameOverScreenFramesRemaining -= 1
@@ -228,29 +238,49 @@ function gameOverDraw() {
 	fillCanvas("black", 1.0)
 
 	context.fillStyle = "red"
-	context.font = "40px smw"
+	context.font = "80px smw"
 	context.textAlign = "center"
-	context.fillText("GAME OVER", canvasMiddleX, (canvas.height / 2) - 90)
+	context.fillText("GAME OVER", canvasMiddleX, (canvas.height / 2) - 150)
 
-	context.font = "20px smw"
+	context.font = "30px smw"
 	if (canRestart) {
-		context.fillText("Press Any Key to Restart", canvasMiddleX, (canvas.height / 2) + 70)
+		context.fillText("Press Any Key to Restart", canvasMiddleX, canvas.height - 100)
 	}
+	var message = "Skill issue"
+	if (level >= 5) {
+		message = "Not bad but still not good"
+	}
+	if (level >= 10) {
+		message = "Honestly pretty good"
+	}
+	if (level >= 15) {
+		message = "wow"
+	}
+	if (level >= 20){
+		message = "literally just cheating"
+	}
+	if (level == 69) {
+		message = "nice"
+	}
+	context.fillText(message, canvasMiddleX, canvasMiddleY + 250)
 
 
 	context.textAlign = "right"
 	var leftOffset = 10
-	context.fillText("Total Hits:", canvasMiddleX - leftOffset, (canvas.height / 2) - 30)
-	context.fillText("Total Misses:", canvasMiddleX - leftOffset, (canvas.height / 2) - 10)
-	context.fillText("Escaped Moles:", canvasMiddleX - leftOffset, (canvas.height / 2) + 10)
-	context.fillText("Hit Accuracy:", canvasMiddleX - leftOffset, (canvas.height / 2) + 30)
+	context.fillText("Level:", canvasMiddleX - leftOffset, (canvas.height / 2) - 50)
+	context.fillText("Total Hits:", canvasMiddleX - leftOffset, (canvas.height / 2))
+	context.fillText("Total Misses:", canvasMiddleX - leftOffset, (canvas.height / 2) + 50)
+	context.fillText("Escaped Moles:", canvasMiddleX - leftOffset, (canvas.height / 2) + 100)
+	context.fillText("Hit Accuracy:", canvasMiddleX - leftOffset, (canvas.height / 2) + 150)
 
 	context.textAlign = "left"
 	var rightOffset = 10
-	context.fillText(totalHits, canvasMiddleX + rightOffset, (canvas.height / 2) - 30)
-	context.fillText(totalMisses, canvasMiddleX + rightOffset, (canvas.height / 2) - 10)
-	context.fillText(totalEscapedMoles, canvasMiddleX + rightOffset, (canvas.height / 2) + 10)
-	context.fillText(accuracyPercent + " %", canvasMiddleX + rightOffset, (canvas.height / 2) + 30)
+	context.fillText(level, canvasMiddleX + rightOffset, (canvas.height / 2) - 50)
+	context.fillText(totalHits, canvasMiddleX + rightOffset, (canvas.height / 2))
+	context.fillText(totalMisses, canvasMiddleX + rightOffset, (canvas.height / 2) + 50)
+	context.fillText(totalEscapedMoles, canvasMiddleX + rightOffset, (canvas.height / 2) + 100)
+	context.fillText(accuracyPercent + " %", canvasMiddleX + rightOffset, (canvas.height / 2) + 150)
+
 
 	drawTimer(0, canvas.height - 10, canvas.width, 10, gameOverScreenFramesRemaining, gameOverScreenFramesTotal)
 }
@@ -259,17 +289,18 @@ function levelCompleteUpdate() {
 	if (levelCompleteScreenFramesRemaining <= 0) {
 		level += 1
 		resetLevel()
-		isGameWon = false
+		isLevelWon = false
 	}
 }
 function levelCompleteDraw() {
 	fillCanvas("black", 1.0)
 	context.fillStyle = "green"
-	context.font = "20px smw"
+	context.font = "80px smw"
 	context.textAlign = "center"
 	drawTimer(0, canvas.height - 10, canvas.width, 10, levelCompleteScreenFramesRemaining, levelCompleteScreenFramesTotal)
-	context.fillText("LEVEL " + level + " COMPLETE!", canvasMiddleX, canvas.height / 2)
-	context.fillText("Next Level starting soon", canvasMiddleX, canvas.height / 2 + 20)
+	context.fillText("LEVEL " + level + " COMPLETE!", canvasMiddleX, (canvas.height / 2) - 30)
+	context.font = "40px smw"
+	context.fillText("Next Level starting soon", canvasMiddleX, canvas.height / 2 + 30)
 }
 function gamingUpdate() {
 	// Decrement level timer
@@ -278,11 +309,13 @@ function gamingUpdate() {
 	// Check for win
 	if (hits >= levelHits) {
 		levelCompleteScreenFramesRemaining = levelCompleteScreenFramesTotal
-		isGameWon = true
+		isLevelWon = true
 	}
 
 	// Check for loss
 	if (timeRemainingFrames <= 0) {
+		gameOverScreenFramesRemaining = gameOverScreenFramesTotal
+		canRestart = false
 		isGameOver = true
 	}
 
@@ -326,7 +359,7 @@ function gamingDraw() {
 }
 function drawUserInterface() {
 	//Set Font
-	context.font = "15px smw"
+	context.font = "40px smw"
 
 	//Draw UI Box
 	context.fillStyle = "#4d4f4e"
@@ -335,21 +368,26 @@ function drawUserInterface() {
 	//Draw UI Text
 	context.fillStyle = "white"
 	context.textAlign = "center"
-	var textPosition = {
-		x: canvasMiddleX,
-		y: gameAreaHeight + 20
-	}
-	context.fillText("Level " + level, textPosition.x, textPosition.y)
-	context.fillText("Hits " + hits + "/" + levelHits, textPosition.x - 150, textPosition.y)
-	context.fillText("Misses " + misses, textPosition.x + 150, textPosition.y)
+
+	context.fillText("Level: " + level + " Hits: " + hits + "/" + levelHits + " Misses: " + misses + " Escaped: " + escapedMoles, canvasMiddleX, gameAreaHeight + 50)
 
 	//Draw Timer Bar
 	context.fillStyle = "green"
-	drawTimer(0, canvas.height - 10, canvas.width, 10, timeRemainingFrames, timeTotalFrames)
+	drawTimer(0, canvas.height - 10, canvas.width, 10, timeRemainingFrames, timeTotalFrames, true)
 
 }
 function fillCanvas(color, alpha = 1.0) {
 	context.fillStyle = color
 	context.fillRect(0, 0, canvas.width, canvas.height)
 	context.globalAlpha = alpha
+}
+function drawDebugInfo() {
+	context.font = "40px smw"
+	context.fillStyle = "white"
+	context.textAlign = "left"
+	context.fillText("X: " + mouseX.toFixed(1), 5, 40)
+	context.fillText("Y: " + mouseY.toFixed(1), 5, 80)
+	context.globalAlpha = 0.5
+	context.fillRect(mole.x, mole.y, mole.w, mole.h)
+	context.globalAlpha = 1.0
 }

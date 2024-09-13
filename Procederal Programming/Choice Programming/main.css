@@ -7,14 +7,19 @@
 
 canvas {
 	outline: black 10px solid;
+	image-rendering: pixelated;
+	border-radius: 10px;
 }
+
+
 
 body {
 	text-align: center;
 	color: #FF8713;
 	font-family: "smw";
-	background-color: black;
+	background: #000000;
 }
+
 div {
 	margin: 0;
 	position: absolute;
@@ -24,8 +29,21 @@ div {
 	transform: translate(-50%, -50%);
 }
 
+img {
+	transition: outline-color 1s;
+	outline-style: solid;
+	outline-width: 5px;
+	outline-color: #EE1C24;
+	margin-right: 10px;
+	margin-left: 10px;
+	width: 336px;
+}
 
-
+img:hover {
+	transition: outline-color 1s;
+	outline-width: 5px;
+	outline-color: #FE7E13;
+}
 
 p {
 	text-align: center;
@@ -43,7 +61,7 @@ p {
 	transition: transform 0.1s, rotate 0.3s;
 	display: inline-flex;
 	transform: scale(1.1);
-	rotate: 5deg;
+	rotate: 3deg;
 	color: #FE7E13;
 }
 
@@ -78,4 +96,16 @@ p {
 	rotate: 5deg;
 	background-color: #FE7E13;
 	color: #EE1C24;
+}
+
+#logo {
+	transition: all 0.25s;
+	filter:blur(5px)
+}
+
+#logo:hover {
+	display: inline-flex;
+	transform: scale(1.1);
+	rotate: 5deg;
+	filter:hue-rotate(90deg),blur(5px);
 }
