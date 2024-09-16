@@ -5,7 +5,7 @@ var debugMode = true
 const fps = 60
 
 var isGameOver = false
-var isLevelWon = false
+var isLevelComplete = false
 
 var canvasMiddleX
 var canvasMiddleY
@@ -75,6 +75,14 @@ bgImg.src = "images/grass.jpg"
 cursorImg = new Image()
 cursorImg.src = "images/cursor.png"
 
+var audio = {
+	bgm: new Audio(),
+	moleHit: new Audio(),
+	moleMissed: new Audio(),
+	moleRunaway: new Audio(),
+	gameOver: new Audio(),
+	levelComplete: new Audio(),
+}
 
 
 //Event listeners
@@ -115,13 +123,17 @@ function update() {
 	if (isGameOver) {
 		gameOverDraw()
 		gameOverUpdate()
-	} else if (isLevelWon) {
+	} else if (isLevelComplete) {
 		levelCompleteDraw()
 		levelCompleteUpdate()
 
 	} else {
 		gamingDraw()
 		gamingUpdate()
+	}
+	//Shows the hitboxes and other debug info
+	if (debugMode) {
+		drawDebugInfo()
 	}
 
 
@@ -130,7 +142,7 @@ function thingPressed() {
 	if (isGameOver && canRestart) {
 		resetGame()
 	}
-	if (!isGameOver && !isLevelWon) {
+	if (!isGameOver && !isLevelComplete) {
 		totalClicks += 1
 		if (checkMoleCollision(mouseX, mouseY) == true) {
 			mole.framesSincePopup = 0
@@ -240,7 +252,7 @@ function gameOverDraw() {
 	context.fillStyle = "red"
 	context.font = "80px smw"
 	context.textAlign = "center"
-	context.fillText("GAME OVER", canvasMiddleX, (canvas.height / 2) - 150)
+	context.fillText("GAME OVER", canvasMiddleX, 150)
 
 	context.font = "30px smw"
 	if (canRestart) {
@@ -256,13 +268,13 @@ function gameOverDraw() {
 	if (level >= 15) {
 		message = "wow"
 	}
-	if (level >= 20){
+	if (level >= 20) {
 		message = "literally just cheating"
 	}
 	if (level == 69) {
 		message = "nice"
 	}
-	context.fillText(message, canvasMiddleX, canvasMiddleY + 250)
+	context.fillText('"' + message + '"', canvasMiddleX, 250)
 
 
 	context.textAlign = "right"
@@ -289,7 +301,7 @@ function levelCompleteUpdate() {
 	if (levelCompleteScreenFramesRemaining <= 0) {
 		level += 1
 		resetLevel()
-		isLevelWon = false
+		isLevelComplete = false
 	}
 }
 function levelCompleteDraw() {
@@ -309,7 +321,7 @@ function gamingUpdate() {
 	// Check for win
 	if (hits >= levelHits) {
 		levelCompleteScreenFramesRemaining = levelCompleteScreenFramesTotal
-		isLevelWon = true
+		isLevelComplete = true
 	}
 
 	// Check for loss
@@ -351,10 +363,6 @@ function gamingDraw() {
 	// Draw the mole
 	context.drawImage(mole.img, mole.x, mole.y, mole.w, mole.h)
 
-	//Shows the hitboxes and other debug info
-	if (debugMode) {
-		drawDebugInfo()
-	}
 	drawUserInterface()
 }
 function drawUserInterface() {
@@ -384,10 +392,19 @@ function fillCanvas(color, alpha = 1.0) {
 function drawDebugInfo() {
 	context.font = "40px smw"
 	context.fillStyle = "white"
+	// Label indicating debug mode
+	context.textAlign = "center"
+	context.fillText("~DEBUG MODE~", canvasMiddleX, 40)
+	// Mouse Position
 	context.textAlign = "left"
 	context.fillText("X: " + mouseX.toFixed(1), 5, 40)
 	context.fillText("Y: " + mouseY.toFixed(1), 5, 80)
+
+	// Current and next hitbox
 	context.globalAlpha = 0.5
+	context.fillStyle = "red"
 	context.fillRect(mole.x, mole.y, mole.w, mole.h)
+	context.fillStyle = "white"
+	context.fillRect(mole.nextX, mole.nextY, mole.w, mole.h)
 	context.globalAlpha = 1.0
 }
