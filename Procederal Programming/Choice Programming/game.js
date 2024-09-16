@@ -1,11 +1,18 @@
 var canvas
 var context
 var intervalNum
-var debugMode = true
+var showDebugInfo = false
+
 const fps = 60
 
 var isGameOver = false
 var isLevelComplete = false
+var isDifficultySelect = true
+
+var easyButtonSelected = false
+var normalButtonSelected = false
+var hardButtonSelected = false
+var expertButtonSelected = false
 
 var canvasMiddleX
 var canvasMiddleY
@@ -16,8 +23,7 @@ var gameAreaHeight = 450
 var uiAreaHeight = 70
 
 
-const TIMER_DANGER = 0.1 // percentage of time where timer colour changes to danger color
-const TIMER_WARN = 0.25 // percentage of time where timer colour changes to warning color
+
 
 var levelLengthFrames = 30
 var levelHitsIncrease = 5
@@ -26,66 +32,71 @@ var level = 1
 var timerLevelMultiplier = 0.9
 var molePopupTimeLevelMultiplier = 0.9
 
+// Mouse positions
 var mouseX = 0
 var mouseY = 0
 
+// Stats tracked and shown during the gameplay
 var misses = 0
 var hits = 0
 var escapedMoles = 0
 
+// Stats tracked and shown on the game over screen
 var totalHits = 0
 var totalMisses = 0
 var totalEscapedMoles = 0
 var accuracyPercent = 100
 var totalClicks = 0
 
-var timeRemainingFrames = 2000
-var timeTotalFrames = 2000
-var startingTimeTotalFrames = 2000
-var timeRemainingPercentage
-var missPenaltyFrames = 30
+// Timer stuff
+const TIMER_DANGER = 0.1 // percentage of time where timer colour changes to danger color
+const TIMER_WARN = 0.25 // percentage of time where timer colour changes to warning color
 
-const levelCompleteScreenFramesTotal = 120
-var levelCompleteScreenFramesRemaining = 120
+var timerStartFrames = 2000 // The amount of time given at the start of a level
+var timeRemainingFrames = 2000 //Tracks the current time remaining
+const timerLevel1TotalFrames = 2000 // The amount of time that level 1 starts with (used to reset)
+var missPenaltyFrames = 30 // The timer decrease when missing a mole
 
+
+
+// Defines how long the "LEVEL COMPLETE" screen is shown
+const levelCompleteStartFrames = 120
+var levelCompleteFramesRemaining = 120
+
+// Defines how long the "GAME OVER" waits before allowing restart
 const gameOverScreenFramesTotal = 240
 var gameOverScreenFramesRemaining = 240
 var canRestart = false
 
+// Defines all mole properties
 var mole = {
+	// Current mole transform
 	x: 0,
 	y: 0,
 	w: 150,
 	h: 150,
-	middleX: 0,
-	middleY: 0,
+	// Next position
 	nextX: 0,
 	nextY: 0,
+	// Position of the mole's middle
+	middleX: 0,
+	middleY: 0,
+	// Position of the mole's middle at the next position
 	nextMiddleX: 0,
 	nextMiddleY: 0,
-	framesSincePopup: 0,
-	popupFrames: 100,
-	img: new Image(),
+	// Tracks how long the mole stays popped out of the ground
+	popupFramesRemaining: 0,
+	totalPopupFrames: 100,
 }
+// Define images
+mole.img = new Image()
 mole.img.src = "images/mole.png"
 
 bgImg = new Image()
 bgImg.src = "images/grass.jpg"
 
-cursorImg = new Image()
-cursorImg.src = "images/cursor.png"
 
-var audio = {
-	bgm: new Audio(),
-	moleHit: new Audio(),
-	moleMissed: new Audio(),
-	moleRunaway: new Audio(),
-	gameOver: new Audio(),
-	levelComplete: new Audio(),
-}
-
-
-//Event listeners
+//Define Event listeners
 mole.img.onload = start
 document.onkeydown = thingPressed
 document.onclick = thingPressed
@@ -96,11 +107,13 @@ function start() {
 
 	context.imageSmoothingEnabled = false
 
+	// Checks for mouse movement and updates mouseX and mouseY
 	canvas.addEventListener("mousemove", function (event) {
 		var rect = canvas.getBoundingClientRect()
 		mouseX = event.clientX - rect.left
 		mouseY = event.clientY - rect.top
 	})
+	// Chooses the moles next position
 	mole.nextX = randomRange(0, gameAreaWidth - mole.w)
 	mole.nextY = randomRange(0, gameAreaHeight - mole.h)
 
@@ -127,12 +140,14 @@ function update() {
 		levelCompleteDraw()
 		levelCompleteUpdate()
 
+	} else if (isDifficultySelect) {
+		difficultySelectUpdate()
 	} else {
 		gamingDraw()
 		gamingUpdate()
 	}
 	//Shows the hitboxes and other debug info
-	if (debugMode) {
+	if (showDebugInfo) {
 		drawDebugInfo()
 	}
 
@@ -144,8 +159,8 @@ function thingPressed() {
 	}
 	if (!isGameOver && !isLevelComplete) {
 		totalClicks += 1
-		if (checkMoleCollision(mouseX, mouseY) == true) {
-			mole.framesSincePopup = 0
+		if (checkMouseCollision(mole.x, mole.y, mole.w, mole.h)) {
+			mole.popupFramesRemaining = 0
 			hits += 1
 			totalHits += 1
 			moveMole()
@@ -162,6 +177,12 @@ function checkMoleCollision(x, y) { // Returns true if the x,y coordinates fall 
 	}
 	return false
 }
+function checkMouseCollision(x, y, w, h) { // Returns true if the x,y coordinates fall inside the mole"s hitbox 
+	if (mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h) {
+		return true
+	}
+	return false
+}
 function randomRange(min, max) {
 	return ((Math.random() * (max - min)) + min)
 }
@@ -172,7 +193,7 @@ function randomRange(min, max) {
 
 
 function drawTimer(x, y, width, height, timeRemaining, totalTime, changeColor = false) {
-	timeRemainingPercentage = timeRemaining / totalTime
+	var timeRemainingPercentage = timeRemaining / totalTime
 	if (changeColor) {
 		if (timeRemainingPercentage < TIMER_DANGER) {
 			context.fillStyle = "red"
@@ -223,18 +244,23 @@ function drawCircle(x, y, radius, color, fill = true, half_circle = false) {
 }
 function resetLevel() {
 	// Change difficulty based on level
-	mole.popupFrames = Math.pow(molePopupTimeLevelMultiplier, level) * 100
-	timeTotalFrames = Math.pow(timerLevelMultiplier, level) * startingTimeTotalFrames
+	mole.totalPopupFrames = Math.pow(molePopupTimeLevelMultiplier, level) * 100
+	timerStartFrames = Math.pow(timerLevelMultiplier, level) * timerLevel1TotalFrames
 
 	// Reset Values and move the mole
 	hits = 0
 	misses = 0
 	escapedMoles = 0
-	timeRemainingFrames = timeTotalFrames
+	timeRemainingFrames = timerStartFrames
 	moveMole()
 }
 function resetGame() {
-	timeTotalFrames = startingTimeTotalFrames
+	timerStartFrames = timerLevel1TotalFrames
+	totalClicks = 0
+	totalEscapedMoles = 0
+	totalMisses = 0
+	totalHits = 0
+	accuracyPercent = 0
 	isGameOver = false
 	level = 1
 	resetLevel()
@@ -297,8 +323,8 @@ function gameOverDraw() {
 	drawTimer(0, canvas.height - 10, canvas.width, 10, gameOverScreenFramesRemaining, gameOverScreenFramesTotal)
 }
 function levelCompleteUpdate() {
-	levelCompleteScreenFramesRemaining -= 1
-	if (levelCompleteScreenFramesRemaining <= 0) {
+	levelCompleteFramesRemaining -= 1
+	if (levelCompleteFramesRemaining <= 0) {
 		level += 1
 		resetLevel()
 		isLevelComplete = false
@@ -309,7 +335,7 @@ function levelCompleteDraw() {
 	context.fillStyle = "green"
 	context.font = "80px smw"
 	context.textAlign = "center"
-	drawTimer(0, canvas.height - 10, canvas.width, 10, levelCompleteScreenFramesRemaining, levelCompleteScreenFramesTotal)
+	drawTimer(0, canvas.height - 10, canvas.width, 10, levelCompleteFramesRemaining, levelCompleteStartFrames)
 	context.fillText("LEVEL " + level + " COMPLETE!", canvasMiddleX, (canvas.height / 2) - 30)
 	context.font = "40px smw"
 	context.fillText("Next Level starting soon", canvasMiddleX, canvas.height / 2 + 30)
@@ -320,7 +346,7 @@ function gamingUpdate() {
 
 	// Check for win
 	if (hits >= levelHits) {
-		levelCompleteScreenFramesRemaining = levelCompleteScreenFramesTotal
+		levelCompleteFramesRemaining = levelCompleteStartFrames
 		isLevelComplete = true
 	}
 
@@ -338,11 +364,11 @@ function gamingUpdate() {
 	mole.nextMiddleY = mole.nextY + mole.h / 2
 
 	//Increments the timer for mole movement
-	mole.framesSincePopup += 1
+	mole.popupFramesRemaining += 1
 
 	// Moves the mole when the timer expires
-	if (mole.framesSincePopup >= mole.popupFrames) {
-		mole.framesSincePopup = 0
+	if (mole.popupFramesRemaining >= mole.totalPopupFrames) {
+		mole.popupFramesRemaining = 0
 		escapedMoles += 1
 		totalEscapedMoles += 1
 		moveMole()
@@ -381,7 +407,7 @@ function drawUserInterface() {
 
 	//Draw Timer Bar
 	context.fillStyle = "green"
-	drawTimer(0, canvas.height - 10, canvas.width, 10, timeRemainingFrames, timeTotalFrames, true)
+	drawTimer(0, canvas.height - 10, canvas.width, 10, timeRemainingFrames, timerStartFrames, true)
 
 }
 function fillCanvas(color, alpha = 1.0) {
@@ -407,4 +433,44 @@ function drawDebugInfo() {
 	context.fillStyle = "white"
 	context.fillRect(mole.nextX, mole.nextY, mole.w, mole.h)
 	context.globalAlpha = 1.0
+}
+function difficultySelectUpdate() {
+	context.font = "40px smw"
+	context.textAlign = "center"
+	context.fillStyle = "red"
+	context.fillText("Select Difficulty", canvasMiddleX, 100)
+	drawButton(canvasMiddleX, canvasMiddleY-150, 250, 70, "Easy")
+	drawButton(canvasMiddleX, canvasMiddleY-50, 250, 70, "Normal")
+	drawButton(canvasMiddleX, canvasMiddleY+50, 250, 70, "Hard")
+	drawButton(canvasMiddleX, canvasMiddleY+150, 250, 70, "Expert")
+
+}
+function drawButton(x, y, w, h, text) {
+	if (checkMouseCollision(x - (w / 2), y - (h / 2), w, h)) {
+		switch (text){
+			case "Easy":
+				easyButtonSelected = true
+			break
+			case "Normal":
+				normalButtonSelected = true
+			break
+			case "Hard":
+				hardButtonSelected = true
+			break
+			case "Expert":
+				expertButtonSelected = true
+			break
+		}
+			
+
+
+		context.fillStyle = "white"
+	} else {
+		context.fillStyle = "red"
+	}
+
+	context.fillRect(x - (w / 2), y - (h / 2), w, h)
+	context.fillStyle = "orange"
+	context.fillText(text, x, y+(h/4))
+
 }
