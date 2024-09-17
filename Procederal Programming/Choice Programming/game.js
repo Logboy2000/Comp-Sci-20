@@ -10,10 +10,6 @@ const fps = 60
 
 var difficulty
 
-//var isGameOver = false
-//var isLevelComplete = false
-//var isDifficultySelect = true
-
 var gameStates = {
 	playing: 0,
 	gameOver: 1,
@@ -105,11 +101,22 @@ bgImg.onload = start
 document.onkeydown = thingPressed
 document.onclick = thingPressed
 
+
 function start() {
+	/*
+	Inputs: none
+	Outputs: none
+	*/
+
+	// Canvas and context defined
 	canvas = document.getElementById("canvas")
 	context = canvas.getContext("2d")
 
-	context.imageSmoothingEnabled = false
+	//Ensures the mole has a random position at the start of the game
+	moveMole()
+
+	//Start game update loop with the framerate of 'fps'
+	setInterval(update, 1000 / fps)
 
 	// Checks for mouse movement and updates mouseX and mouseY
 	canvas.addEventListener("mousemove", function (event) {
@@ -117,15 +124,12 @@ function start() {
 		mouseX = event.clientX - rect.left
 		mouseY = event.clientY - rect.top
 	})
-	// Chooses the moles next position
-	mole.nextX = randomRange(0, gameAreaWidth - mole.w)
-	mole.nextY = randomRange(0, gameAreaHeight - mole.h)
-
-	//resetGame()
-	//Start game update loop with the framerate of 'fps'
-	setInterval(update, 1000 / fps)
 }
 function update() {
+	/*
+	Inputs: none
+	Outputs: none
+	*/
 	//Calculates various useful canvas and ui values
 	canvasMiddleX = canvas.width / 2
 	canvasMiddleY = canvas.height / 2
@@ -167,6 +171,11 @@ function update() {
 
 }
 function thingPressed() {
+	/*
+	Inputs: none
+	Outputs: none
+	*/
+
 	switch (gameState) {
 		case gameStates.playing:
 			totalClicks += 1
@@ -200,19 +209,33 @@ function thingPressed() {
 
 
 }
-function checkMoleCollision(x, y) { // Returns true if the x,y coordinates fall inside the mole"s hitbox 
+function checkMoleCollision(x, y) { // Returns true if the x,y coordinates fall inside the mole"s hitbox
+	/*
+	Inputs: x, y
+	Outputs: true, false
+	*/
 	if (x >= mole.x && x <= mole.x + mole.w && y >= mole.y && y <= mole.y + mole.h) {
 		return true
 	}
 	return false
 }
 function checkMouseCollision(x, y, w, h) { // Returns true if the x,y coordinates fall inside the mole"s hitbox 
+	/*
+	Inputs: x, y, w, h
+	Outputs: true, false
+	*/
+
+
 	if (mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h) {
 		return true
 	}
 	return false
 }
 function randomRange(min, max) {
+	/*
+	Inputs: min, max
+	Outputs: A random number between the two given values
+	*/
 	return ((Math.random() * (max - min)) + min)
 }
 
@@ -221,7 +244,12 @@ function randomRange(min, max) {
 
 
 
-function drawTimer(x, y, width, height, timeRemaining, totalTime, changeColor = false) {
+function drawTimer(x, y, w, h, timeRemaining, totalTime, changeColor = false) {
+	/*
+	Inputs: x, y, w, h, timeRemaining, totalTime, changeColor
+	Outputs: none
+	*/
+
 	var timeRemainingPercentage = timeRemaining / totalTime
 	if (changeColor) {
 		if (timeRemainingPercentage < TIMER_DANGER) {
@@ -232,7 +260,7 @@ function drawTimer(x, y, width, height, timeRemaining, totalTime, changeColor = 
 			context.fillStyle = "green"
 		}
 	}
-	context.fillRect(x, y, width * (timeRemaining / totalTime), height)
+	context.fillRect(x, y, w * (timeRemaining / totalTime), h)
 }
 
 
@@ -240,12 +268,21 @@ function drawTimer(x, y, width, height, timeRemaining, totalTime, changeColor = 
 
 
 function moveMole() {
+	/*
+	Inputs: none
+	Outputs: none
+	*/
 	mole.x = mole.nextX
 	mole.y = mole.nextY
 	mole.nextX = randomRange(0, gameAreaWidth - mole.w)
 	mole.nextY = randomRange(0, gameAreaHeight - mole.h)
 }
 function drawLine(x1, y1, x2, y2, thickness, color) {
+	/*
+	Inputs: x1, y1, x2, y2, thickness, color
+	Outputs: none
+	*/
+
 	context.fillStyle = color
 	// Start a new Path
 	context.beginPath()
@@ -257,6 +294,11 @@ function drawLine(x1, y1, x2, y2, thickness, color) {
 	context.stroke();
 }
 function drawCircle(x, y, radius, color, fill = true, half_circle = false) {
+	/*
+	Inputs: x, y, radius, color, fill, half_circle
+	Outputs: none
+	*/
+
 	context.beginPath()
 	if (half_circle) {
 		context.arc(x, y, radius, 0, 1 * Math.PI)
@@ -272,6 +314,10 @@ function drawCircle(x, y, radius, color, fill = true, half_circle = false) {
 	}
 }
 function resetLevel() {
+	/*
+	Inputs: none
+	Outputs: none
+	*/
 	// Change difficulty based on level
 	mole.totalPopupFrames = Math.pow(molePopupTimeLevelMultiplier, level) * 100
 	timerStartFrames = Math.pow(timerLevelMultiplier, level) * timerLevel1TotalFrames
@@ -283,6 +329,10 @@ function resetLevel() {
 	moveMole()
 }
 function resetGame() {
+	/*
+	Inputs: none
+	Outputs: none
+	*/
 	timerStartFrames = timerLevel1TotalFrames
 	totalClicks = 0
 	totalEscapedMoles = 0
@@ -295,6 +345,10 @@ function resetGame() {
 	resetLevel()
 }
 function gameOverUpdate() {
+	/*
+	Inputs: none
+	Outputs: none
+	*/
 	// Calculates player accuracy
 	accuracyPercent = ((totalHits / totalClicks) * 100).toFixed(2)
 	//adds an extra delay to prevent accidental restarting
@@ -302,6 +356,10 @@ function gameOverUpdate() {
 	if (gameOverScreenFramesRemaining <= 0) { canRestart = true }
 }
 function gameOverDraw() {
+	/*
+	Inputs: none
+	Outputs: none
+	*/
 	fillCanvas("black", 1.0)
 
 	context.fillStyle = "red"
@@ -311,29 +369,30 @@ function gameOverDraw() {
 
 	context.font = "30px smw"
 	if (canRestart) {
-		context.fillText("Press Any Key to Play Again", canvasMiddleX, canvas.height - 100)
+		context.fillText("Press Anything to Play Again", canvasMiddleX, canvas.height - 100)
 	}
-	var message = "Skill issue"
+	var gameOverMessage = "Skill issue"
 	if (level >= 5) {
-		message = "Not bad but still not good"
+		gameOverMessage = "Not bad but still not good"
 	}
 	if (level >= 10) {
-		message = "Honestly pretty good"
+		gameOverMessage = "Honestly pretty good"
 	}
 	if (level >= 15) {
-		message = "wow"
+		gameOverMessage = "wow"
 	}
 	if (level >= 20) {
-		message = "literally just cheating"
+		gameOverMessage = "literally just cheating"
 	}
 	if (level == 69) {
-		message = "nice"
+		gameOverMessage = "nice"
 	}
-	context.fillText('"' + message + '"', canvasMiddleX, 250)
+	context.fillText(gameOverMessage, canvasMiddleX, 200)
 
 
 	context.textAlign = "right"
 	var leftOffset = 10
+	context.fillText("Difficulty:", canvasMiddleX - leftOffset, (canvas.height / 2) - 100)
 	context.fillText("Level:", canvasMiddleX - leftOffset, (canvas.height / 2) - 50)
 	context.fillText("Total Hits:", canvasMiddleX - leftOffset, (canvas.height / 2))
 	context.fillText("Total Misses:", canvasMiddleX - leftOffset, (canvas.height / 2) + 50)
@@ -342,6 +401,7 @@ function gameOverDraw() {
 
 	context.textAlign = "left"
 	var rightOffset = 10
+	context.fillText(difficulty, canvasMiddleX + rightOffset, (canvas.height / 2) - 100)
 	context.fillText(level, canvasMiddleX + rightOffset, (canvas.height / 2) - 50)
 	context.fillText(totalHits, canvasMiddleX + rightOffset, (canvas.height / 2))
 	context.fillText(totalMisses, canvasMiddleX + rightOffset, (canvas.height / 2) + 50)
@@ -352,6 +412,10 @@ function gameOverDraw() {
 	drawTimer(0, canvas.height - 10, canvas.width, 10, gameOverScreenFramesRemaining, gameOverScreenFramesTotal)
 }
 function levelCompleteUpdate() {
+	/*
+	Inputs: none
+	Outputs: none
+	*/
 	levelCompleteFramesRemaining -= 1
 	if (levelCompleteFramesRemaining <= 0) {
 		level += 1
@@ -360,6 +424,10 @@ function levelCompleteUpdate() {
 	}
 }
 function levelCompleteDraw() {
+	/*
+	Inputs: none
+	Outputs: none
+	*/
 	fillCanvas("black", 1.0)
 	context.fillStyle = "green"
 	context.font = "80px smw"
@@ -370,6 +438,10 @@ function levelCompleteDraw() {
 	context.fillText("Next Level starting soon", canvasMiddleX, canvas.height / 2 + 30)
 }
 function gamingUpdate() {
+	/*
+	Inputs: none
+	Outputs: none
+	*/
 	// Decrement level timer
 	timeRemainingFrames -= 1
 
@@ -404,6 +476,10 @@ function gamingUpdate() {
 	}
 }
 function gamingDraw() {
+	/*
+	Inputs: none
+	Outputs: none
+	*/
 	//Reset the canvas
 	fillCanvas("white", 1.0)
 
@@ -421,6 +497,10 @@ function gamingDraw() {
 	drawUserInterface()
 }
 function drawUserInterface() {
+	/*
+	Inputs: none
+	Outputs: none
+	*/
 	//Set Font
 	context.font = "40px smw"
 
@@ -440,24 +520,26 @@ function drawUserInterface() {
 
 }
 function fillCanvas(color, alpha = 1.0) {
+	/*
+	Inputs: color, alpha
+	Outputs: none
+	*/
 	context.fillStyle = color
 	context.fillRect(0, 0, canvas.width, canvas.height)
 	context.globalAlpha = alpha
 }
 function drawDebugInfo() {
+	/*
+	Inputs: none
+	Outputs: none
+	*/
 	context.font = "40px smw"
 	context.fillStyle = "black"
-
-
-
-
-
 	context.globalAlpha = 0.5
+
+	// Draw Text "Shadow"
 	context.fillRect(0, 0, 230, 85)
 	context.fillRect(canvasMiddleX - 210, 0, 420, 45)
-
-
-
 
 	// Label indicating debug mode
 	context.fillStyle = "white"
@@ -478,41 +560,44 @@ function drawDebugInfo() {
 	context.globalAlpha = 1.0
 }
 function difficultySelectUpdate() {
+	/*
+	Inputs: none
+	Outputs: none
+	*/
 	context.font = "40px smw"
 	context.textAlign = "center"
 	context.fillStyle = "red"
 	context.fillText("Select Difficulty", canvasMiddleX, 100)
 	buttonSelected = false
-	drawButton(canvasMiddleX, canvasMiddleY - 150, 250, 70, "Easy")
-	drawButton(canvasMiddleX, canvasMiddleY - 50, 250, 70, "Normal")
-	drawButton(canvasMiddleX, canvasMiddleY + 50, 250, 70, "Hard")
-	drawButton(canvasMiddleX, canvasMiddleY + 150, 250, 70, "Expert")
+	createDifficultyButton(canvasMiddleX, canvasMiddleY - 150, 250, 70, "Easy")
+	createDifficultyButton(canvasMiddleX, canvasMiddleY - 50, 250, 70, "Normal")
+	createDifficultyButton(canvasMiddleX, canvasMiddleY + 50, 250, 70, "Hard")
+	createDifficultyButton(canvasMiddleX, canvasMiddleY + 150, 250, 70, "Expert")
 }
-function drawButton(x, y, w, h, text) {
+function createDifficultyButton(x, y, w, h, text) {
+	/*
+	Inputs: x, y, w, h, text
+	Outputs: none
+	*/
 	if (checkMouseCollision(x - (w / 2), y - (h / 2), w, h)) {
-		if (text == "Easy") {
-			levelHits = 3
-		}
-		if (text == "Normal") {
-			levelHits = 5
-		}
-		if (text == "Hard") {
-			levelHits = 10
-		}
-		if (text == "Expert") {
-			levelHits = 20
-		}
+		// Sets the hits required based on the difficulty
+		if (text == "Easy") { levelHits = 3 }
+		if (text == "Normal") { levelHits = 5 }
+		if (text == "Hard") { levelHits = 10 }
+		if (text == "Expert") { levelHits = 20 }
+		// Changes difficulty level used on game over screen
 		difficulty = text
+		// Changes button color when button hovered
 		buttonSelected = true
 		context.fillStyle = "#7f0f13"
-
-
 	} else {
-
+		// Changes button color when button is not hovered
 		context.fillStyle = "#EE1C24"
 	}
+	// Draws button backing
 	context.fillRect(x - (w / 2), y - (h / 2), w, h)
+
+	// Draws button label
 	context.fillStyle = "#FE7E13"
 	context.fillText(text, x, y + (h / 4))
-
 }
