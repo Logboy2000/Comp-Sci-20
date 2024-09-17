@@ -1,32 +1,36 @@
 var canvas
+var canvasMiddleX
+var canvasMiddleY
+
 var context
 var intervalNum
 var showDebugInfo = false
 
 const fps = 60
 
-var isGameOver = false
-var isLevelComplete = false
-var isDifficultySelect = true
+var difficulty
 
-var easyButtonSelected = false
-var normalButtonSelected = false
-var hardButtonSelected = false
-var expertButtonSelected = false
+//var isGameOver = false
+//var isLevelComplete = false
+//var isDifficultySelect = true
 
-var canvasMiddleX
-var canvasMiddleY
+var gameStates = {
+	playing: 0,
+	gameOver: 1,
+	levelComplete: 2,
+	difficultySelect: 3,
+}
+
+var gameState = gameStates.difficultySelect
+
+var buttonSelected = false
 
 var gameAreaWidth = 500
 var gameAreaHeight = 450
 
 var uiAreaHeight = 70
 
-
-
-
 var levelLengthFrames = 30
-var levelHitsIncrease = 5
 var levelHits = 10
 var level = 1
 var timerLevelMultiplier = 0.9
@@ -97,7 +101,7 @@ bgImg.src = "images/grass.jpg"
 
 
 //Define Event listeners
-mole.img.onload = start
+bgImg.onload = start
 document.onkeydown = thingPressed
 document.onclick = thingPressed
 
@@ -117,7 +121,7 @@ function start() {
 	mole.nextX = randomRange(0, gameAreaWidth - mole.w)
 	mole.nextY = randomRange(0, gameAreaHeight - mole.h)
 
-	resetGame()
+	//resetGame()
 	//Start game update loop with the framerate of 'fps'
 	setInterval(update, 1000 / fps)
 }
@@ -133,19 +137,28 @@ function update() {
 	canvas.height = window.innerHeight - 20
 
 	// Determines and runs the correct update method
-	if (isGameOver) {
-		gameOverDraw()
-		gameOverUpdate()
-	} else if (isLevelComplete) {
-		levelCompleteDraw()
-		levelCompleteUpdate()
 
-	} else if (isDifficultySelect) {
-		difficultySelectUpdate()
-	} else {
-		gamingDraw()
-		gamingUpdate()
+	switch (gameState) {
+		case gameStates.playing:
+			gamingDraw()
+			gamingUpdate()
+			break
+
+		case gameStates.gameOver:
+			gameOverDraw()
+			gameOverUpdate()
+			break
+
+		case gameStates.difficultySelect:
+			difficultySelectUpdate()
+			break
+
+		case gameStates.levelComplete:
+			levelCompleteDraw()
+			levelCompleteUpdate()
+			break
 	}
+
 	//Shows the hitboxes and other debug info
 	if (showDebugInfo) {
 		drawDebugInfo()
@@ -154,22 +167,38 @@ function update() {
 
 }
 function thingPressed() {
-	if (isGameOver && canRestart) {
-		resetGame()
+	switch (gameState) {
+		case gameStates.playing:
+			totalClicks += 1
+			if (checkMouseCollision(mole.x, mole.y, mole.w, mole.h)) {
+				mole.popupFramesRemaining = 0
+				hits += 1
+				totalHits += 1
+				moveMole()
+			} else {
+				misses += 1
+				totalMisses += 1
+				timeRemainingFrames -= missPenaltyFrames
+			}
+			break
+
+		case gameStates.gameOver:
+			if (canRestart) { resetGame() }
+			break
+
+		case gameStates.difficultySelect:
+			if (buttonSelected) { gameState = gameStates.playing }
+			break
+
+		case gameStates.levelComplete:
+
+			break
 	}
-	if (!isGameOver && !isLevelComplete) {
-		totalClicks += 1
-		if (checkMouseCollision(mole.x, mole.y, mole.w, mole.h)) {
-			mole.popupFramesRemaining = 0
-			hits += 1
-			totalHits += 1
-			moveMole()
-		} else {
-			misses += 1
-			totalMisses += 1
-			timeRemainingFrames -= missPenaltyFrames
-		}
-	}
+
+
+
+
+
 }
 function checkMoleCollision(x, y) { // Returns true if the x,y coordinates fall inside the mole"s hitbox 
 	if (x >= mole.x && x <= mole.x + mole.w && y >= mole.y && y <= mole.y + mole.h) {
@@ -247,9 +276,8 @@ function resetLevel() {
 	mole.totalPopupFrames = Math.pow(molePopupTimeLevelMultiplier, level) * 100
 	timerStartFrames = Math.pow(timerLevelMultiplier, level) * timerLevel1TotalFrames
 
-	// Reset Values and move the mole
+	// Reset Values and move the moleGameOver
 	hits = 0
-	misses = 0
 	escapedMoles = 0
 	timeRemainingFrames = timerStartFrames
 	moveMole()
@@ -261,7 +289,8 @@ function resetGame() {
 	totalMisses = 0
 	totalHits = 0
 	accuracyPercent = 0
-	isGameOver = false
+	gameState = gameStates.difficultySelect
+	isDifficultySelect = true
 	level = 1
 	resetLevel()
 }
@@ -282,7 +311,7 @@ function gameOverDraw() {
 
 	context.font = "30px smw"
 	if (canRestart) {
-		context.fillText("Press Any Key to Restart", canvasMiddleX, canvas.height - 100)
+		context.fillText("Press Any Key to Play Again", canvasMiddleX, canvas.height - 100)
 	}
 	var message = "Skill issue"
 	if (level >= 5) {
@@ -327,7 +356,7 @@ function levelCompleteUpdate() {
 	if (levelCompleteFramesRemaining <= 0) {
 		level += 1
 		resetLevel()
-		isLevelComplete = false
+		gameState = gameStates.playing
 	}
 }
 function levelCompleteDraw() {
@@ -347,14 +376,14 @@ function gamingUpdate() {
 	// Check for win
 	if (hits >= levelHits) {
 		levelCompleteFramesRemaining = levelCompleteStartFrames
-		isLevelComplete = true
+		gameState = gameStates.levelComplete
 	}
 
 	// Check for loss
 	if (timeRemainingFrames <= 0) {
 		gameOverScreenFramesRemaining = gameOverScreenFramesTotal
 		canRestart = false
-		isGameOver = true
+		gameState = gameStates.gameOver
 	}
 
 	//Determine Middle of the mole
@@ -417,8 +446,22 @@ function fillCanvas(color, alpha = 1.0) {
 }
 function drawDebugInfo() {
 	context.font = "40px smw"
-	context.fillStyle = "white"
+	context.fillStyle = "black"
+
+
+
+
+
+	context.globalAlpha = 0.5
+	context.fillRect(0, 0, 230, 85)
+	context.fillRect(canvasMiddleX - 210, 0, 420, 45)
+
+
+
+
 	// Label indicating debug mode
+	context.fillStyle = "white"
+	context.globalAlpha = 1.0
 	context.textAlign = "center"
 	context.fillText("~DEBUG MODE~", canvasMiddleX, 40)
 	// Mouse Position
@@ -439,38 +482,37 @@ function difficultySelectUpdate() {
 	context.textAlign = "center"
 	context.fillStyle = "red"
 	context.fillText("Select Difficulty", canvasMiddleX, 100)
-	drawButton(canvasMiddleX, canvasMiddleY-150, 250, 70, "Easy")
-	drawButton(canvasMiddleX, canvasMiddleY-50, 250, 70, "Normal")
-	drawButton(canvasMiddleX, canvasMiddleY+50, 250, 70, "Hard")
-	drawButton(canvasMiddleX, canvasMiddleY+150, 250, 70, "Expert")
-
+	buttonSelected = false
+	drawButton(canvasMiddleX, canvasMiddleY - 150, 250, 70, "Easy")
+	drawButton(canvasMiddleX, canvasMiddleY - 50, 250, 70, "Normal")
+	drawButton(canvasMiddleX, canvasMiddleY + 50, 250, 70, "Hard")
+	drawButton(canvasMiddleX, canvasMiddleY + 150, 250, 70, "Expert")
 }
 function drawButton(x, y, w, h, text) {
 	if (checkMouseCollision(x - (w / 2), y - (h / 2), w, h)) {
-		switch (text){
-			case "Easy":
-				easyButtonSelected = true
-			break
-			case "Normal":
-				normalButtonSelected = true
-			break
-			case "Hard":
-				hardButtonSelected = true
-			break
-			case "Expert":
-				expertButtonSelected = true
-			break
+		if (text == "Easy") {
+			levelHits = 3
 		}
-			
+		if (text == "Normal") {
+			levelHits = 5
+		}
+		if (text == "Hard") {
+			levelHits = 10
+		}
+		if (text == "Expert") {
+			levelHits = 20
+		}
+		difficulty = text
+		buttonSelected = true
+		context.fillStyle = "#7f0f13"
 
 
-		context.fillStyle = "white"
 	} else {
-		context.fillStyle = "red"
-	}
 
+		context.fillStyle = "#EE1C24"
+	}
 	context.fillRect(x - (w / 2), y - (h / 2), w, h)
-	context.fillStyle = "orange"
-	context.fillText(text, x, y+(h/4))
+	context.fillStyle = "#FE7E13"
+	context.fillText(text, x, y + (h / 4))
 
 }
