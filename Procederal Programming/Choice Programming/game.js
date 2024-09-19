@@ -1,11 +1,14 @@
+// Shows various debug info like mouse pos and hitbox
+var showDebugInfo = false
+
 var canvas
 var canvasMiddleX
 var canvasMiddleY
-
 var context
-var intervalNum
-var showDebugInfo = false
 
+
+
+// Frames per second
 const fps = 60
 
 var difficulty
@@ -102,7 +105,7 @@ document.onkeydown = thingPressed
 document.onclick = thingPressed
 
 
-function start() {
+function start() { // start of start
 	/*
 	Inputs: none
 	Outputs: none
@@ -124,8 +127,8 @@ function start() {
 		mouseX = event.clientX - rect.left
 		mouseY = event.clientY - rect.top
 	})
-}
-function update() {
+}// end of start
+function update() {// start of update
 	/*
 	Inputs: none
 	Outputs: none
@@ -154,7 +157,7 @@ function update() {
 			break
 
 		case gameStates.difficultySelect:
-			difficultySelectUpdate()
+			difficultySelectDraw()
 			break
 
 		case gameStates.levelComplete:
@@ -169,8 +172,8 @@ function update() {
 	}
 
 
-}
-function thingPressed() {
+}// end of update
+function thingPressed() {// start of thingPressed
 	/*
 	Inputs: none
 	Outputs: none
@@ -203,26 +206,22 @@ function thingPressed() {
 
 			break
 	}
-
-
-
-
-
-}
-function checkMoleCollision(x, y) { // Returns true if the x,y coordinates fall inside the mole"s hitbox
+}// end of thingPressed
+function checkMoleCollision(x, y) { // start of checkMoleCollision
 	/*
 	Inputs: x, y
-	Outputs: true, false
+	Outputs: Returns true if the x,y coordinates fall inside the mole's hitbox
 	*/
 	if (x >= mole.x && x <= mole.x + mole.w && y >= mole.y && y <= mole.y + mole.h) {
 		return true
 	}
 	return false
-}
-function checkMouseCollision(x, y, w, h) { // Returns true if the x,y coordinates fall inside the mole"s hitbox 
+}// end of checkMoleCollision
+function checkMouseCollision(x, y, w, h) { // Start of checkMouseCollision
+
 	/*
 	Inputs: x, y, w, h
-	Outputs: true, false
+	Outputs: Returns true if the x,y coordinates fall inside the mouse's hitbox 
 	*/
 
 
@@ -230,26 +229,19 @@ function checkMouseCollision(x, y, w, h) { // Returns true if the x,y coordinate
 		return true
 	}
 	return false
-}
-function randomRange(min, max) {
+}// end of checkMouseCollision
+function randomRange(min, max) { //Start of randomRange
 	/*
 	Inputs: min, max
 	Outputs: A random number between the two given values
 	*/
 	return ((Math.random() * (max - min)) + min)
-}
-
-
-
-
-
-
-function drawTimer(x, y, w, h, timeRemaining, totalTime, changeColor = false) {
+}// end of randomRange
+function drawTimer(x, y, w, h, timeRemaining, totalTime, changeColor = false) {// Start of drawTimer
 	/*
 	Inputs: x, y, w, h, timeRemaining, totalTime, changeColor
 	Outputs: none
 	*/
-
 	var timeRemainingPercentage = timeRemaining / totalTime
 	if (changeColor) {
 		if (timeRemainingPercentage < TIMER_DANGER) {
@@ -261,23 +253,20 @@ function drawTimer(x, y, w, h, timeRemaining, totalTime, changeColor = false) {
 		}
 	}
 	context.fillRect(x, y, w * (timeRemaining / totalTime), h)
-}
-
-
-
-
-
-function moveMole() {
+}// end of drawTimer
+function moveMole() {// Start of moveMole
 	/*
 	Inputs: none
 	Outputs: none
 	*/
+	// moves to next position
 	mole.x = mole.nextX
 	mole.y = mole.nextY
+	// sets next position
 	mole.nextX = randomRange(0, gameAreaWidth - mole.w)
 	mole.nextY = randomRange(0, gameAreaHeight - mole.h)
-}
-function drawLine(x1, y1, x2, y2, thickness, color) {
+}// end of moveMole
+function drawLine(x1, y1, x2, y2, thickness, color) {// Start of drawLine
 	/*
 	Inputs: x1, y1, x2, y2, thickness, color
 	Outputs: none
@@ -292,8 +281,8 @@ function drawLine(x1, y1, x2, y2, thickness, color) {
 
 	// Draw the Path
 	context.stroke();
-}
-function drawCircle(x, y, radius, color, fill = true, half_circle = false) {
+}// end of drawLine
+function drawCircle(x, y, radius, color, fill = true, half_circle = false) {// Start of drawCircle
 	/*
 	Inputs: x, y, radius, color, fill, half_circle
 	Outputs: none
@@ -312,8 +301,8 @@ function drawCircle(x, y, radius, color, fill = true, half_circle = false) {
 	} else {
 		context.stroke()
 	}
-}
-function resetLevel() {
+}// end of drawCircle
+function resetLevel() {// Start of resetLevel
 	/*
 	Inputs: none
 	Outputs: none
@@ -327,8 +316,8 @@ function resetLevel() {
 	escapedMoles = 0
 	timeRemainingFrames = timerStartFrames
 	moveMole()
-}
-function resetGame() {
+}// end of resetLevel
+function resetGame() {// Start of resetGame
 	/*
 	Inputs: none
 	Outputs: none
@@ -343,8 +332,8 @@ function resetGame() {
 	isDifficultySelect = true
 	level = 1
 	resetLevel()
-}
-function gameOverUpdate() {
+}// end of resetGame
+function gameOverUpdate() {//start of gameOverUpdate
 	/*
 	Inputs: none
 	Outputs: none
@@ -354,23 +343,27 @@ function gameOverUpdate() {
 	//adds an extra delay to prevent accidental restarting
 	gameOverScreenFramesRemaining -= 1
 	if (gameOverScreenFramesRemaining <= 0) { canRestart = true }
-}
-function gameOverDraw() {
+}// end of gameOverUpdate
+function gameOverDraw() {// start of gameOverDraw
 	/*
 	Inputs: none
 	Outputs: none
 	*/
-	fillCanvas("black", 1.0)
+	clearCanvas("black", 1.0)
 
+	// Format drawing
 	context.fillStyle = "red"
 	context.font = "80px smw"
 	context.textAlign = "center"
+
+	// Game over message
 	context.fillText("GAME OVER", canvasMiddleX, 150)
 
 	context.font = "30px smw"
 	if (canRestart) {
 		context.fillText("Press Anything to Play Again", canvasMiddleX, canvas.height - 100)
 	}
+	// Draws messages depending on your level
 	var gameOverMessage = "Skill issue"
 	if (level >= 5) {
 		gameOverMessage = "Not bad but still not good"
@@ -389,7 +382,7 @@ function gameOverDraw() {
 	}
 	context.fillText(gameOverMessage, canvasMiddleX, 200)
 
-
+	// Draw Stat names
 	context.textAlign = "right"
 	var leftOffset = 10
 	context.fillText("Difficulty:", canvasMiddleX - leftOffset, (canvas.height / 2) - 100)
@@ -399,6 +392,7 @@ function gameOverDraw() {
 	context.fillText("Escaped Moles:", canvasMiddleX - leftOffset, (canvas.height / 2) + 100)
 	context.fillText("Hit Accuracy:", canvasMiddleX - leftOffset, (canvas.height / 2) + 150)
 
+	// Draw Stat values
 	context.textAlign = "left"
 	var rightOffset = 10
 	context.fillText(difficulty, canvasMiddleX + rightOffset, (canvas.height / 2) - 100)
@@ -408,36 +402,41 @@ function gameOverDraw() {
 	context.fillText(totalEscapedMoles, canvasMiddleX + rightOffset, (canvas.height / 2) + 100)
 	context.fillText(accuracyPercent + " %", canvasMiddleX + rightOffset, (canvas.height / 2) + 150)
 
-
+	// Draw cooldown between restarts
 	drawTimer(0, canvas.height - 10, canvas.width, 10, gameOverScreenFramesRemaining, gameOverScreenFramesTotal)
-}
-function levelCompleteUpdate() {
+}// end of gameOverDraw
+function levelCompleteUpdate() {// start of levelCompleteUpdate
 	/*
 	Inputs: none
 	Outputs: none
 	*/
+	// Waits for cooldown before starting next level
 	levelCompleteFramesRemaining -= 1
 	if (levelCompleteFramesRemaining <= 0) {
 		level += 1
 		resetLevel()
 		gameState = gameStates.playing
 	}
-}
-function levelCompleteDraw() {
+}// end of levelCompleteUpdate
+function levelCompleteDraw() { // start of levelCompleteDraw
 	/*
 	Inputs: none
 	Outputs: none
 	*/
-	fillCanvas("black", 1.0)
+	clearCanvas("black", 1.0)
+
+	// Formatting
 	context.fillStyle = "green"
 	context.font = "80px smw"
 	context.textAlign = "center"
+
+	// Draws stuff
 	drawTimer(0, canvas.height - 10, canvas.width, 10, levelCompleteFramesRemaining, levelCompleteStartFrames)
 	context.fillText("LEVEL " + level + " COMPLETE!", canvasMiddleX, (canvas.height / 2) - 30)
 	context.font = "40px smw"
 	context.fillText("Next Level starting soon", canvasMiddleX, canvas.height / 2 + 30)
-}
-function gamingUpdate() {
+}// end of levelCompleteDraw
+function gamingUpdate() {// start of gamingUpdate
 	/*
 	Inputs: none
 	Outputs: none
@@ -474,14 +473,13 @@ function gamingUpdate() {
 		totalEscapedMoles += 1
 		moveMole()
 	}
-}
-function gamingDraw() {
+}// end of gamingUpdate
+function gamingDraw() {// start of gamingDraw
 	/*
 	Inputs: none
 	Outputs: none
 	*/
-	//Reset the canvas
-	fillCanvas("white", 1.0)
+	clearCanvas("white", 1.0)
 
 	//Draw Background
 	context.drawImage(bgImg, 0, 0, canvas.width, canvas.height)
@@ -495,31 +493,32 @@ function gamingDraw() {
 	context.drawImage(mole.img, mole.x, mole.y, mole.w, mole.h)
 
 	drawUserInterface()
-}
-function drawUserInterface() {
+}// end of gamingDraw
+function drawUserInterface() {// start of drawUserInterface
 	/*
 	Inputs: none
 	Outputs: none
 	*/
-	//Set Font
+	// Formatting
 	context.font = "40px smw"
+	context.textAlign = "center"
+	context.fillStyle = "#4d4f4e"
 
 	//Draw UI Box
-	context.fillStyle = "#4d4f4e"
 	context.fillRect(0, gameAreaHeight, canvas.width, canvas.height)
 
 	//Draw UI Text
 	context.fillStyle = "white"
-	context.textAlign = "center"
 
+	// Draw Stats
 	context.fillText("Level: " + level + " Hits: " + hits + "/" + levelHits + " Misses: " + misses + " Escaped: " + escapedMoles, canvasMiddleX, gameAreaHeight + 50)
 
 	//Draw Timer Bar
 	context.fillStyle = "green"
 	drawTimer(0, canvas.height - 10, canvas.width, 10, timeRemainingFrames, timerStartFrames, true)
 
-}
-function fillCanvas(color, alpha = 1.0) {
+}// end of drawUserInterface
+function clearCanvas(color, alpha = 1.0) { // start of clearCanvas
 	/*
 	Inputs: color, alpha
 	Outputs: none
@@ -527,12 +526,13 @@ function fillCanvas(color, alpha = 1.0) {
 	context.fillStyle = color
 	context.fillRect(0, 0, canvas.width, canvas.height)
 	context.globalAlpha = alpha
-}
-function drawDebugInfo() {
+}// end of clearCanvas
+function drawDebugInfo() { // start of drawDebugInfo
 	/*
 	Inputs: none
 	Outputs: none
 	*/
+	// Formatting
 	context.font = "40px smw"
 	context.fillStyle = "black"
 	context.globalAlpha = 0.5
@@ -558,23 +558,27 @@ function drawDebugInfo() {
 	context.fillStyle = "white"
 	context.fillRect(mole.nextX, mole.nextY, mole.w, mole.h)
 	context.globalAlpha = 1.0
-}
-function difficultySelectUpdate() {
+}// end of drawDebugInfo
+function difficultySelectDraw() { // start of difficultySelectDraw
 	/*
 	Inputs: none
 	Outputs: none
 	*/
+	// Formatting
 	context.font = "40px smw"
 	context.textAlign = "center"
 	context.fillStyle = "red"
+	// Draw label
 	context.fillText("Select Difficulty", canvasMiddleX, 100)
+	// Deselects Buttons
 	buttonSelected = false
+	// Draws and checks for selected buttons
 	createDifficultyButton(canvasMiddleX, canvasMiddleY - 150, 250, 70, "Easy")
 	createDifficultyButton(canvasMiddleX, canvasMiddleY - 50, 250, 70, "Normal")
 	createDifficultyButton(canvasMiddleX, canvasMiddleY + 50, 250, 70, "Hard")
 	createDifficultyButton(canvasMiddleX, canvasMiddleY + 150, 250, 70, "Expert")
-}
-function createDifficultyButton(x, y, w, h, text) {
+}// end of difficultySelectDraw
+function createDifficultyButton(x, y, w, h, text) {// start of createDifficultyButton
 	/*
 	Inputs: x, y, w, h, text
 	Outputs: none
@@ -600,4 +604,4 @@ function createDifficultyButton(x, y, w, h, text) {
 	// Draws button label
 	context.fillStyle = "#FE7E13"
 	context.fillText(text, x, y + (h / 4))
-}
+}// end of createDifficultyButton

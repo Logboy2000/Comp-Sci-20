@@ -1,0 +1,62 @@
+<!doctype html>
+
+<style>
+	body {
+		text-align: center;
+		font-family: "Comic Sans MS";
+	}
+	button {
+		width: 200px;
+		height: 50px;
+	}
+	input {
+		width: 192px;
+		text-align: center;
+	}
+</style>
+
+<html>
+
+<head>
+	<title>Array Showcase</title>
+	<script type="text/javascript" src="code.js"></script>
+</head>
+
+<body onLoad="go()">
+	<h1>Array Showcase</h1>
+
+	<div id="output">
+		<hr>
+		<h2>My friends array</h2>
+		
+		<hr>
+	</div>
+
+	<br>
+
+	<div>
+		<hr>
+		<h2>Array search</h2>
+		<hr>
+		<input type="text" id="arraySearchInput" placeholder="input value">
+		<br>
+		<button onclick="searchArrayButton()">Search</button>
+	</div>
+
+	<div>
+		<hr>
+		<h2>Array copying</h2>
+		<hr>
+		<button onclick="copyArrayButton()">Copy Array</button>
+		<h3>Array: numbers</h3>
+		<p id="numbersOutput"></p>
+		<h3>Array: numbers2</h3>
+		<p id="numbers2Output"></p>
+	</div>
+
+	<br>
+
+
+</body>
+
+</html>

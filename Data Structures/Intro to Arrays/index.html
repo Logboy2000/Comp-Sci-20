@@ -1,17 +1,42 @@
 <!doctype html>
+<style>
+	body {
+		text-align: center;
+	}
+</style>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Learning Arrays</title>
-<script>
-	function go(){// start of go
+	<title>Arrays Showcase</title>
+	<script>
+		function go() {
+			var names = new Array()
+			names.length = 5
+			names[0] = "Thomas the train"
+			names[1] = "Jeremey"
+			names[2] = "Mike"
+			names[3] = "Joe Biden"
+			names[4] = "Mr. Clean"
+			displayArray(names, "output")		
+
+	for (i = 0; i < array.length; i++) {
+				document.getElementById(elementId).innerHTML += array[i] + "<br/> "
+			}
+		}
 		
-	}// end of go
-	
-</script>
+	</script>
 
 </head>
-
 <body onLoad="go()">
+	<h1>Learning Arrays</h1>
+
+	<div id="output">
+		My friends:
+		<br>
+		================
+		<br>
+	</div>
+
 </body>
-</html>
+
+</html>	function displayArray(array, elementId) {
+			
