@@ -5,10 +5,12 @@
 		text-align: center;
 		font-family: "Comic Sans MS";
 	}
+
 	button {
 		width: 200px;
 		height: 50px;
 	}
+
 	input {
 		width: 192px;
 		text-align: center;
@@ -28,7 +30,7 @@
 	<div id="output">
 		<hr>
 		<h2>My friends array</h2>
-		
+
 		<hr>
 	</div>
 
@@ -54,8 +56,34 @@
 		<p id="numbers2Output"></p>
 	</div>
 
+
+	<div>
+		<hr>
+		<h2>Array insertion FIX ME I AM BROKEN</h2>
+		<hr>
+		<button onclick="insertIntoArrayButton()" style="width: 400px;">Insert Value at Index</button>
+		<br>
+		<input type="text" id="arrayInsertionInputValue" placeholder="value">
+		<input type="text" id="arrayInsertionInputIndex" placeholder="index">
+		<h3>Array: arrayThatGetsInsertedInto</h3>
+		<p id="arrayThatGetsInsertedIntoOutput"></p>
+	</div>
+
 	<br>
 
+	<div>
+		<hr>
+		<h2>Array merging</h2>
+		<hr>
+		<button onclick="mergeArraysButton()" style="width: 400px;">Merge array1 and array2</button>
+		<br>
+		<h3>array1</h3>
+		<p id="array1Display">
+		<h3>array2</h3>
+		<p id="array2Display">
+		<h3>mergedArray</h3>
+		<p id="mergedArrayDisplay">
+	</div>
 
 </body>
 
