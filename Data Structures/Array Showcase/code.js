@@ -1,6 +1,9 @@
 var names = ["Thomas the train", "Jeremey", "Mike", "Joe Biden", "Mr. Clean"]
 var numbers = [10, 20, 40, 80]
 var numbers2 = []
+var array1 = [5, 2, 7]
+var array2 = ["y", "x", "z"]
+
 
 function go() {
     displayArray(names, "output")
@@ -39,25 +42,27 @@ function copyArray(copiedArray) {
     return outputArray
 }
 function copyArrayButton() {
+
     numbers2 = copyArray(numbers)
     document.getElementById("numbers2Output").innerHTML = ""
     displayArray(numbers2, "numbers2Output")
 }
 
-var arrayThatGetsInsertedInto = [1, 2, 5]
 
-function insertIntoArray(value, insertionIndex, inputArray) {
-    var outputArray = inputArray
-    var i
-    for (i = insertionIndex; i < inputArray.length - 1; i++) {
-        outputArray[i + 1] = outputArray[i]
+
+
+
+function insertArray(value, insertionIndex, array) {
+    for (i = array.length; i > insertionIndex; i--) {
+        array[i] = array[i - 1]
     }
-
-    outputArray[insertionIndex] = value
-    return outputArray
+    array[insertionIndex] = value
+    return array
 }
+
+var arrayThatGetsInsertedInto = []
 function insertIntoArrayButton() {
-    arrayThatGetsInsertedInto = insertIntoArray(document.getElementById("arrayInsertionInputValue").value, document.getElementById("arrayInsertionInputIndex").value, arrayThatGetsInsertedInto)
+    arrayThatGetsInsertedInto = insertArray(document.getElementById("arrayInsertionInputValue").value, document.getElementById("arrayInsertionInputIndex").value, arrayThatGetsInsertedInto)
     displayArray(arrayThatGetsInsertedInto, "arrayThatGetsInsertedIntoOutput")
 }
 
@@ -75,10 +80,7 @@ function mergeArrays(array1, array2) {
 }
 
 
-var array1 = [5, 2, 7]
-var array2 = ["y", "x", "z"]
-function mergeArraysButton(){
-
+function mergeArraysButton() {
     var mergedArray = mergeArrays(array1, array2)
     displayArray(mergedArray, "mergedArrayDisplay")
 }
