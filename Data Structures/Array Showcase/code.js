@@ -42,7 +42,6 @@ function copyArray(copiedArray) {
     return outputArray
 }
 function copyArrayButton() {
-
     numbers2 = copyArray(numbers)
     document.getElementById("numbers2Output").innerHTML = ""
     displayArray(numbers2, "numbers2Output")
