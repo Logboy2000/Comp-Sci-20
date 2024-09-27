@@ -1,11 +1,14 @@
-var testString = "WhyHelloThere"
+var currentAnswerArray = []
+var currentAnswerString = ''
+
 var currentWordArray = []
-var currentWordString = ""
+
 var isFetching = false
+
 function go() {
-
+	generateKeys()
+	fetchRandomWord()
 }
-
 
 function stringToArray(string) {
 	var outputArray = []
@@ -18,29 +21,97 @@ function stringToArray(string) {
 }
 
 
-const fetchRandomWord = function (length) {
+function fetchRandomWord() {
+	var length = document.getElementById('lengthInput').value
+	if (length == '') {
+		length = randomRange(2, 10)
+	}
 	if (!isFetching) {
 		isFetching = true
-		document.getElementById("answer").innerHTML = "Fetching word, please wait"
-		fetch("https://random-word-api.herokuapp.com/word?length=" + length)
+		document.getElementById('word').innerHTML = 'Fetching word, please wait'
+		fetch('https://random-word-api.herokuapp.com/word?length=' + length)
 			.then(res => res.json())
 			.then(data => {
 				isFetching = false
-				currentWordString = data[0].toUpperCase()
-				currentWordArray = stringToArray(currentWordString)
-				document.getElementById("answer").innerHTML = "Answer: " + currentWordString
+				currentAnswerString = data[0].toUpperCase()
+				currentAnswerArray = stringToArray(currentAnswerString)
+				document.getElementById('word').innerHTML = ''
+				currentWordArray = []
+				for (i = 0; i < currentAnswerArray.length; i++) {
+					currentWordArray[i] = '_'
+				}
+				document.getElementById('word').innerHTML = currentWordArray
+				removeKeys()
+				generateKeys()
 			})
 			.catch(err => {
-				alert("Word Not Found!")
+				document.getElementById('word').innerHTML = 'Word not found, try another length'
 			})
 	}
-	//showBtn.innerText = `Please wait. Fetching the word ...`
-
 }
 
-function displayArray(array, elementId) {
-	document.getElementById(elementId).innerHTML = ""
+
+function searchArray(array, valueToFind) {
+	var i
 	for (i = 0; i < array.length; i++) {
-		document.getElementById(elementId).innerHTML += array[i]
+		if (array[i] == valueToFind) {
+			console.log(i)
+		}
 	}
+	return -1
+}
+
+function keyPressed(key) {
+	if (!isFetching) {
+		var button = document.getElementById(key)
+		button.style.display = 'none'
+		//searchArray(currentWordArray, key)
+
+
+
+
+
+
+	}
+}
+function removeKeys() {
+	var keyboardDiv = document.getElementById('letters')
+	while (keyboardDiv.firstChild) {
+		keyboardDiv.removeChild(keyboardDiv.firstChild)
+	}
+	
+}
+function generateKeys() {
+	// Generate keyboard buttons dynamically (wOwIe!!)
+	const keysQwerty = [
+		'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
+		'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',
+		'Z', 'X', 'C', 'V', 'B', 'N', 'M'
+	];
+	const keysAlphabetical = [
+		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+		'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+		'U', 'V', 'W', 'X', 'Y', 'Z'
+	];
+	var keys = keysAlphabetical
+	var lettersDiv = document.getElementById('letters')
+	// Loop through all keys in the array
+	keys.forEach(key => {
+		// Create button
+		const button = document.createElement('button')
+		// Modify button
+		button.textContent = key
+		button.onclick = () => keyPressed(key)
+		button.id = key
+		// Append created button
+		lettersDiv.appendChild(button)
+	});
+}
+
+function randomRange(min, max) {
+	return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function showAnswer() {
+	document.getElementById('word').innerHTML = currentAnswerArray
 }

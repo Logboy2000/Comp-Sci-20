@@ -1,29 +1,75 @@
-body {
-    text-align: center;
-    width: 100%;
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
+body {
+    width: 100%;
+    font-family: "Bebas Neue";
+    font-size: 30px;
+    color: #FFFFFF;
+    justify-content: center;
+    display: flex;
 }
+
 button {
     transition: transform 0.2s;
     margin: 3px;
-    order: 1;
-    min-width: 50px;
-    min-height:50px;
-    font-size: 30px;
+    min-width: 40px;
+    min-height: 40px;
+    font-size: inherit;
     border-radius: 5px;
+    border-style: none;
     background-color: #000000;
     color: white;
     transform: scale(1);
+    font-family: inherit
 }
+
 button:hover {
     transform: scale(1.5);
     background-color: #373737;
+    cursor: pointer;
 }
+
 button:active {
     transform: scale(1.25);
     background-color: #696969;
 }
+
 input {
-    min-width: 40px;
-    min-height: 36px;
+    background-color: #000000;
+    border-style: none;
+    margin: 3px;
+    color: white;
+    height: 40px;
+    font-size: inherit;
+    font-family: inherit;
+    border-radius: 5px;
+    display: inline;
+}
+
+img {
+    width: 300px;
+    height: 300px;
+}
+
+#keyboard {
+    width: 415px;
+    padding: 10px;
+    background-color: #585858;
+    font-size: inherit;
+    border-radius: 5px;
+    color: inherit;
+}
+label {
+    font-size: inherit;
+    color: inherit;
+}
+
+#screen {
+    background-color: #000000;
+    border-radius: 5px;
+    margin: 3px;
+    color: white;
+    height: 40px;
+    font-size: inherit;
+    text-align: center;
 }
