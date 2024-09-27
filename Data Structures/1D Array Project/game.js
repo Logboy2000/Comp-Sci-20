@@ -10,6 +10,13 @@ function go() {
 	fetchRandomWord()
 }
 
+var twoDee = [
+	[1,2,3],
+	[4,5,6],
+	[7,8,9]
+]
+
+
 function stringToArray(string) {
 	var outputArray = []
 	var originalString = string
@@ -58,14 +65,22 @@ function searchArray(array, valueToFind) {
 			console.log(i)
 		}
 	}
-	return -1
+	return
 }
 
 function keyPressed(key) {
 	if (!isFetching) {
 		var button = document.getElementById(key)
 		button.style.display = 'none'
-		//searchArray(currentWordArray, key)
+		document.getElementById("guessDisplay").innerHTML = key
+
+		for (i = 0; i < currentAnswerArray.length; i++) {
+			if (currentAnswerArray[i] == key) {
+				currentWordArray[i] = key
+			}
+		}
+		document.getElementById('word').innerHTML = currentWordArray
+
 
 
 
