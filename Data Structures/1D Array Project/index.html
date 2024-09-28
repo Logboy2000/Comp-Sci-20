@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<head>
+  <title>Hangman</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="game.js"></script>
+</head>
+
+
+
+
+
+
+
+<body onload="go()">
+
+
+  <br>
+  <div id="wordContainer">
+    <label id="word"></label>
+  </div>
+  <img src="images/hangman0.png" alt="hangman" id="hangman" />
+  <div id="keyboard">
+    <div id="letters"></div>
+  </div>
+
+
+
+
+  <div id="settings">
+    <div>
+      <label>New Answer</label>
+      <br>
+      <button onclick="randomWordButton()">Random</button>
+      <button onclick="customWordButton()">Custom</button>
+    </div>
+
+    <div style="text-align: left;">
+      <hr>
+      <label>Random Word Length</label>
+      <input type="text" id="lengthInput" placeholder="default is (3-10)">
+      <label>Custom Answer</label>
+      <input type="text" id="customAnswerInput" placeholder="Put your own custom answer here!">
+    </div>
+    <hr>
+    <div>
+      <label>Random words are fetched from </label> <a href="https://random-word-api.herokuapp.com/home" target="_blank"
+        style="text-decoration: none;">here</a>
+    </div>
+  </div>
+
+
+
+
+
+
+
+</body>
+
+</html>
