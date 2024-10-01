@@ -57,7 +57,7 @@ function searchArray(array, valueToFind) {
 	return false
 }
 
-function displayArray(array, elementId) {
+function displayAnswerArray(array, elementId) {
 	document.getElementById(elementId).innerHTML = ''
 	for (i = 0; i < array.length; i++) {
 		document.getElementById(elementId).innerHTML += ' ' + array[i] + ' '
@@ -65,10 +65,11 @@ function displayArray(array, elementId) {
 }
 
 function keyPressed(key) {
+	key = key.toUpperCase()
 	if (gameState == gameStates.PLAYING) {
 		// Hide button
-		document.getElementById(key).style.display = 'none'
-
+		document.getElementById(key).className = 'buttonDisabled'
+		document.getElementById(key).onclick = () => ""
 		// Check for game loss
 		var isKeyCorrect = false
 		for (i = 0; i < currentAnswerArray.length; i++) {
@@ -92,15 +93,6 @@ function keyPressed(key) {
 
 
 		switch (gameState) {
-			case gameStates.PLAYING:
-
-				break
-			case gameStates.FETCHING:
-
-				break
-			case gameStates.ANSWER_SHOWN:
-
-				break
 			case gameStates.GAME_OVER:
 				document.getElementById('word').style.color = '#FF0000'
 				break
@@ -112,7 +104,7 @@ function keyPressed(key) {
 		if (currentGuessArray == currentAnswerArray) {
 			document.getElementById('word').style.color = '#00FF00'
 		}
-		displayArray(currentGuessArray, 'word')
+		displayAnswerArray(currentGuessArray, 'word')
 
 
 
@@ -131,34 +123,43 @@ function removeKeys() {
 }
 function generateKeys() {
 	// Generate keyboard buttons dynamically (wOwIe!!)
-	const keysAlphabetical = [
-		'1','2','3','4','5','6','7','8','9','0',
-		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-		'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-		'U', 'V', 'W', 'X', 'Y', 'Z'
+	const keysQwerty = [
+		'~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+',
+		'`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=',
+		'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\\',
+		'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', '\'',
+		'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/',
 	];
-	var keys = keysAlphabetical
+
+	var keys = keysQwerty
 	var lettersDiv = document.getElementById('letters')
 	// Loop through all keys in the array
+	
 	keys.forEach(key => {
 		// Create button
 		const button = document.createElement('button')
+		button.className = 'button'
 		// Modify button
 		button.textContent = key
 		button.onclick = () => keyPressed(key)
 		button.id = key
+		
 		// Append created button
 		lettersDiv.appendChild(button)
-		if (key == '0'){
+		if (key == '\'') {
+			button.textContent = 'Answer'
+			button.onclick = () => showAnswer()
+			button.id = 'showAnswerButton'
+			button.className = 'button'
+			lettersDiv.appendChild(button)
+		}
+		if (key == '+' || key == '=' || key == '\\' || key == '\'') {
 			lettersDiv.appendChild(document.createElement('br'))
 		}
-	});
+		
+	})
 
-	const showAnswerButton = document.createElement('button')
-	showAnswerButton.textContent = 'Show Answer'
-	showAnswerButton.onclick = () => showAnswer()
-	showAnswerButton.id = 'showAnswerButton'
-	lettersDiv.appendChild(showAnswerButton)
+
 
 }
 
@@ -168,7 +169,7 @@ function randomRange(min, max) {
 
 function showAnswer() {
 	gameState = gameStates.ANSWER_SHOWN
-	displayArray(currentAnswerArray, 'word')
+	displayAnswerArray(currentAnswerArray, 'word')
 }
 
 function randomWordButton() {
@@ -189,7 +190,6 @@ function customWordButton() {
 	document.getElementById('customAnswerInput').value = ''
 }
 
-
 function changeWord(word) {
 	wrongPicks = 0
 	document.getElementById('hangman').setAttribute('src', 'images/hangman' + wrongPicks + '.png')
@@ -204,7 +204,7 @@ function changeWord(word) {
 		}
 
 	}
-	displayArray(currentGuessArray, 'word')
+	displayAnswerArray(currentGuessArray, 'word')
 	removeKeys()
 	generateKeys()
 	document.getElementById('word').style.color = '#FFFFFF'

@@ -5,53 +5,41 @@ body {
     margin: 0;
     width: 100%;
     height: 100%;
-    background-color: #444;
+    background-color: #696969;
 }
 
 body {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 25px;
     color: #FFFFFF;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    /* Use fr units to distribute space evenly */
-    grid-template-rows: auto 1fr 1fr;
-    
+    text-align: center;
+    display: inline-block;
 }
 
 
-
 #keyboard, #settings, #wordContainer{
-    background-color: #444;
     color: #fff;
     padding: 10px;
 }
 
 img {
-    grid-column: 1;
-    grid-row: 2;
-    width: 100%;
-    height: 100%;
-    object-fit: scale-down;
+    width: 30%;
+    height: 50%;
     background-color: #FFFFFF;
-    outline: #444 10px solid;
     border-radius: 10px;
 }
 
 #keyboard {
-    grid-column: 1;
-    grid-row: 3;
     text-align: center;
+    width: 100%;
 }
 
 #settings {
-    grid-column: 2 / 3;
-    grid-row: 1 / 3;
+    width: 50%;
 }
 
 #wordContainer {
-    grid-column: 1;
-    grid-row: 1;
+    width: 10%;
     text-align: center;
 }
 
@@ -79,8 +67,8 @@ input {
     display: inline;
 }
 
-button {
-    transition: transform 0.2s;
+.button {
+    transition: all 0.2s;
     margin: 3px;
     min-width: 50px;
     min-height: 50px;
@@ -93,13 +81,27 @@ button {
     font-family: inherit
 }
 
-button:hover {
+.button:hover {
     transform: scale(1.5);
     background-color: #373737;
     cursor: pointer;
 }
 
-button:active {
+.button:active {
     transform: scale(1.25);
     background-color: #696969;
+}
+
+.buttonDisabled {
+    transition: all 0.2s;
+    margin: 3px;
+    min-width: 50px;
+    min-height: 50px;
+    font-size: inherit;
+    border-radius: 5px;
+    border-style: none;
+    background-color: #4d4d4d;
+    color: #6b6b6b;
+    transform: scale(1);
+    font-family: inherit
 }
