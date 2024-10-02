@@ -14,36 +14,41 @@
 
 <body onload="go()">
 
+  <label id="word"></label>
+  <hr>
+  <div style="display:flex;">
 
-  <div>
-    <div id="wordContainer"></div>
-    <label id="word"></label>
-    <hr>
-    <img src="images/hangman0.png" alt="hangman" id="hangman" />
+    <div id="wordContainer">
+      <img src="images/hangman0.png" alt="hangman" id="hangman" />
 
-    <div id="settings">
       <div>
-        <label>New Answer</label>
+        <label>New Word</label>
         <br>
         <button onclick="randomWordButton()" class="button">Random</button>
         <button onclick="customWordButton()" class="button">Custom</button>
       </div>
 
+
+
+    </div>
+    
+    <div id="settings">
+
+
       <div style="text-align: left;">
-        <hr>
         <label>Random Word Length</label>
         <input type="text" id="lengthInput" placeholder="default is (3-10)">
         <br>
         <label>Custom Answer</label>
         <input type="text" id="customAnswerInput" placeholder="Put your own custom answer here!">
       </div>
-      <hr>
-      <div>
-        <label>Random words are fetched from </label> <a href="https://random-word-api.herokuapp.com/home"
-          target="_blank">here</a>
-      </div>
     </div>
   </div>
+  
+
+
+
+
 
 
 
@@ -61,7 +66,8 @@
 
 
 
-
+  <label>Random words are fetched from </label> <a href="https://random-word-api.herokuapp.com/home"
+          target="_blank">here</a>
 
 
 

@@ -13,45 +13,16 @@ body {
     font-size: 25px;
     color: #FFFFFF;
     text-align: center;
-    display: inline-block;
 }
-
-
-#keyboard, #settings, #wordContainer{
-    color: #fff;
-    padding: 10px;
-}
-
-img {
-    width: 30%;
-    height: 50%;
-    background-color: #FFFFFF;
-    border-radius: 10px;
-}
-
-#keyboard {
-    text-align: center;
-    width: 100%;
+#wordContainer {
+    width: 50%;
 }
 
 #settings {
     width: 50%;
+    
 }
 
-#wordContainer {
-    width: 10%;
-    text-align: center;
-}
-
-#screen {
-    background-color: #000000;
-    border-radius: 5px;
-    margin: 3px;
-    color: white;
-    min-height: 40px;
-    font-size: inherit;
-    text-align: center;
-}
 
 
 input {
@@ -65,6 +36,11 @@ input {
     font-family: inherit;
     border-radius: 5px;
     display: inline;
+}
+
+img {
+    background-color: #FFFFFF;
+    image-rendering: pixelated;
 }
 
 .button {
@@ -104,4 +80,8 @@ input {
     color: #6b6b6b;
     transform: scale(1);
     font-family: inherit
+}
+
+#showAnswerButton {
+    width: 105px;
 }
