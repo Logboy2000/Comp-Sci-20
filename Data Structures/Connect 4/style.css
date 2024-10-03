@@ -5,11 +5,10 @@ body {
 }
 
 canvas {
-	image-rendering: pixelated;
-    border: #2313ff 10px solid;
+    border: #000000 10px solid;
     object-fit:scale-down;
 	border-radius: 10px;
-	box-shadow: 0px 0px 50px #6600ff;
+	box-shadow: 0px 0px 10px #000000;
 
 }
 
