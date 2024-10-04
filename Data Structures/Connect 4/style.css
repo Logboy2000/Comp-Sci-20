@@ -5,10 +5,10 @@ body {
 }
 
 canvas {
-    border: #000000 10px solid;
+    border: #0000BB 10px solid;
     object-fit:scale-down;
 	border-radius: 10px;
-	box-shadow: 0px 0px 10px #000000;
+	box-shadow: 0px 0px 10px #0000BB;
 
 }
 

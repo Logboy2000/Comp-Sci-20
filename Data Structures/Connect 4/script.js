@@ -3,12 +3,15 @@ var ctx
 
 const FPS = 60
 
-const EMPTY_CELL_COLOR = '#FFFFFF';
-const PLAYER_ONE_COLOR = '#FF0000';
-const PLAYER_TWO_COLOR = '#FFFF00';
-const CURSOR_COLOR = '#0000FF';
+const EMPTY_CELL_COLOR = '#FFFFFF'
+const PLAYER_ONE_COLOR = '#FF0000'
+const PLAYER_TWO_COLOR = '#FFFF00'
+const PLAYER_THREE_COLOR = '#00FF00'
+const PLAYER_FOUR_COLOR = '#FF00FF'
+const CURSOR_COLOR = '#0000FF'
 
-var currentPlayer = 1
+var playerTurn = 1
+var playerCount = 4
 
 var mouse = {
     x: 0,
@@ -18,13 +21,15 @@ var mouse = {
 var pieceWidth = 50
 var pieceHeight = 50
 var selectedColumn = 0
+var selectedRow = 5
+
 /**
  * The current state of the Connect 4 game board.
  * Each element represents a cell on the board.
  * Values in the array mean:
  * - 0: Empty cell
  * - 1: Red piece
- * - 2: Green piece
+ * - 2: Yellow piece
  */
 var board = [
     [0, 0, 0, 0, 0, 0],
@@ -62,12 +67,8 @@ function go() {
         mouse.y = event.clientY - rect.top - 10
     })
     canvas.addEventListener("click", function (event) {
-        placePiece(selectedColumn, currentPlayer)
-        if (currentPlayer == 1){
-            currentPlayer = 2
-        } else if (currentPlayer == 2) {
-            currentPlayer = 1
-        }
+        placePiece(selectedRow, selectedColumn, playerTurn)
+
     })
 
 
@@ -79,13 +80,15 @@ function go() {
 }
 
 function update() {
-    board[2][0] = 2
 
     if (mouse.x > 0 && mouse.y > 0 && mouse.x < canvas.width && mouse.y < canvas.height) {
         selectedColumn = Math.floor(mouse.x / pieceWidth)
+        selectedRow = 5
+        while (board[selectedColumn][selectedRow] == 1 || board[selectedColumn][selectedRow] == 2 || board[selectedColumn][selectedRow] == 3 || board[selectedColumn][selectedRow] == 4) {
+            selectedRow -= 1
+        }
     }
-    document.getElementById('columnDisplay').innerText = selectedColumn
-    document.getElementById('turnDisplay').innerText = currentPlayer
+    document.getElementById('turnDisplay').innerText = 'Turn: ' + playerTurn
 
     draw()
 }
@@ -106,9 +109,15 @@ function draw() {
     ctx.fillStyle = '#FFFFFF'
     ctx.fillRect(selectedColumn * pieceWidth, 0, pieceWidth, canvas.height)
 
+    // Draw Selected Column
+    ctx.globalAlpha = 0.5
+    ctx.fillStyle = '#FFFFFF'
+    ctx.fillRect(0, selectedRow * pieceWidth, canvas.width, pieceHeight)
+
+
     //Draw Mouse Position
-    ctx.fillStyle = '#000000'
-    drawCircle(mouse.x, mouse.y, 5)
+    //ctx.fillStyle = '#000000'
+    //drawCircle(mouse.x, mouse.y, 5)
 }
 function drawCircle(x = 0, y = 0, radius = 10, fill = true) {
     ctx.beginPath()
@@ -132,6 +141,12 @@ function drawBoard() {
                 case 2:
                     ctx.fillStyle = PLAYER_TWO_COLOR;
                     break;
+                case 3:
+                    ctx.fillStyle = PLAYER_THREE_COLOR
+                    break
+                case 4:
+                    ctx.fillStyle = PLAYER_FOUR_COLOR
+                    break
             }
             drawCircle((x * pieceWidth) + (pieceWidth / 2), (y * pieceHeight) + (pieceHeight / 2), pieceWidth / 2)
 
@@ -150,11 +165,20 @@ function pushDown() {
         }
     }
 }
-function placePiece(column, player) {
-    board[column][0] = player
+function placePiece(row, column, player) {
+    if (board[column][row] == 0) {
+        board[column][row] = player
+
+
+
+        playerTurn += 1
+        if (playerTurn > playerCount) {playerTurn = 1}
+    }
+
 }
 
-function clearBoard() {
+function newGame() {
     board = emptyBoard
+    playerTurn
 }
 
