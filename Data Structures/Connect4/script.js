@@ -307,13 +307,13 @@ function updatePieceFalling() {
         if (checkWin() != 0) {
             gameState = gameStates.END
             isDraw = false
-            sndWin.play()
+            sndWin.cloneNode().play()
             return
         }
         if (checkDraw()) {
             gameState = gameStates.END
             isDraw = true
-            sndDraw.play()
+            sndDraw.cloneNode().play()
             return
         }
 
