@@ -6,11 +6,11 @@ const FPS = 60
 const PLAYER_COLORS = [
     '#FFFFFF', // White
     '#FF0000', // Red
-    '#FF7F00', // Orange
     '#FFFF00', // Yellow
     '#00FF00', // Green
-    '#4B0082', // Indigo
     '#9400D3', // Violet
+    '#FF7F00', // Orange
+    '#4B0082', // Indigo
     '#000000', // Black
     '#00FFFF', // Cyan
     '#FF00FF', // Magenta
@@ -26,7 +26,7 @@ const PLAYER_COLORS = [
     '#808080', // Gray
     '#A52A2A', // Brown
     '#DEB887', // Burlywood
-    '#5F9EA0', // Cadet Blue
+
     '#7FFF00', // Chartreuse
     '#D2691E', // Chocolate
     '#FF7F50', // Coral
@@ -149,10 +149,9 @@ const PLAYER_COLORS = [
     '#FFFFFF', // White
     '#F5F5F5', // White Smoke
     '#FFFF00', // Yellow
-    '#9ACD32'  // Yellow Green
+    '#9ACD32',  // Yellow Green
 ]
 
-const CURSOR_COLOR = '#0000FF'
 
 const gameStates = {
     PLAYING: 0,
@@ -211,7 +210,7 @@ function go() {
     // Adds all player options to dropdown
     const playerCount = document.getElementById('playerCount')
     for (var i = 1; i < PLAYER_COLORS.length; i++) {
-        
+
         var option = document.createElement('option')
         option.value = i
         option.text = i
@@ -266,7 +265,7 @@ function update() {
 }
 
 function updatePlaying() {
-
+    document.getElementById('gameCanvas').style.cursor = 'pointer'
 
     // Update selected column and row
     if (mouse.x > 0 && mouse.y > 0 && mouse.x < canvas.width && mouse.y < canvas.height) {
@@ -287,6 +286,7 @@ var animatedPiece = {
     radius: pieceWidth / 2,
 }
 function updatePieceFalling() {
+    document.getElementById('gameCanvas').style.cursor = 'default'
     draw()
     // Update animated piece
     animatedPiece.x = (selectedColumn * pieceWidth) + (pieceWidth / 2)
@@ -327,6 +327,7 @@ function updatePieceFalling() {
 }
 
 function updateEnd() {
+    document.getElementById('gameCanvas').style.cursor = 'default'
     // Draws board in background
     draw()
 
@@ -356,19 +357,12 @@ function updateEnd() {
     ctx.fillText(text, canvas.width / 2, canvas.height / 2)
 }
 function draw() {
+    // Clear Canvas with blue
     ctx.globalAlpha = 1.0
     ctx.fillStyle = '#0000FF'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
-    // Draw Selected Row & Column
-    ctx.globalAlpha = 0.5
-    ctx.fillStyle = '#FFFFFF'
-    ctx.fillRect(selectedColumn * pieceWidth, 0, pieceWidth, selectedRow * pieceWidth + pieceHeight / 2)
-    //ctx.fillRect(0, selectedRow * pieceWidth, canvas.width, pieceHeight)
 
-
-
-
-    //Draw board
+    //Draw board pieces
     ctx.globalAlpha = 1.0
     for (x = 0; x < board.length; x++) {
         for (y = 0; y < board[0].length; y++) {
@@ -377,13 +371,24 @@ function draw() {
 
         }
     }
-    ctx.globalAlpha = 0.5
+    
+
+    ctx.globalAlpha = 1
     ctx.fillStyle = PLAYER_COLORS[playerTurn]
     drawCircle(selectedColumn * pieceWidth + pieceWidth / 2, selectedRow * pieceWidth + pieceWidth / 2, pieceWidth / 2)
+
+
+
+    // Draw Selected Row & Column
+    ctx.globalAlpha = 0.5
+    ctx.fillStyle = '#000000'
+    
+    ctx.fillRect(selectedColumn * pieceWidth, 0, pieceWidth, selectedRow * pieceWidth + pieceHeight/2)
+    drawCircle(selectedColumn * pieceWidth + pieceWidth / 2, selectedRow * pieceWidth + pieceWidth / 2, pieceWidth / 2, true, 1)
 }
-function drawCircle(x = 0, y = 0, radius = 10, fill = true) {
+function drawCircle(x = 0, y = 0, radius = 10, fill = true, piMult = 2) {
     ctx.beginPath()
-    ctx.arc(x, y, radius, 0, 2 * Math.PI)
+    ctx.arc(x, y, radius, 0, piMult * Math.PI)
     if (fill) {
         ctx.fill()
     } else {

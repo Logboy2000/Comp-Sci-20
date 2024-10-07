@@ -24,7 +24,8 @@ hr {
 	color: #FF0000;
 }
 
-input, select {
+input,
+select {
 	background-color: #000000;
 	border-style: none;
 	margin: 3px;

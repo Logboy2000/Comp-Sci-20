@@ -3,6 +3,7 @@ var currentGuessArray = []
 
 var wrongPicks = 0
 
+var api = 'https://random-word.ryanrk.com/api/en/word/random/'
 
 var gameStates = {
 	PLAYING: 0,
@@ -15,6 +16,7 @@ var gameStates = {
 var gameState = gameStates.PLAYING
 
 function go() {
+	document.getElementById('apiURL').href = api
 	generateKeys()
 	randomWordButton()
 }
@@ -35,12 +37,14 @@ function stringToArray(string) {
 async function fetchRandomWord(length) {
 	document.getElementById('word').innerHTML = 'Fetching word, please wait'
 
-	fetch('https://random-word-api.herokuapp.com/word?length=' + length)
-		.then(res => res.json())
+	fetch(api + '?length=' + length)
+		.then(res => res.json()) // Convert JSON into variable
 		.then(data => {
+			// Update word
 			changeWord(data[0])
 		})
 		.catch(err => {
+			// Display error
 			document.getElementById('word').innerHTML = 'Word not found, try another length'
 		})
 
@@ -134,7 +138,7 @@ function generateKeys() {
 	var keys = keysQwerty
 	var lettersDiv = document.getElementById('letters')
 	// Loop through all keys in the array
-	
+
 	keys.forEach(key => {
 		// Create button
 		const button = document.createElement('button')
@@ -143,7 +147,7 @@ function generateKeys() {
 		button.textContent = key
 		button.onclick = () => keyPressed(key)
 		button.id = key
-		
+
 		// Append created button
 		lettersDiv.appendChild(button)
 		if (key == '\'') {
@@ -156,7 +160,7 @@ function generateKeys() {
 		if (key == '+' || key == '=' || key == '\\' || key == '\'') {
 			lettersDiv.appendChild(document.createElement('br'))
 		}
-		
+
 	})
 
 
