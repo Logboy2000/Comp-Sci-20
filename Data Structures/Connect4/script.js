@@ -388,11 +388,12 @@ function draw() {
 
     ctx.globalAlpha = 1
     ctx.fillStyle = PLAYER_COLORS[playerTurn]
-    drawCircle((selectedColumn * pieceWidth) + boardXOffset + pieceWidth / 2, selectedRow * pieceWidth + pieceWidth / 2, pieceWidth / 2)
+    
 
 
     if (isMobile == false) {
         // Draw Selected Row & Column
+        drawCircle((selectedColumn * pieceWidth) + boardXOffset + pieceWidth / 2, selectedRow * pieceWidth + pieceWidth / 2, pieceWidth / 2)
         ctx.globalAlpha = 0.5
         ctx.fillStyle = '#000000'
         ctx.fillRect((selectedColumn * pieceWidth) + boardXOffset, 0, pieceWidth, selectedRow * pieceWidth + pieceHeight / 2)
