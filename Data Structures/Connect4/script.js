@@ -1,10 +1,12 @@
 var canvas
 var ctx
+var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
 const FPS = 60
 
+// The following color list is brought to you by ChatGPT.
 const PLAYER_COLORS = [
-    '#FFFFFF', // White
+    '#FFFFFF', // White (used for blank spaces)
     '#FF0000', // Red
     '#FFFF00', // Yellow
     '#00FF00', // Green
@@ -26,7 +28,7 @@ const PLAYER_COLORS = [
     '#808080', // Gray
     '#A52A2A', // Brown
     '#DEB887', // Burlywood
-
+    '#FF69B4', // Hot Pink
     '#7FFF00', // Chartreuse
     '#D2691E', // Chocolate
     '#FF7F50', // Coral
@@ -180,9 +182,13 @@ var mouse = {
 
 var pieceWidth = 50
 var pieceHeight = 50
+const defaultPieceWidth = 50
+const defaultPieceHeight = 50
+
 var selectedColumn = 0
 var selectedRow = 5
 
+var boardXOffset = 0
 
 /**
  * 0 = Empty cell
@@ -207,6 +213,7 @@ var sndDraw = new Audio('Audio/rizz.mp3')
 var sndWin = new Audio('Audio/win.mp3')
 
 function go() {
+    
     // Adds all player options to dropdown
     const playerCount = document.getElementById('playerCount')
     for (var i = 1; i < PLAYER_COLORS.length; i++) {
@@ -231,13 +238,17 @@ function go() {
     // Get Mouse Position
     canvas.addEventListener('mousemove', function (event) {
         var rect = canvas.getBoundingClientRect()
-        mouse.x = event.clientX - rect.left - 10
-        mouse.y = event.clientY - rect.top - 10
+        var scaleX = canvas.width / rect.width
+        var scaleY = canvas.height / rect.height
+        mouse.x = (event.clientX - rect.left) * scaleX - boardXOffset
+        mouse.y = (event.clientY - rect.top) * scaleY
     })
     // Get Mouse Click
     canvas.addEventListener("click", function (event) {
         if (gameState == gameStates.PLAYING) {
             placePiece(selectedRow, selectedColumn, playerTurn)
+        } else if (gameState == gameStates.END){
+            newGame()
         }
     })
     // Start game loop
@@ -245,6 +256,9 @@ function go() {
 }
 
 function update() {
+
+
+
     switch (gameState) {
         case gameStates.PLAYING:
             updatePlaying()
@@ -256,10 +270,6 @@ function update() {
             updateEnd()
             break
     }
-
-
-
-
 
 
 }
@@ -283,14 +293,13 @@ var animatedPiece = {
     x: 0,
     y: 0,
     targetY: 0,
-    radius: pieceWidth / 2,
 }
 function updatePieceFalling() {
     document.getElementById('gameCanvas').style.cursor = 'default'
     draw()
     // Update animated piece
-    animatedPiece.x = (selectedColumn * pieceWidth) + (pieceWidth / 2)
-    animatedPiece.targetY = (selectedRow * pieceHeight) + (pieceHeight / 2)
+    animatedPiece.x = (selectedColumn * pieceWidth) + boardXOffset + pieceWidth / 2,
+        animatedPiece.targetY = (selectedRow * pieceHeight) + (pieceHeight / 2)
     animatedPiece.y += animatedPieceFallSpeed
     ctx.fillStyle = PLAYER_COLORS[playerTurn]
     if (animatedPiece.y >= animatedPiece.targetY) {
@@ -323,11 +332,11 @@ function updatePieceFalling() {
 
     }
     ctx.globalAlpha = 1.0
-    drawCircle(animatedPiece.x, animatedPiece.y, animatedPiece.radius)
+    drawCircle(animatedPiece.x, animatedPiece.y, pieceWidth / 2)
 }
 
 function updateEnd() {
-    document.getElementById('gameCanvas').style.cursor = 'default'
+    document.getElementById('gameCanvas').style.cursor = 'pointer'
     // Draws board in background
     draw()
 
@@ -353,8 +362,11 @@ function updateEnd() {
     ctx.lineWidth = 5
     ctx.strokeStyle = '#000000'
     ctx.strokeText(text, canvas.width / 2, canvas.height / 2)
+    ctx.strokeText('Click to play again', canvas.width / 2, canvas.height-25)
     // Draws Text
     ctx.fillText(text, canvas.width / 2, canvas.height / 2)
+    ctx.fillText('Click to play again', canvas.width / 2, canvas.height-25)
+    
 }
 function draw() {
     // Clear Canvas with blue
@@ -363,28 +375,30 @@ function draw() {
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
     //Draw board pieces
+    boardXOffset = (canvas.width / 2) - ((boardWidth * pieceWidth) / 2)
     ctx.globalAlpha = 1.0
     for (x = 0; x < board.length; x++) {
         for (y = 0; y < board[0].length; y++) {
             ctx.fillStyle = PLAYER_COLORS[board[x][y]]
-            drawCircle((x * pieceWidth) + (pieceWidth / 2), (y * pieceHeight) + (pieceHeight / 2), pieceWidth / 2)
+            drawCircle((x * pieceWidth) + (pieceWidth / 2) + boardXOffset, (y * pieceHeight) + (pieceHeight / 2), pieceWidth / 2)
 
         }
     }
-    
+
 
     ctx.globalAlpha = 1
     ctx.fillStyle = PLAYER_COLORS[playerTurn]
-    drawCircle(selectedColumn * pieceWidth + pieceWidth / 2, selectedRow * pieceWidth + pieceWidth / 2, pieceWidth / 2)
+    drawCircle((selectedColumn * pieceWidth) + boardXOffset + pieceWidth / 2, selectedRow * pieceWidth + pieceWidth / 2, pieceWidth / 2)
 
 
+    if (isMobile == false) {
+        // Draw Selected Row & Column
+        ctx.globalAlpha = 0.5
+        ctx.fillStyle = '#000000'
+        ctx.fillRect((selectedColumn * pieceWidth) + boardXOffset, 0, pieceWidth, selectedRow * pieceWidth + pieceHeight / 2)
+        drawCircle((selectedColumn * pieceWidth) + boardXOffset + pieceWidth / 2, selectedRow * pieceWidth + pieceWidth / 2, pieceWidth / 2, true, 1)
+    }
 
-    // Draw Selected Row & Column
-    ctx.globalAlpha = 0.5
-    ctx.fillStyle = '#000000'
-    
-    ctx.fillRect(selectedColumn * pieceWidth, 0, pieceWidth, selectedRow * pieceWidth + pieceHeight/2)
-    drawCircle(selectedColumn * pieceWidth + pieceWidth / 2, selectedRow * pieceWidth + pieceWidth / 2, pieceWidth / 2, true, 1)
 }
 function drawCircle(x = 0, y = 0, radius = 10, fill = true, piMult = 2) {
     ctx.beginPath()
@@ -398,7 +412,7 @@ function drawCircle(x = 0, y = 0, radius = 10, fill = true, piMult = 2) {
 function placePiece(row, column, player) {
     if (board[column][row] == 0) {
         gameState = gameStates.PIECE_FALLING
-        animatedPiece.y = 0
+        animatedPiece.y = -pieceHeight
         sndDrop.cloneNode().play()
     }
 
@@ -420,11 +434,15 @@ function newGame() {
 
     board = JSON.parse(JSON.stringify(emptyBoard));
     selectedRow = board[0].length - 1
-    canvas.width = pieceWidth * emptyBoard.length
-    canvas.height = pieceHeight * emptyBoard[0].length
+    //canvas.width = pieceWidth * emptyBoard.length
+    //canvas.height = pieceHeight * emptyBoard[0].length
     playerTurn = 1
     gameState = gameStates.PLAYING
+    resizeCanvas()
 }
+
+
+
 function copyArray(copiedArray) {
     var outputArray = []
     var i
@@ -434,7 +452,7 @@ function copyArray(copiedArray) {
     return outputArray
 }
 /**
- * Checks for a sequence of 4 connected pieces in all directions.
+ * Checks for a sequence of 'winLength' connected pieces in all directions.
  * Returns the player number if a winner is found, or 0 if no winner is found.
  */
 function checkWin() {
@@ -515,3 +533,54 @@ function checkDraw() {
     }
     return true
 }
+
+
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        if (canvas.requestFullscreen) {
+            canvas.requestFullscreen().then(() => {
+                resizeCanvas()
+            }).catch((err) => {
+                console.error(`Error attempting to enable fullscreen: ${err.message}`);
+            });
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen().then(() => {
+                resizeCanvas()
+            }).catch((err) => {
+                console.error(`Error attempting to exit fullscreen: ${err.message}`);
+            });
+        }
+    }
+}
+
+function resizeCanvas() {
+    if (document.fullscreenElement) {//With fullscreen
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+
+        pieceHeight = canvas.height / boardHeight
+        pieceWidth = pieceHeight
+
+        // Adjust the width if the board is too wide
+        if (pieceWidth * boardWidth > canvas.width) {
+            pieceWidth = canvas.width / boardWidth
+            pieceHeight = pieceWidth
+        }
+
+
+
+        canvas.style.border = '#0000BB 0px solid'
+    } else {//Without fullscreen
+        pieceWidth = defaultPieceWidth
+        pieceHeight = defaultPieceHeight
+        canvas.width = pieceWidth * boardWidth
+        canvas.height = pieceHeight * boardHeight
+        canvas.style.border = '#0000BB 10px solid'
+    }
+    
+}
+
+// Add event listener for fullscreenchange
+document.addEventListener('fullscreenchange', resizeCanvas);
