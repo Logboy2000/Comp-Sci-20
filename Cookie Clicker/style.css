@@ -1,0 +1,20 @@
+
+#cookieContainer {
+    text-align: center;
+}
+
+#cookie{
+    transition: 0.5s;
+    display: inline-flex;
+    cursor: default;
+    transform: scale(1);
+}
+#cookie:hover{
+
+    cursor: pointer;
+    transform: scale(1.1);
+}
+#cookie:active {
+    transition: 0.25s;
+    transform: scale(1);
+}
