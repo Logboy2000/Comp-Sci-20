@@ -1,20 +1,100 @@
-
-#cookieContainer {
-    text-align: center;
+body {
+    background-color: #222222;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100vw;
 }
 
-#cookie{
-    transition: 0.5s;
+img {
+    pointer-events: none;
+    width: 200px;
+    height: 200px;
+}
+
+#cookieContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 500px;
+}
+
+#cookie {
+    transition: 0.25s;
     display: inline-flex;
     cursor: default;
     transform: scale(1);
+    top: 410px;
+    left: 410px;
 }
-#cookie:hover{
+
+#cookie:hover {
 
     cursor: pointer;
     transform: scale(1.1);
 }
+
 #cookie:active {
     transition: 0.25s;
-    transform: scale(1);
+    transform: scale(0.9);
 }
+
+
+#shop {
+    width: 500px;
+    align-items: right;
+}
+
+.shopButton {
+    display: block;
+    width: 100%;
+    height: 50px;
+    background-color: #444444;
+    color: #ffffff;
+    font-size: 16px;
+    border-style: solid;
+    border-color: #666666;
+    border-radius: 5px;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.25s;
+    padding: 10px;
+}
+
+.shopButton:hover {
+    background-color: #666666;
+}
+
+.shopButton:active {
+    background-color: #222222;
+}
+
+.shopButton:disabled {
+    color: #111111;
+    background-color: #222222;
+    border-color: #444444;
+    cursor: default;
+}
+
+#emptyBox {
+    display: inline;
+    background-color: black;
+    width: 100%;
+}
+
+
+.cookieIncreaseDisplay {
+    pointer-events: none;
+    user-select: none;
+    font-weight: bold;
+    position: absolute;
+    text-align: center;
+    text-shadow: #000000 10px 10px 150px;
+}
+
+
