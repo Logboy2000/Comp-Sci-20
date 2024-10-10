@@ -38,6 +38,84 @@ var buildings = [
         cookiesPerSecond: 1400,
         owned: 0
     },
+    {
+        name: 'Bank',
+        cost: 1400000,
+        cookiesPerSecond: 1400,
+        owned: 0
+    },
+    {
+        name: 'Bank',
+        cost: 1400000,
+        cookiesPerSecond: 1400,
+        owned: 0
+    },
+    {
+        name: 'Bank',
+        cost: 1400000,
+        cookiesPerSecond: 1400,
+        owned: 0
+    },
+    {
+        name: 'Bank',
+        cost: 1400000,
+        cookiesPerSecond: 1400,
+        owned: 0
+    },
+    {
+        name: 'Bank',
+        cost: 1400000,
+        cookiesPerSecond: 1400,
+        owned: 0
+    },
+    {
+        name: 'Bank',
+        cost: 1400000,
+        cookiesPerSecond: 1400,
+        owned: 0
+    },
+    {
+        name: 'Bank',
+        cost: 1400000,
+        cookiesPerSecond: 1400,
+        owned: 0
+    },
+    {
+        name: 'Bank',
+        cost: 1400000,
+        cookiesPerSecond: 1400,
+        owned: 0
+    },
+    {
+        name: 'Bank',
+        cost: 1400000,
+        cookiesPerSecond: 1400,
+        owned: 0
+    },
+    {
+        name: 'Bank',
+        cost: 1400000,
+        cookiesPerSecond: 1400,
+        owned: 0
+    },
+    {
+        name: 'Bank',
+        cost: 1400000,
+        cookiesPerSecond: 1400,
+        owned: 0
+    },
+    {
+        name: 'Bank',
+        cost: 1400000,
+        cookiesPerSecond: 1400,
+        owned: 0
+    },
+    {
+        name: 'Bank',
+        cost: 1400000,
+        cookiesPerSecond: 1400,
+        owned: 0
+    },
 
 ]
 
@@ -64,12 +142,22 @@ function go() {
         mouse.x = e.clientX - 10
         mouse.y = e.clientY - 20
     })
+    document.addEventListener('keydown', function(e){
+        switch(e.key){
+            case ' ':
+                cookieClicked()
+            break
+        }
+        
+    })
 
     setInterval(update, 1000 / FPS)
     createShopButtons()
 }
 
 function update() {
+    upgrades.cookiesPerClick.value = Number(document.getElementById('cookiesPerClick').value)
+
     if (settings.autoClicker == true) {
         cookieClicked()
     }
@@ -99,6 +187,7 @@ function update() {
     } else {
         document.getElementById('cookieCount').innerText = Math.floor(cookies) + ' cookies'
     }
+    document.getElementById('tabTitle').innerText = document.getElementById('cookieCount').innerText+' - Cockie Clorker'
 }
 
 function updateShopButtons() {
@@ -126,14 +215,15 @@ function cookieClicked() {
 function createShopButtons() {
     for (var i = 0; i < buildings.length; i++) {
         const building = buildings[i];
-        const button = document.createElement('button')
-        button.id = 'product' + i
-        button.className = 'shopButton'
-        button.disabled = true
-        button.onclick = function () {
+        const buttonDiv = document.createElement('button')
+        buttonDiv.id = 'product' + i
+        buttonDiv.className = 'shopButton'
+        buttonDiv.disabled = true
+        buttonDiv.style.backgroundImage = "url('https://orteil.dashnet.org/experiments/cookie/grandmaicon.png')"
+        buttonDiv.onclick = function () {
             buyBuilding(building)
         }
-        document.getElementById('shop').appendChild(button)
+        document.getElementById('shop').appendChild(buttonDiv)
     }
 }
 
@@ -141,7 +231,7 @@ function buyBuilding(building) {
     if (cookies >= building.cost) {
         cookies -= building.cost
         building.owned += 1
-        building.cost = Math.ceil(building.cost * Math.pow(1.05, Math.max(0, building.owned)))
+        building.cost = Math.ceil(building.cost * Math.pow(1.05, building.owned))
     }
 
 }

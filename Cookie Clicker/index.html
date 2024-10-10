@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Cockie</title>
+    <title id="tabTitle">Cockie</title>
 </head>
 <body onload="go()">
     <div id="cookieContainer">
@@ -15,13 +15,16 @@
             <img src="images/cookie.webp">
         </div>
     </div>
-
-    <div id="emptyBox">
-
-    </div>
-
-    <div id="shop">
+    <div id="separator"></div>
+    <div id="tabbedMenu">
+        <div id="options">
+            <label>Cookies Per Click</label> <input type="number" id="cookiesPerClick" value="1">
+        </div>
         
+    </div>
+    <div id="separator"></div>
+    <div id="shop">
+        <h1 style="text-align: center;">SHOP</h1>
     </div>
     
 </body>
