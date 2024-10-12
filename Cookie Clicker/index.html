@@ -1,34 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title id="tabTitle">Cockie</title>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='stylesheet' href='style.css'>
+    <title id='tabTitle'>Cockie</title>
 </head>
-<body onload="go()">
-    <div id="cookieContainer">
-        <label id="cookieCount"></label>
-        <label id="cookiesPerSecond"></label>
+
+<body onload='go()'>
+    <div id='cookieContainer'>
+        <canvas id="backgroundLeftCanvas"></canvas>
+        <label id='cookieCount'></label>
+        <label id='cookiesPerSecond'></label>
         <br>
-        <div id="cookie" onclick="cookieClicked()">
-            <img src="images/cookie.webp">
-        </div>
-    </div>
-    <div id="separator"></div>
-    <div id="tabbedMenu">
-        <div id="options">
-            <label>Cookies Per Click</label> <input type="number" id="cookiesPerClick" value="1">
+        <div id='cookie' onclick='cookieClicked()'>
+            <img src='images/cookie.png' id='cookieImage'>
         </div>
         
     </div>
-    <div id="separator"></div>
-    <div id="shop">
-        <h1 style="text-align: center;">SHOP</h1>
+    <div id='separatorV'></div>
+    <div id='tabbedMenu'>
+        <button class='tabButton' onclick='changeTab("options")' id="optionsTab">Options</button>
+        <button class='tabButton' onclick='changeTab("stats")' id="statsTab">Stats</button>
+        <button class='tabButton' onclick='changeTab("debug")' id="debugTab">~debug~</button>
+        <div id="separatorH"></div>
+        <div id='tabs'>
+            <div id='options'>
+                <h1>Options</h1>
+                
+            </div>
+            <div id="stats">
+                <h1>Statistics</h1>
+            </div>
+            <div id="debug">
+                <h1>~DEBUG MENU~</h1>
+                <button onclick="testNotification()">testNotification</button>
+                <br>
+                <label>Cookies Per Click</label> <input type='number' id='cookiesPerClick' value='1'>
+            </div>
+        </div>
+
+
     </div>
-    
+    <div id='separatorV'></div>
+    <div id='shop'>
+        <h1 style='text-align: center;'>Store</h1>
+        <div id="separatorH"></div>
+    </div>
+    <div id="particleContainer"></div>
+    <div id="notificationContainer"></div>
+    <script src='js/main.js'></script>
+    <script src='js/classes.js'></script>
+    <script src="js/debug.js"></script>
 </body>
 
-<script src="script.js"></script>
+
 
 </html>
