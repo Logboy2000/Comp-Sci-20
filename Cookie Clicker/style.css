@@ -193,9 +193,11 @@ p, h1, h2, h3, h4, h5, h6 , label{
 
 .notification{
     background-color: var(--menu-backkground-color);
+    min-width: 200px;
     color: #ffffff;
     margin-bottom: 10px;
     border-radius: 5px;
+    padding: 10px;
     font-size: 16px;
     z-index: 1000;
 }
@@ -222,5 +224,6 @@ p, h1, h2, h3, h4, h5, h6 , label{
 
 .particles {
     position: absolute;
-    
+    overflow-x: hidden;
+    overflow-y: hidden;
 }

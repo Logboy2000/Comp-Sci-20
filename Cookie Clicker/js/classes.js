@@ -56,8 +56,8 @@ class CookieParticle {
         
         
 
-        this.xSpeed = randomRange(-3, 3)
-        this.ySpeed = randomRange(-5, -10)
+        this.xSpeed = randomRange(-10, 10)
+        this.ySpeed = randomRange(-10, 0)
         
         this.gravity = 0.5
         

@@ -63,6 +63,7 @@ function go() {
         new Building('Time machine', 16000000000000, 65000000, 'images/buildings/time_machine.png'),
         new Building('Antimatter condenser', 230000000000000, 430000000, 'images/buildings/antimatter_condenser.png'),
         new Building('Prism', 3300000000000000, 2900000000, 'images/buildings/prism.png'),
+        
     ]
 
     document.addEventListener('mousemove', function (event) {
@@ -160,7 +161,7 @@ function updateShop() {
 
 
 
-        button.innerHTML = `${building.name} (Owned: ` + building.owned + `)<br> ${formatBigNumber(building.cost)} cookies`
+        button.innerHTML = `${building.name} (Owned: ` + building.owned + `)  <br><img src='images/money.png'> ${formatBigNumber(building.cost)}`
 
         if (cookies >= building.cost) {
             button.disabled = false
@@ -175,7 +176,7 @@ function cookieClicked() {
     cookies += upgrades.cookiesPerClick.value
     if (options.cookieParticles == true) {
         for(i=0;i<upgrades.cookiesPerClick.value;i++){
-            if(i>15){i = upgrades.cookiesPerClick.value}
+            //if(i>15){i = upgrades.cookiesPerClick.value}
             new CookieParticle(mouse.x - 5, mouse.y, randomRange(0, 360))
         }
         
@@ -309,5 +310,5 @@ function changeTab(tabID) {
 }
 
 function randomRange(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
+    return Math.random() * (max - min + 1) + min
 }
