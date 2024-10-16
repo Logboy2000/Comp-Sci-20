@@ -10,86 +10,104 @@ class Building {
     }
 }
 
-class CookieIncreaseDisplay {
-    constructor(value, x, y) {
-        this.element = document.createElement('p')
-        this.element.innerText = '+' + formatBigNumber(value)
-        this.element.className = 'cookieIncreaseDisplay'
-        this.element.style.left = x + 'px'
-        this.element.style.top = y + 'px'
-        this.element.style.opacity = 1
+class Particle {
+    constructor(x, y, r, opacity) {
+        this.x = x
+        this.y = y
+        this.r = r
+        this.opacity = opacity
+        this.isDead = false
+    }
+    update() {
+        // This method should be overridden
+    }
+    draw(ctx) {
+        ctx.globalAlpha = Math.max(0, this.opacity)
+        ctx.save()
+        this.drawContent(ctx)
+        ctx.restore()
+        ctx.globalAlpha = 1
     }
 
-    appendTo(container) {
-        container.appendChild(this.element)
-        var opacity = 1
-        var topPosition = parseFloat(this.element.style.top)
-        const fadeInterval = setInterval(() => {
-            opacity -= 0.01
-            topPosition -= 1
-            this.element.style.opacity = opacity
-            this.element.style.top = topPosition + 'px'
-            if (opacity <= 0) {
-                clearInterval(fadeInterval)
-                this.element.remove()
-            }
-        }, 1000 / FPS)
+    drawContent(ctx) {
+        // This method should be overridden
     }
 }
 
-class CookieParticle {
-    constructor(inputX, inputY, inputR) {
-        this.element = document.createElement('img')
+class ImageParticle extends Particle {
+    constructor(x, y, r, opacity, imageSrc) {
+        super(x, y, r, opacity)
+        this.image = new Image()
+        this.image.src = imageSrc
+    }
+    drawContent(ctx) {
+        // Image drawing logic here
+    }
+}
 
-        this.x = inputX
-        this.y = inputY
-        this.r = inputR
-        this.element.style.left = this.x + 'px'
-        this.element.style.top = this.y + 'px'
-        this.element.style.transform = 'rotate(' + this.r + 'deg)'
+class TextParticle extends Particle {
+    constructor(x, y, r, opacity, text) {
+        super(x, y, r, opacity)
+        this.text = text
+    }
+}
 
-        
-        this.element.src = 'images/particles/cookie.png'
-        this.element.className = 'particles'
-        this.element.style.opacity = 1
 
-        
-        
+class NumberIncreaseParticle extends TextParticle {
+    constructor() {
+        super(mouse.x, mouse.y, 0, 1, '+' + formatBigNumber(upgrades.cookiesPerClick.value))
+        this.ySpeed = -1
+    }
 
+    update() {
+        this.opacity -= 0.01
+        this.y += this.ySpeed
+        if (this.opacity <= 0) {
+            this.isDead = true
+        }
+    }
+
+    drawContent(ctx) {
+        ctx.font = '16px Arial'
+        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`
+        ctx.textAlign = 'center'
+        ctx.fillText(this.text, this.x, this.y)
+    }
+}
+class CookieParticle extends ImageParticle {
+    constructor() {
+        super(mouse.x, mouse.y, randomRange(0, 360), 1, 'images/particles/cookie.png')
         this.xSpeed = randomRange(-10, 10)
         this.ySpeed = randomRange(-10, 0)
-        
+        this.rSpeed = randomRange(-10, 10)
         this.gravity = 0.5
-        
+    }
 
-        
-        
-        
-        document.getElementById('particleContainer').appendChild(this.element)
+    update() {
+        this.opacity -= 0.02
+        this.r += this.rSpeed
 
-        const animInterval = setInterval(() => {
-            this.element.style.opacity -= 0.02
-            this.r+=3
+        this.ySpeed += this.gravity
+        this.x += this.xSpeed
+        this.y += this.ySpeed
 
-            this.ySpeed += this.gravity
-            this.x += this.xSpeed 
-            this.y += this.ySpeed
+        if (this.opacity <= 0) {
+            this.isDead = true
+        }
+    }
 
-
-            this.element.style.left = this.x + 'px'
-            this.element.style.top = this.y + 'px'
-            this.element.style.transform = 'rotate(' + this.r + 'deg)'
-            if (this.element.style.opacity <= 0) {
-                clearInterval(animInterval)
-                this.element.remove()
-            }
-        }, 1000 / FPS)
+    drawContent(ctx) {
+        ctx.translate(this.x, this.y)
+        ctx.rotate(this.r * Math.PI / 180)
+        ctx.drawImage(this.image, -this.image.width / 2, -this.image.height / 2)
     }
 }
-
 class Notification {
-    constructor(title, description) {
+    constructor(title, description, timeout = 2000) {
         this.element = document.createElement('div')
+        this.element.onclick = () => {
+            this.slideOut()
+        }
 
         this.title = document.createElement('label')
         this.title.innerText = title
@@ -101,18 +119,129 @@ class Notification {
 
         this.element.className = 'notification'
         this.element.style.opacity = 1
-        document.getElementById('notificationContainer').appendChild(this.element)
+        this.element.style.transform = 'translateX(-100%)'
+        document.getElementById('notificationContainer').insertBefore(this.element, document.getElementById('notificationContainer').firstChild)
+
+        // Slide in animation
+        setTimeout(() => {
+            this.element.style.transition = 'transform 0.5s ease-out'
+            this.element.style.transform = 'translateX(0)'
+        }, 50)
 
         setTimeout(() => {
-            const fadeInterval = setInterval(() => {
-                this.element.style.opacity -= 0.01
-                if (this.element.style.opacity <= 0) {
-                    clearInterval(fadeInterval)
-                    this.element.remove()
+            this.slideOut()
+        }, timeout)
+    }
+    slideOut() {
+        this.element.style.transition = 'transform 0.5s ease-in'
+        this.element.style.transform = 'translateX(-100%)'
+        setTimeout(() => {
+            this.element.remove()
+        }, 500)
+    }
+}
+
+class TabManager {
+    constructor() {
+        this.tabsContainer = document.getElementById('tabs');
+        this.tabs = Array.from(this.tabsContainer.children).map(div => div.id);
+        this.currentTab = this.tabs[0];
+        this.generateTabButtons();
+        this.initTabs();
+    }
+
+    generateTabButtons() {
+        const tabbedMenu = document.getElementById('tabbedMenu');
+        this.tabs.forEach(tabId => {
+            const button = document.createElement('button');
+            button.className = 'tabButton';
+            button.id = `${tabId}Tab`;
+            button.textContent = this.capitalizeFirstLetter(tabId);
+            button.addEventListener('click', () => this.changeTab(tabId));
+            tabbedMenu.insertBefore(button, this.tabsContainer);
+        });
+        const separator = document.createElement('div');
+        separator.id = 'separatorH';
+        tabbedMenu.insertBefore(separator, this.tabsContainer);
+
+    }
+
+    capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    initTabs() {
+        this.showTab(this.currentTab);
+    }
+
+    changeTab(tabName) {
+        this.hideAllTabs();
+        this.showTab(tabName);
+        this.currentTab = tabName;
+    }
+
+    hideAllTabs() {
+        this.tabs.forEach(tab => {
+            document.getElementById(tab).style.display = 'none';
+        });
+    }
+
+    showTab(tabName) {
+        document.getElementById(tabName).style.display = 'block';
+    }
+}
+
+class SaveManager {
+    static save() {
+        const simplifiedBuildings = buildings.map(building => ({
+            name: building.name,
+            owned: building.owned,
+            unlocked: building.unlocked
+        }));
+
+        const gameState = {
+            cookies: cookies,
+            cookiesPerSecond: cookiesPerSecond,
+            buildings: simplifiedBuildings,
+            upgrades: upgrades,
+            options: options,
+            timestamp: Date.now()
+        };
+        localStorage.setItem('cookieClickerSave', JSON.stringify(gameState));
+    }
+
+    static load() {
+        const savedState = localStorage.getItem('cookieClickerSave');
+        if (savedState) {
+            const gameState = JSON.parse(savedState);
+            const currentTime = Date.now();
+            const elapsedSeconds = (currentTime - gameState.timestamp) / 1000;
+
+            const cookiesWhileGone = gameState.cookiesPerSecond * elapsedSeconds;
+            cookies = gameState.cookies + cookiesWhileGone;
+            cookiesPerSecond = gameState.cookiesPerSecond;
+
+            // Reconstruct buildings
+            buildings.forEach(building => {
+                const savedBuilding = gameState.buildings.find(b => b.name === building.name);
+                if (savedBuilding) {
+                    building.owned = savedBuilding.owned;
+                    building.unlocked = savedBuilding.unlocked;
+                    building.cost = Math.ceil(building.cost * Math.pow(1.01, building.owned));
                 }
-            }, 1000 / FPS)
-        }, 1000)
+            });
 
+            upgrades = gameState.upgrades;
+            options = gameState.options;
 
+            // Add the welcome back notification
+            new Notification('Welcome back!', 'You earned ' + formatBigNumber(Math.floor(cookiesWhileGone)) + ' cookies while you were away.', 10000);
+
+            return true;
+        }
+        return false;
+    } static clear() {
+        localStorage.removeItem('cookieClickerSave');
+        location.reload();
     }
 }

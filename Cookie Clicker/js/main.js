@@ -3,11 +3,16 @@ var cookies = 0
 var cookiesPerSecond = 0
 
 var leftCanvas
-var ctx
+var leftCtx
+var particleCanvas = document.getElementById('foregroundParticleCanvas')
+var particleCtx = particleCanvas.getContext('2d')
 
 var canClick = true
 
+
 var buildings = []
+var options = {}
+
 
 var upgrades = {
     cookiesPerClick: {
@@ -17,14 +22,7 @@ var upgrades = {
 }
 
 
-var options = {
-    autoClicker: false,
-    cookieParticles: true,
-    numberParticles: true,
-    formatBigNumbers: true,
-    milk: true,
-    milkSpeed: 1,
-}
+
 
 var milk = {
     image: new Image(),
@@ -33,7 +31,7 @@ var milk = {
     width: 400,
     height: 400,
 }
-milk.image.src = 'images/milk/plain.png'
+milk.image.src = 'images/milk/chocolate.png'
 
 
 
@@ -43,12 +41,15 @@ var mouse = {
 }
 
 function go() {
-    leftCanvas = document.getElementById('backgroundLeftCanvas')
-    ctx = leftCanvas.getContext('2d')
 
+    leftCanvas = document.getElementById('backgroundLeftCanvas')
+    leftCtx = leftCanvas.getContext('2d')
+    new TabManager()
+    handleWindowResize()
 
 
     buildings = [
+        new Building('Brian Griffin', 1, 1000000, 'images/buildings/brian_griffin.png'),
         new Building('Cursor', 15, 0.2, 'images/buildings/cursor.png'),
         new Building('Grandma', 100, 1, 'images/buildings/grandma.png'),
         new Building('Farm', 1100, 8, 'images/buildings/farm.png'),
@@ -63,20 +64,15 @@ function go() {
         new Building('Time machine', 16000000000000, 65000000, 'images/buildings/time_machine.png'),
         new Building('Antimatter condenser', 230000000000000, 430000000, 'images/buildings/antimatter_condenser.png'),
         new Building('Prism', 3300000000000000, 2900000000, 'images/buildings/prism.png'),
-        
+
     ]
 
     document.addEventListener('mousemove', function (event) {
-        mouse.x = event.clientX - 10
-        mouse.y = event.clientY - 20
+        mouse.x = event.clientX
+        mouse.y = event.clientY
     })
 
     document.addEventListener('keydown', function (event) {
-
-
-
-
-
         switch (event.key) {
             case ' ': // Spacebar
                 if (canClick) {
@@ -89,33 +85,64 @@ function go() {
     document.addEventListener('keyup', function (event) {
         canClick = true
     })
+    window.addEventListener('resize', handleWindowResize)
     changeTab('options')
     createShopElements()
     createSettingsElements()
-    setInterval(update, 1000 / FPS)
 
+    // Create offscreen canvas
+    offscreenCanvas = document.createElement('canvas')
+    offscreenCanvas.width = particleCanvas.width
+    offscreenCanvas.height = particleCanvas.height
+    offscreenCtx = offscreenCanvas.getContext('2d')
+
+    // Load saved game
+    loadGame()
+    // Start update loop
+    setInterval(update, 1000 / FPS)
+    setInterval(autoSave, 1000 * 60)
 }
+var particles = [];
 
 function update() {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+    leftCtx.clearRect(0, 0, leftCtx.canvas.width, leftCtx.canvas.height)
+
     leftCanvas.width = leftCanvas.parentNode.offsetWidth
     leftCanvas.height = leftCanvas.parentNode.offsetHeight
 
-
-    if (options.milk == true) {
+    if (options.showMilk.value == true) {
         milk.x += options.milkSpeed
-        milk.y = leftCanvas.height - milk.height/2
+        milk.y = leftCanvas.height - milk.height / 2
+        milk.height = leftCanvas.height / 3
         for (var x = -milk.width + (milk.x % milk.width); x < leftCanvas.width; x += milk.width) {
-            ctx.drawImage(milk.image, x, milk.y, milk.width, milk.height)
+            leftCtx.drawImage(milk.image, x, milk.y, milk.width, milk.height)
         }
     }
 
+    // Update and draw particles
+    if (options.clearParticleCanvas.value == true) {
+        particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height)
+    }
+    // Removes dead particles and draws live ones
+    for (var i = 0; i < particles.length; i++) {
+        var particle = particles[i]
+        if (particle.isDead) {
+            particles.splice(i, 1)
+            i--
+        } else {
+            particle.update()
+            particle.draw(particleCtx)
+        }
+
+    }
 
     upgrades.cookiesPerClick.value = Number(document.getElementById('cookiesPerClick').value)
 
     if (options.autoClicker == true) {
         cookieClicked()
     }
+
+    // For every owned build, add the cookies per second to the total
     cookiesPerSecond = 0
     for (var i = 0; i < buildings.length; i++) {
         for (var j = 0; j < buildings[i].owned; j++) {
@@ -125,19 +152,9 @@ function update() {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
     updateShop()
     cookiesPerSecond = parseFloat(cookiesPerSecond.toFixed(2))
-    document.getElementById('cookiesPerSecond').innerText = 'Per second: ' + cookiesPerSecond
+    document.getElementById('cookiesPerSecond').innerText = 'Per second: ' + formatBigNumber(Math.floor(cookiesPerSecond))
     if (cookies == 1) {
         document.getElementById('cookieCount').innerText = formatBigNumber(Math.floor(cookies)) + ' cookie'
     } else {
@@ -158,10 +175,7 @@ function updateShop() {
         } else {
             button.className = 'shopButtonLocked'
         }
-
-
-
-        button.innerHTML = `${building.name} (Owned: ` + building.owned + `)  <br><img src='images/money.png'> ${formatBigNumber(building.cost)}`
+        button.innerHTML = building.name + '(Owned: ' + building.owned + ')  <br> ' + formatBigNumber(building.cost) + ' Cookies'
 
         if (cookies >= building.cost) {
             button.disabled = false
@@ -171,25 +185,26 @@ function updateShop() {
     }
 }
 
-
 function cookieClicked() {
-    cookies += upgrades.cookiesPerClick.value
-    if (options.cookieParticles == true) {
-        for(i=0;i<upgrades.cookiesPerClick.value;i++){
-            //if(i>15){i = upgrades.cookiesPerClick.value}
-            new CookieParticle(mouse.x - 5, mouse.y, randomRange(0, 360))
+    cookies += upgrades.cookiesPerClick.value;
+
+    if (options.cookieParticles.value == true) {
+        for (i = 0; i < upgrades.cookiesPerClick.value; i++) {
+            if (i <= options.maxParticles.value) {
+                particles.push(new CookieParticle(mouse.x - 5, mouse.y, randomRange(0, 360)));
+            }
         }
-        
     }
-    if (options.numberParticles == true) {
-        const cookieIncreaseDisplay = new CookieIncreaseDisplay(upgrades.cookiesPerClick.value, mouse.x, mouse.y)
-        cookieIncreaseDisplay.appendTo(document.getElementById('cookieContainer'))
+    if (options.numberParticles.value == true) {
+        particles.push(new NumberIncreaseParticle());
     }
 }
+
+
 function createShopElements() {
     // Upgrades
     for (var i = 0; i < upgrades.length; i++) {
-        const upgrade = upgrades[i];
+        const upgrade = upgrades[i]
         const buttonDiv = document.createElement('button')
         buttonDiv.id = 'product' + i
         buttonDiv.className = 'shopButton'
@@ -199,74 +214,139 @@ function createShopElements() {
             buyUpgrade(upgrade)
         }
         document.getElementById('shop').appendChild(buttonDiv)
+        document.getElementById('shop').appendChild(document.createElement('br'))
     }
 
+
+    class BuildingButton {
+        constructor(building, index) {
+            this.building = building;
+            this.element = this.createButtonElement(index);
+        }
+
+        createButtonElement(index) {
+            const buttonDiv = document.createElement('button');
+            buttonDiv.id = 'product' + index;
+            buttonDiv.className = 'shopButtonLocked';
+            buttonDiv.disabled = true;
+            buttonDiv.style.backgroundImage = 'url(' + this.building.image + ')';
+            buttonDiv.onclick = () => {
+                buyBuilding(this.building);
+            };
+            return buttonDiv;
+        }
+
+        updateButton() {
+            if (cookies >= this.building.cost / 5) {
+                this.building.unlocked = true;
+            }
+            this.element.className = this.building.unlocked ? 'shopButton' : 'shopButtonLocked';
+            this.element.innerHTML = `${this.building.name} (Owned: ${this.building.owned})<br>${formatBigNumber(this.building.cost)} Cookies`;
+            this.element.disabled = cookies < this.building.cost;
+        }
+    }
 
     // Buildings
     for (var i = 0; i < buildings.length; i++) {
-        const building = buildings[i];
-        const buttonDiv = document.createElement('button')
-        buttonDiv.id = 'product' + i
-        buttonDiv.className = 'shopButtonLocked'
-        buttonDiv.disabled = true
-        buttonDiv.style.backgroundImage = 'url(' + building.image + ')'
-        buttonDiv.onclick = function () {
-            buyBuilding(building)
-        }
-        document.getElementById('shop').appendChild(buttonDiv)
+        const buildingButton = new BuildingButton(buildings[i], i);
+        document.getElementById('shop').appendChild(buildingButton.element);
     }
 }
-function createSettingsElements() {
-    const settingsContainer = document.getElementById('options')
 
-    for (const [key, value] of Object.entries(options)) {
+class Option {
+    constructor(key, value) {
+        this.key = key
+        this.value = value
+        this.element = this.createOptionElement()
+    }
+
+    createOptionElement() {
         const settingDiv = document.createElement('div')
         settingDiv.className = 'setting-item'
 
         const label = document.createElement('label')
-        label.textContent = key.charAt(0).toUpperCase() + key.slice(1) + ': '
+        label.textContent = this.key.charAt(0).toUpperCase() + this.key.slice(1) + ': '
 
         const input = document.createElement('input')
-        switch (typeof value) {
+        switch (typeof this.value) {
             case 'boolean':
                 input.type = 'checkbox'
-                input.checked = value
+                input.checked = this.value
                 break
             case 'number':
                 input.type = 'number'
-                input.value = value
+                input.value = this.value
                 break
             case 'string':
                 input.type = 'text'
-                input.value = value
+                input.value = this.value
                 break
             default:
                 break
         }
-        input.id = key + '-setting'
+        input.id = this.key + '-setting'
 
         input.addEventListener('change', (e) => {
-            if (typeof value === 'boolean') {
-                options[key] = e.target.checked
-            } else if (typeof value === 'number') {
-                options[key] = Number(e.target.value)
-            } else if (typeof value === 'string') {
-                options[key] = e.target.value
+            if (typeof this.value === 'boolean') {
+                this.value = e.target.checked
+            } else if (typeof this.value === 'number') {
+                this.value = Number(e.target.value)
+            } else if (typeof this.value === 'string') {
+                this.value = e.target.value
             }
+            options[this.key] = this.value
         })
 
         label.appendChild(input)
         settingDiv.appendChild(label)
-        settingsContainer.appendChild(settingDiv)
+        return settingDiv
+    }
+}
+class FunctionButton {
+    constructor(text, func) {
+        this.text = text
+        this.func = func
+        this.element = this.createButtonElement()
+    }
+    createButtonElement() {
+        const buttonDiv = document.createElement('button')
+        buttonDiv.innerHTML = `${this.text}`
+        buttonDiv.onclick = this.func
+        return buttonDiv
+    }
+}
+
+
+function createSettingsElements() {
+    const settingsContainer = document.getElementById('options')
+    options.autoSave = new Option('autoSave', true)
+    options.clearParticleCanvas = new Option('clearParticleCanvas', true)
+    options.autoClicker = new Option('autoClicker', false)
+    options.cookieParticles = new Option('cookieParticles', true)
+    options.maxParticles = new Option('maxParticles', 30)
+    options.numberParticles = new Option('numberParticles', true)
+    options.formatBigNumbers = new Option('formatBigNumbers', true)
+    options.showMilk = new Option('showMilk', true)
+    options.milkSpeed = new Option('milkSpeed', 1)
+
+
+    settingsContainer.appendChild(new FunctionButton('Save', saveGame).createButtonElement())
+    settingsContainer.appendChild(new FunctionButton('WIPE SAVE', clearSaveButton).createButtonElement())
+
+
+    for (var key in options) {
+        settingsContainer.appendChild(options[key].element)
     }
 }
 
 function buyBuilding(building) {
+    console.log(building.owned)
     if (cookies >= building.cost) {
         cookies -= building.cost
         building.owned += 1
-        building.cost = Math.ceil(building.cost * Math.pow(1.05, building.owned))
+        building.cost = Math.ceil(building.cost * Math.pow(1.01, building.owned))
     }
+    console.log(building.owned)
 }
 
 function buyUpgrade(upgrade) {
@@ -278,7 +358,7 @@ function buyUpgrade(upgrade) {
 
 
 function formatBigNumber(number) {
-    if (options.formatBigNumbers == true) {
+    if (options.formatBigNumbers.value == true) {
         const suffixes = ['', 'K', 'Million', 'Billion', 'Trillion', 'Quadrillion', 'Quintillion', 'Sextillion', 'Septillion', 'Octillion', 'Nonillion', 'Decillion', 'Undecillion', 'Duodecillion', 'Tredecillion', 'Quattuordecillion', 'Quindecillion', 'Sexdecillion', 'Septendecillion', 'Octodecillion', 'Novemdecillion', 'Vigintillion', 'Unvigintillion', 'Duovigintillion', 'Trevigintillion', 'Quattuorvigintillion', 'Quinvigintillion', 'Sexvigintillion', 'Septenvigintillion', 'Octovigintillion', 'Novemvigintillion', 'Trigintillion', 'Untrigintillion', 'Duotrigintillion', 'Googol']
         if (number < 1000000) {
             return number.toString()
@@ -311,4 +391,38 @@ function changeTab(tabID) {
 
 function randomRange(min, max) {
     return Math.random() * (max - min + 1) + min
+}
+
+
+function handleWindowResize() {
+    // Updates canvas size based on window shape & zoom
+    particleCanvas.width = particleCanvas.parentNode.clientWidth
+    particleCanvas.height = window.innerHeight
+}
+
+function autoSave() {
+    if (options.autoSave.value == true) {
+        saveGame()
+    }
+}
+
+function saveGame() {
+    SaveManager.save()
+    new Notification('Game Saved', 'Your progress has been saved.')
+}
+
+function loadGame() {
+    if (SaveManager.load()) {
+        //new Notification('Game Loaded', 'Your progress has been restored.')
+    }
+}
+function clearSaveButton() {
+    if (confirm("Are you sure? This will wipe EVERYTHING FOREVER.")) {
+        new Notification('Game wiped', 'Goodbye cookies')
+        setTimeout(function () {
+            SaveManager.clear()
+        }, 1000)
+
+
+    }
 }

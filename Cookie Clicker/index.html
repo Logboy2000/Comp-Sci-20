@@ -17,27 +17,28 @@
         <div id='cookie' onclick='cookieClicked()'>
             <img src='images/cookie.png' id='cookieImage'>
         </div>
-        
+
     </div>
     <div id='separatorV'></div>
     <div id='tabbedMenu'>
-        <button class='tabButton' onclick='changeTab("options")' id="optionsTab">Options</button>
-        <button class='tabButton' onclick='changeTab("stats")' id="statsTab">Stats</button>
-        <button class='tabButton' onclick='changeTab("debug")' id="debugTab">~debug~</button>
-        <div id="separatorH"></div>
+
         <div id='tabs'>
             <div id='options'>
                 <h1>Options</h1>
-                
+                <hr>
             </div>
             <div id="stats">
                 <h1>Statistics</h1>
+                <hr>
             </div>
             <div id="debug">
                 <h1>~DEBUG MENU~</h1>
+                <hr>
                 <button onclick="testNotification()">testNotification</button>
                 <br>
                 <label>Cookies Per Click</label> <input type='number' id='cookiesPerClick' value='1'>
+                <br>
+                <button onclick="unlockAll()">unlockAll</button>
             </div>
         </div>
 
@@ -47,14 +48,20 @@
     <div id='shop'>
         <h1 style='text-align: center;'>Store</h1>
         <div id="separatorH"></div>
+        <br>
     </div>
-    <div id="particleContainer"></div>
     <div id="notificationContainer"></div>
-    <script src='js/main.js'></script>
-    <script src='js/classes.js'></script>
-    <script src="js/debug.js"></script>
+
+
+    <canvas id="foregroundParticleCanvas"></canvas>
+
+
+
+
 </body>
 
-
+<script src='js/main.js'></script>
+<script src='js/classes.js'></script>
+<script src="js/debug.js"></script>
 
 </html>
