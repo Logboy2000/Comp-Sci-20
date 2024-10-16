@@ -319,7 +319,7 @@ class FunctionButton {
 
 function createSettingsElements() {
     const settingsContainer = document.getElementById('options')
-    options.autoSave = new Option('autoSave', true)
+    options.autoSave = new Option('Auto Save', true)
     options.clearParticleCanvas = new Option('clearParticleCanvas', true)
     options.autoClicker = new Option('autoClicker', false)
     options.cookieParticles = new Option('cookieParticles', true)
