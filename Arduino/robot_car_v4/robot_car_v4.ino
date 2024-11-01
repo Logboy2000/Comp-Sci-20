@@ -12,8 +12,6 @@ const int motorRSpeedPin = 6;
 const int motorLDirPin = 7;
 const int motorRDirPin = 8;
 
-
-
 Servo servo;
 
 // Whole lotta colors
@@ -57,38 +55,13 @@ void loop() {
     }
   }
 
-  motorController(0, true, 0, true);
-  driveForward(10);
-
-
-
-
+  
+  pivotRight(255);
 }
 
 void setPixelColor(const int color[3]) {
   leds[0] = CRGB(color[0], color[1], color[2]);
   FastLED.show();
-}
-
-void cycleColors(const int colorArray[][3], int colorCount, int delayTime) {
-  for (int i = 0; i < colorCount; i++) {
-    setPixelColor(colorArray[i]);
-    delay(delayTime);
-  }
-}
-
-int hue = 0;
-void rainbowCycle(int delayTime, int led) {
-  
-
-  hue++;
-  // Limit Hue at 255
-  if (hue > 255) {
-    hue = 0;
-  }
-  leds[0] = CHSV(hue, 255, 255);
-  FastLED.show();
-  delay(delayTime);
 }
 
 void motorController(int lSpeed, bool lDir, int rSpeed, bool rDir) {
@@ -115,4 +88,28 @@ void pivotLeft(int speed) {
 }
 void pivotRight(int speed) {
   motorController(speed, true, -speed, false);
+}
+
+
+
+
+void cycleColors(const int colorArray[][3], int colorCount, int delayTime) {
+  for (int i = 0; i < colorCount; i++) {
+    setPixelColor(colorArray[i]);
+    delay(delayTime);
+  }
+}
+
+int hue = 0;
+void rainbowCycle(int delayTime, int led) {
+  
+
+  hue++;
+  // Limit Hue at 255
+  if (hue > 255) {
+    hue = 0;
+  }
+  leds[0] = CHSV(hue, 255, 255);
+  FastLED.show();
+  delay(delayTime);
 }
