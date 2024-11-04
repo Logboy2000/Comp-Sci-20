@@ -36,10 +36,26 @@ CRGB leds[LED_COUNT];
 void setup() {
   Serial.begin(9600);
   // Set those pins
-  FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, LED_COUNT);
   servo.attach(9);
   FastLED.setBrightness(10);
+
+  // Enable the motors
   digitalWrite(motorEnablePin, true);
+
+  FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, LED_COUNT);
+
+  setPixelColor(colors[0]);
+  driveForward(100, 1000);
+  setPixelColor(colors[1]);
+  driveBackward(100, 1000);
+  setPixelColor(colors[2]);
+  turnRight(255, 2000);
+  setPixelColor(colors[3]);
+  turnLeft(255, 2000);
+  setPixelColor(colors[4]);
+  pivotRight(255, 2000);
+  setPixelColor(colors[5]);
+  pivotLeft(255, 2000);
 }
 
 void loop() {
@@ -54,9 +70,6 @@ void loop() {
       digitalWrite(motorEnablePin, true);
     }
   }
-
-  
-  pivotRight(255);
 }
 
 void setPixelColor(const int color[3]) {
@@ -64,32 +77,45 @@ void setPixelColor(const int color[3]) {
   FastLED.show();
 }
 
-void motorController(int lSpeed, bool lDir, int rSpeed, bool rDir) {
+void motorController(int lSpeed, bool lDir, int rSpeed, bool rDir, int timeMilliseconds) {
   analogWrite(motorLSpeedPin, lSpeed);
   analogWrite(motorRSpeedPin, rSpeed);
   digitalWrite(motorLDirPin, lDir);
   digitalWrite(motorRDirPin, rDir);
+  delay(timeMilliseconds);
+  stopWheels();
 }
 
-void driveForward(int speed) {
-  motorController(speed, true, speed, true);
-}
-void driveBackward(int speed) {
-  motorController(speed, false, speed, false);
-}
-void turnLeft(int speed) {
-  motorController(speed, true, speed / 2, true);
-}
-void turnRight(int speed) {
-  motorController(speed / 2, true, speed, true);
-}
-void pivotLeft(int speed) {
-  motorController(-speed, true, speed, false);
-}
-void pivotRight(int speed) {
-  motorController(speed, true, -speed, false);
+void driveForward(int speed, int timeMilliseconds) {
+  motorController(speed, true, speed, true, timeMilliseconds);
 }
 
+void driveBackward(int speed, int timeMilliseconds) {
+  motorController(speed, false, speed, false, timeMilliseconds);
+}
+
+void turnLeft(int speed, int timeMilliseconds) {
+  motorController(speed, true, speed / 2, true, timeMilliseconds);
+}
+
+void turnRight(int speed, int timeMilliseconds) {
+  motorController(speed / 2, true, speed, true, timeMilliseconds);
+}
+
+void pivotLeft(int speed, int timeMilliseconds) {
+  motorController(speed, false, speed, true, timeMilliseconds);
+}
+
+void pivotRight(int speed, int timeMilliseconds) {
+  motorController(speed, true, speed, false, timeMilliseconds);
+}
+
+void stopWheels() {
+  analogWrite(motorLSpeedPin, 0);
+  analogWrite(motorRSpeedPin, 0);
+  digitalWrite(motorLDirPin, 0);
+  digitalWrite(motorRDirPin, 0);
+}
 
 
 
@@ -102,7 +128,7 @@ void cycleColors(const int colorArray[][3], int colorCount, int delayTime) {
 
 int hue = 0;
 void rainbowCycle(int delayTime, int led) {
-  
+
 
   hue++;
   // Limit Hue at 255

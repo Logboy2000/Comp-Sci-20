@@ -435,8 +435,6 @@ function newGame() {
 
     board = JSON.parse(JSON.stringify(emptyBoard));
     selectedRow = board[0].length - 1
-    //canvas.width = pieceWidth * emptyBoard.length
-    //canvas.height = pieceHeight * emptyBoard[0].length
     playerTurn = 1
     gameState = gameStates.PLAYING
     resizeCanvas()
