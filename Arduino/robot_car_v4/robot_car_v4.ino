@@ -1,5 +1,6 @@
 #include <FastLED.h>
 #include <Servo.h>
+#include <IRremote.h>
 
 #define LED_COUNT 1
 
@@ -11,6 +12,9 @@ const int motorLSpeedPin = 5;
 const int motorRSpeedPin = 6;
 const int motorLDirPin = 7;
 const int motorRDirPin = 8;
+const int IR_PIN = 9;
+IRrecv irrecv(IR_PIN);
+decode_results results;
 
 Servo servo;
 
@@ -42,20 +46,12 @@ void setup() {
   // Enable the motors
   digitalWrite(motorEnablePin, true);
 
+  // Enable IR receiver
+  irrecv.enableIRIn();
+
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, LED_COUNT);
 
-  setPixelColor(colors[0]);
-  driveForward(100, 1000);
-  setPixelColor(colors[1]);
-  driveBackward(100, 1000);
-  setPixelColor(colors[2]);
-  turnRight(255, 2000);
-  setPixelColor(colors[3]);
-  turnLeft(255, 2000);
-  setPixelColor(colors[4]);
-  pivotRight(255, 2000);
-  setPixelColor(colors[5]);
-  pivotLeft(255, 2000);
+
 }
 
 void loop() {
@@ -70,6 +66,10 @@ void loop() {
       digitalWrite(motorEnablePin, true);
     }
   }
+  irRemote();
+
+
+
 }
 
 void setPixelColor(const int color[3]) {
@@ -77,37 +77,35 @@ void setPixelColor(const int color[3]) {
   FastLED.show();
 }
 
-void motorController(int lSpeed, bool lDir, int rSpeed, bool rDir, int timeMilliseconds) {
+void motorController(int lSpeed, bool lDir, int rSpeed, bool rDir) {
   analogWrite(motorLSpeedPin, lSpeed);
   analogWrite(motorRSpeedPin, rSpeed);
   digitalWrite(motorLDirPin, lDir);
   digitalWrite(motorRDirPin, rDir);
-  delay(timeMilliseconds);
-  stopWheels();
 }
 
-void driveForward(int speed, int timeMilliseconds) {
-  motorController(speed, true, speed, true, timeMilliseconds);
+void driveForward(int speed) {
+  motorController(speed, true, speed, true);
 }
 
-void driveBackward(int speed, int timeMilliseconds) {
-  motorController(speed, false, speed, false, timeMilliseconds);
+void driveBackward(int speed) {
+  motorController(speed, false, speed, false);
 }
 
-void turnLeft(int speed, int timeMilliseconds) {
-  motorController(speed, true, speed / 2, true, timeMilliseconds);
+void turnLeft(int speed) {
+  motorController(speed, true, speed / 2, true);
 }
 
-void turnRight(int speed, int timeMilliseconds) {
-  motorController(speed / 2, true, speed, true, timeMilliseconds);
+void turnRight(int speed) {
+  motorController(speed / 2, true, speed, true);
 }
 
-void pivotLeft(int speed, int timeMilliseconds) {
-  motorController(speed, false, speed, true, timeMilliseconds);
+void pivotLeft(int speed) {
+  motorController(speed, false, speed, true);
 }
 
-void pivotRight(int speed, int timeMilliseconds) {
-  motorController(speed, true, speed, false, timeMilliseconds);
+void pivotRight(int speed) {
+  motorController(speed, true, speed, false);
 }
 
 void stopWheels() {
@@ -117,6 +115,68 @@ void stopWheels() {
   digitalWrite(motorRDirPin, 0);
 }
 
+void drivePattern() {
+  setPixelColor(colors[0]);
+  driveForward(100);
+  delay(1000);
+  stopWheels();
+  
+  setPixelColor(colors[1]);
+  driveBackward(100);
+  delay(1000);
+  stopWheels();
+  
+  setPixelColor(colors[2]);
+  turnRight(255);
+  delay(1000);
+  stopWheels();
+  
+  setPixelColor(colors[3]);
+  turnLeft(255);
+  delay(1000);
+  stopWheels();
+  
+  setPixelColor(colors[4]);
+  pivotRight(255);
+  delay(1000);
+  stopWheels();
+  
+  setPixelColor(colors[5]);
+  pivotLeft(255);
+  delay(1000);
+  stopWheels();
+}
+
+unsigned long lastCode = 0; // Store the last valid IR code received
+
+void irRemote() {
+  if (irrecv.decode(&results)) { // Check if a signal is received
+    if (results.value != 0xFFFFFFFF) {
+      // Only store the code if it's not the repeat code
+      lastCode = results.value;
+    }
+
+    Serial.println(lastCode);
+
+    // Perform actions based on the last valid code
+    switch (lastCode) {
+      case 0xFF22DD:  // Left arrow
+        Serial.println("Left");
+        pivotLeft(255);
+        break;
+      case 0xFFC23D:  // Right arrow
+        Serial.println("Right");
+        pivotRight(255);
+        break;
+      case 16712445: // OK
+        Serial.println("OK");
+        stopWheels();
+        break;
+    }
+
+    irrecv.resume(); // Receive the next value
+  }
+}
 
 
 void cycleColors(const int colorArray[][3], int colorCount, int delayTime) {
