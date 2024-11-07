@@ -89,12 +89,14 @@ function isWeekend(day) {
 function calculateAreaButton() {
     var areaInput = document.getElementById("areaInput").value
     document.getElementById("areaOutput").innerHTML = "Area = " + areaOfCircle(areaInput) + "cm"
+    var storedValue = areaOfCircle(areaInput)
 }// end of calculateAreaButton
 
 function randomNumberButton() {
     var min = parseFloat(document.getElementById("minRandomInput").value)
     var max = parseFloat(document.getElementById("maxRandomInput").value)
     document.getElementById("randomOutput").innerHTML = "Random Number = " + random(min, max)
+    var storedValue = random(1, 5)
 }// end of randomAreaButton
 
 function isWeekendButton() {
@@ -104,6 +106,7 @@ function isWeekendButton() {
     } else {
         document.getElementById("weekendOutput").innerHTML = "It's not the weekend"
     }
+    var storedValue = isWeekend(currentDay)
 }// end of isWeekendButton
 
 /*

@@ -196,13 +196,7 @@ var boardXOffset = 0
 **/
 var board = []
 
-var emptyBoard = [
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-]
+var emptyBoard = []
 
 
 
