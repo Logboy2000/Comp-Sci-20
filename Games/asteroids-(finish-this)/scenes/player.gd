@@ -19,7 +19,7 @@ func _physics_process(_delta: float) -> void:
 	var input_direction: Vector2 = Vector2(Input.get_axis("left", "right"), Input.get_axis("up", "down"))
 	look_at(get_global_mouse_position())
 	linear_velocity += input_direction * move_speed
-	if Input.is_action_just_pressed("shoot"):
+	if Input.is_action_pressed("shoot"):
 		shoot()
 		
 

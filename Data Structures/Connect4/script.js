@@ -139,7 +139,7 @@ function updatePlaying() { // Start of updatePlaying
             if (selectedRow < 0) break; // Prevent going out of bounds
         }
     }
-    draw()
+    drawBoard()
 
 }// End of updatePlaying
 var animatedPiece = {
@@ -149,7 +149,7 @@ var animatedPiece = {
 }
 function updatePieceFalling() { // Start of updatePieceFalling
     document.getElementById('gameCanvas').style.cursor = 'default'
-    draw()
+    drawBoard()
     // Update animated piece
     animatedPiece.x = (selectedColumn * pieceWidth) + boardXOffset + pieceWidth / 2,
         animatedPiece.targetY = (selectedRow * pieceHeight) + (pieceHeight / 2)
@@ -191,7 +191,7 @@ function updatePieceFalling() { // Start of updatePieceFalling
 function updateEnd() {// Start of updateEnd
     document.getElementById('gameCanvas').style.cursor = 'pointer'
     // Draws board in background
-    draw()
+    drawBoard()
 
     // Draws black circle in middle of canvas
     ctx.globalAlpha = 0.5
@@ -221,7 +221,7 @@ function updateEnd() {// Start of updateEnd
     ctx.fillText('Click to play again', canvas.width / 2, canvas.height-25)
     
 }// End of updateEnd
-function draw() {// Start of draw
+function drawBoard() {// Start of draw
     // Clear Canvas with blue
     ctx.globalAlpha = 1.0
     ctx.fillStyle = '#0000FF'
@@ -264,7 +264,7 @@ function drawCircle(x = 0, y = 0, radius = 10, fill = true, piMult = 2) { // Sta
     }
 }// End of drawCircle
 
-function placePiece(row, column, player) { // Start of placePiece
+function placePiece(row, column) { // Start of placePiece
     if (board[column][row] == 0) {
         gameState = gameStates.PIECE_FALLING
         animatedPiece.y = -pieceHeight
