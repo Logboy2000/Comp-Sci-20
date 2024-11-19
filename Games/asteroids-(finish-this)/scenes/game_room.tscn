@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://bsrko37thm624"]
+
+[ext_resource type="PackedScene" uid="uid://0bv25eepcj8y" path="res://scenes/player.tscn" id="1_x4ct1"]
+[ext_resource type="Script" path="res://scenes/camera_2d.gd" id="2_51ww7"]
+[ext_resource type="PackedScene" uid="uid://87lypw8l8210" path="res://scenes/asteroid.tscn" id="2_jakj6"]
+
+[node name="GameRoom" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_x4ct1")]
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Player"]
+remote_path = NodePath("../../Camera2D")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+script = ExtResource("2_51ww7")
+
+[node name="Asteroid" parent="." instance=ExtResource("2_jakj6")]
+position = Vector2(70, 2)
