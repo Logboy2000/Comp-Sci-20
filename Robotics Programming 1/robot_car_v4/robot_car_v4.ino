@@ -50,8 +50,6 @@ void setup() {
   irrecv.enableIRIn();
 
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, LED_COUNT);
-
-
 }
 
 void loop() {
@@ -66,10 +64,8 @@ void loop() {
       digitalWrite(motorEnablePin, true);
     }
   }
+
   irRemote();
-
-
-
 }
 
 void setPixelColor(const int color[3]) {
@@ -120,62 +116,54 @@ void drivePattern() {
   driveForward(100);
   delay(1000);
   stopWheels();
-  
+
   setPixelColor(colors[1]);
   driveBackward(100);
   delay(1000);
   stopWheels();
-  
+
   setPixelColor(colors[2]);
   turnRight(255);
   delay(1000);
   stopWheels();
-  
+
   setPixelColor(colors[3]);
   turnLeft(255);
   delay(1000);
   stopWheels();
-  
+
   setPixelColor(colors[4]);
   pivotRight(255);
   delay(1000);
   stopWheels();
-  
+
   setPixelColor(colors[5]);
   pivotLeft(255);
   delay(1000);
   stopWheels();
 }
 
-unsigned long lastCode = 0; // Store the last valid IR code received
+unsigned long code = 0;
+
 
 void irRemote() {
   if (irrecv.decode(&results)) { // Check if a signal is received
-    if (results.value != 0xFFFFFFFF) {
-      // Only store the code if it's not the repeat code
-      lastCode = results.value;
-    }
-
-    Serial.println(lastCode);
-
-    // Perform actions based on the last valid code
-    switch (lastCode) {
+    Serial.println(results.value);
+    switch (results.value) {
       case 0xFF22DD:  // Left arrow
         Serial.println("Left");
-        pivotLeft(255);
         break;
       case 0xFFC23D:  // Right arrow
         Serial.println("Right");
-        pivotRight(255);
         break;
       case 16712445: // OK
         Serial.println("OK");
-        stopWheels();
         break;
     }
-
     irrecv.resume(); // Receive the next value
   }
+
+  
 }
 
 
@@ -188,8 +176,6 @@ void cycleColors(const int colorArray[][3], int colorCount, int delayTime) {
 
 int hue = 0;
 void rainbowCycle(int delayTime, int led) {
-
-
   hue++;
   // Limit Hue at 255
   if (hue > 255) {

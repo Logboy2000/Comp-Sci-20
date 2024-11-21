@@ -31,7 +31,7 @@ func _physics_process(_delta: float) -> void:
 	rotation = lerp_angle(rotation, target_angle, rotation_speed)  # Adjust the speed by changing the 5 factor
 	# Apply movement
 	linear_velocity += input_direction * move_speed
-	if Input.is_action_just_pressed("shoot") or Input.is_key_pressed(KEY_1):
+	if Input.is_action_just_pressed("shoot") or Input.is_action_pressed("autofire"):
 		shoot()
 	
 	update_debug()
