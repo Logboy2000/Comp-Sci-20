@@ -10,6 +10,7 @@ func _ready() -> void:
 	# Optionally add some labels at the start
 	add_label("Asteroids", ProjectSettings.get("application/config/name"))
 	add_label("FPS")
+	add_label("Position")
 
 # Called every frame
 func _process(_delta: float) -> void:

@@ -17,8 +17,7 @@ const SHOOT_SOUND = preload("res://assets/Audio/shoot.wav")
 var target_angle: float = 0
 
 
-func _ready() -> void:
-	DebugMenu.add_label("Position")
+
 
 
 
@@ -33,7 +32,6 @@ func _physics_process(_delta: float) -> void:
 	linear_velocity += input_direction * move_speed
 	if Input.is_action_just_pressed("shoot") or Input.is_action_pressed("autofire"):
 		shoot()
-	
 	update_debug()
 
 func shoot():
