@@ -1,7 +1,7 @@
 #include <FastLED.h>
 
 // How many leds in your strip?
-#define NUM_LEDS 95
+#define NUM_LEDS 94
 
 #define DATA_PIN 10
 #define CLOCK_PIN 13
@@ -9,7 +9,11 @@
 // Define the array of leds
 CRGB leds[NUM_LEDS];
 
+// Colors
+CRGB WHITE = CRGB(255,255,255);
+
 void setup() {
+  Serial.begin(9600);
   FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_LEDS);
   line(0,NUM_LEDS,CRGB(0,0,0));
 }// end of setup
@@ -24,7 +28,8 @@ void loop() {
 //  endToStart(CRGB(255,255,0), del);
 //  endToStart(CRGB(255,255,255), del);
 //  endToStart(CRGB(0,0,0), del);
-  allOutside(CRGB(255,255,255), 100);
+//    allOutside(CRGB(255,255,255), del);
+  line(93,96,WHITE);
 
 }// end of loop
 
@@ -104,20 +109,20 @@ void innerBranch(int index, CRGB color) {
 
 
 void allOutside(CRGB color, int delayMilliseconds){
-  innerBranch(0,color);
-  innerBranch(1,color);
-  innerBranch(2,color);
-  innerBranch(3,color);
-  innerBranch(4,color);
-  innerBranch(5,color);
+  outerBranch(0,color);
+  outerBranch(1,color);
+  outerBranch(2,color);
+  outerBranch(3,color);
+  outerBranch(4,color);
+  outerBranch(5,color);
   delay(delayMilliseconds);
 }
 
 
 
-void arrayToLights(int arr[], int arrayLength) {
+void arrayToLights(int arr[], int arrayLength, CRGB color) {
   for (int i = 0; i < arrayLength; i++) {
     int lightIndex = arr[i];
-    leds[lightIndex] = CRGB(255, 255, 255);
+    leds[lightIndex] = color;
   }
 }
