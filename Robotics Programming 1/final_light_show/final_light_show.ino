@@ -1,12 +1,12 @@
 // Diagram https://raw.githubusercontent.com/Logboy2000/Comp-Sci-20/refs/heads/main/Robotics%20Programming%201/final_light_show/Star.png
 #include <FastLED.h>
 
+// 95th led is cooked
 #define NUM_LEDS 94
 
 // First LED is 0
-// Led 94 is cooked
-#define LAST_LED 93
 
+#define LAST_LED 93
 
 #define DATA_PIN 10
 #define CLOCK_PIN 13
@@ -15,136 +15,137 @@
 CRGB leds[NUM_LEDS];
 
 // Colors
-CRGB WHITE = CRGB(255,255,255);
+CRGB WHITE = CRGB(255, 255, 255);
 
-int inner_leds[42] = {9,10,11,12,13,14,71,72,73,74,75,33,34,35,36,37,38,79,80,81,82,57,58,59,60,61,62,63,64,65,66,67,68,69,70,76,77,78,84,83,85,86};
-void setup() {
+int outerBranch1[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};          // Bottom
+int outerBranch2[] = {15, 16, 17, 18, 19, 20, 21, 22, 23}; // Bottom Left
+int outerBranch3[] = {24, 25, 26, 27, 28, 29, 30, 31, 32}; // Up Left
+int outerBranch4[] = {39, 40, 41, 42, 43, 44, 45, 46, 47}; // Up
+int outerBranch5[] = {48, 49, 50, 51, 52, 53, 54, 55, 56}; // Up Right
+int outerBranch6[] = {87, 88, 89, 90, 91, 92, 93};         // Down Right
+
+int innerLeds[] = {9, 10, 11, 12, 13, 14, 71, 72, 73, 74, 75, 33, 34, 35, 36, 37, 38, 79, 80, 81, 82, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 76, 77, 78, 84, 83, 85, 86};
+int innerBranch1[] = {9, 10, 11, 12, 13, 14, 70, 69, 68};      // Bottom
+int innerBranch2[] = {69, 70, 14, 71, 72, 73, 74, 75, 33, 76}; // Bottom Left
+int innerBranch3[] = {76, 33, 34, 35, 36, 37, 38, 78, 77};     // Up Left
+int innerBranch4[] = {77, 78, 38, 79, 80, 81, 82, 57, 83, 83}; // Up
+int innerBranch5[] = {84, 83, 57, 58, 59, 60, 61, 86, 85};     // Up Right
+int innerBranch6[] = {62, 63, 64, 65, 66, 67, 85, 86};         // Down Right
+
+int line1[] = {43, 42, 41, 40, 39, 38, 78, 77, 68, 67, 8, 7, 6, 2, 3};
+int line2[] = {20, 21, 17, 16, 15, 14, 70, 69, 84, 83, 57, 56, 55, 54, 50, 51};
+int line3[] = {27, 26, 30, 31, 32, 33, 76, 85, 86, 87, 88, 93, 92};
+
+void setup()
+{
   Serial.begin(9600);
   FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_LEDS);
   // Turn off all LEDS
-  line(0,NUM_LEDS,CRGB(0,0,0));
-}// end of setup
+  blackout();
+} // end of setup
 
-void loop() {
+void loop()
+{
+  lightshow();
+} // end of loop
+
+void lightshow()
+{
   int del = 10;
   int del2 = 100;
-  startToEnd(CRGB(0,0,0), del);
-  startToEnd(CRGB(255,255,255), del);
-  startToEnd(CRGB(0,255,255), del);
-  startToEnd(CRGB(0,0,255), del);
-  startToEnd(CRGB(0,0,0), del);
-  endToStart(CRGB(255,0,0), del);
-  endToStart(CRGB(255,255,0), del);
-  endToStart(CRGB(255,255,255), del);
-  endToStart(CRGB(0,0,0), del);
-  allOutside(CRGB(255,255,255));
-  for(int i = 0; i < 6; i++){
-    allOutside(CRGB(0,255,255));
-    allInside(CRGB(255,255,255));
+  startToEnd(CRGB(0, 0, 0), del);
+  startToEnd(CRGB(255, 255, 255), del);
+  startToEnd(CRGB(0, 255, 255), del);
+  startToEnd(CRGB(0, 0, 255), del);
+  startToEnd(CRGB(0, 0, 0), del);
+  endToStart(CRGB(255, 0, 0), del);
+  endToStart(CRGB(255, 255, 0), del);
+  endToStart(CRGB(255, 255, 255), del);
+  endToStart(CRGB(0, 0, 0), del);
+  for (int i = 0; i < 6; i++)
+  {
+    allOutside(CRGB(0, 255, 255));
+    allInside(CRGB(255, 255, 255));
     delay(del2);
-    allOutside(CRGB(255,255,255));
-    allInside(CRGB(0,255,255));
+    allOutside(CRGB(255, 255, 255));
+    allInside(CRGB(0, 255, 255));
     delay(del2);
   }
+  arrayToColor(outerBranch1, 9, WHITE);
+  allLeds(CRGB(255,0,0));
+  arrayToColor(line3, 13, WHITE);
+  arrayToColor(line2, 16, WHITE);
+  delay(500);
+  allLeds(CRGB(255,0,0));
+  arrayToColor(line2, 16, WHITE);
+  arrayToColor(line1, 15, WHITE);
+  delay(500);
+  allLeds(CRGB(255,0,0));
+  arrayToColor(line1, 15, WHITE);
+  arrayToColor(line3, 13, WHITE);
+  delay(500);
+  allLeds(CRGB(255,0,0));
+  delay(500);
+}
 
-  
-
-}// end of loop
-
-void startToEnd(CRGB color, int delayMil){
-  for(int i = 0; i < NUM_LEDS; i++){
+void startToEnd(CRGB color, int delayMil)
+{
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
     line(0, i, color);
     delay(delayMil);
   }
-}
+} // end of startToEnd
 
-void endToStart(CRGB color, int delayMil){
-    for(int i = NUM_LEDS; i >= 0; i--){
+void endToStart(CRGB color, int delayMil)
+{
+  for (int i = NUM_LEDS; i >= 0; i--)
+  {
     line(i, NUM_LEDS, color);
     delay(delayMil);
   }
-}
+} // End of endToStart
 
-
-void line(int startIndex, int endIndex, CRGB color) {
-  for (int i = startIndex; i <= endIndex; i++) {
+void line(int startIndex, int endIndex, CRGB color)
+{
+  for (int i = startIndex; i <= endIndex; i++)
+  {
     leds[i] = color;
   }
   FastLED.show();
-}// end of line
+} // end of line
 
-void outerBranch(int index, CRGB color) {
-  switch (index) {
-    case 0:
-      line(0, 8, color);
-      break;
-    case 1:
-      line(15, 23, color);
-      break;
-    case 2:
-      line(24, 32, color);
-      break;
-    case 3:
-      line(39, 47, color);
-      break;
-    case 4:
-      line(48, 56, color);
-      break;
-    case 5:
-      line(87, LAST_LED, color);
-      break;
-    default:
-      line(0, NUM_LEDS, CRGB(255, 255, 255));
-      break;
-  }
-}// end of outerBranch
+void allOutside(CRGB color)
+{
+  arrayToColor(outerBranch1, 9, color);
+  arrayToColor(outerBranch2, 9, color);
+  arrayToColor(outerBranch3, 9, color);
+  arrayToColor(outerBranch4, 9, color);
+  arrayToColor(outerBranch5, 9, color);
+  arrayToColor(outerBranch6, 9, color);
+} // End of allOutside
 
-void innerBranch(int index, CRGB color) {
-  switch (index) {
-    case 0:
-      line(10, 15, color);
-      break;
-    case 1:
-      line(16, 24, color);
-      break;
-    case 2:
-      line(25, 33, color);
-      break;
-    case 3:
-      line(40, 48, color);
-      break;
-    case 4:
-      line(49, 57, color);
-      break;
-    case 5:
-      line(88, 96, color);
-      break;
-    default:
-      line(0, NUM_LEDS, CRGB(255, 255, 255));
-      break;
-  }
-}// end of innerBranch
+void allInside(CRGB color)
+{
+  arrayToColor(innerLeds, 42, color);
+} // end of allInside
 
-
-void allOutside(CRGB color){
-  outerBranch(0,color);
-  outerBranch(1,color);
-  outerBranch(2,color);
-  outerBranch(3,color);
-  outerBranch(4,color);
-  outerBranch(5,color);
+void allLeds(CRGB color)
+{
+  line(0, NUM_LEDS, color);
 }
 
-void allInside(CRGB color){
-  arrayToLights(inner_leds, 42, color);
-}
+void blackout()
+{
+  allLeds(CRGB(0, 0, 0));
+} // end of blackout
 
-
-
-void arrayToLights(int arr[], int arrayLength, CRGB color) {
-  for (int i = 0; i < arrayLength; i++) {
+void arrayToColor(int arr[], int length, CRGB color)
+{
+  for (int i = 0; i < length; i++)
+  {
     int lightIndex = arr[i];
     leds[lightIndex] = color;
   }
   FastLED.show();
-}
+} // end of arrayToColor
