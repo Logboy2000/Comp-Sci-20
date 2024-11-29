@@ -38,10 +38,7 @@ int line3[] = {27, 26, 30, 31, 32, 33, 76, 85, 86, 87, 88, 93, 92};
 
 void setup()
 {
-  Serial.begin(9600);
   FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_LEDS);
-  // Turn off all LEDS
-  blackout();
 } // end of setup
 
 void loop()
@@ -71,21 +68,21 @@ void lightshow()
     allInside(CRGB(0, 255, 255));
     delay(del2);
   }
-  arrayToColor(outerBranch1, 9, WHITE);
-  allLeds(CRGB(255,0,0));
-  arrayToColor(line3, 13, WHITE);
-  arrayToColor(line2, 16, WHITE);
-  delay(500);
-  allLeds(CRGB(255,0,0));
-  arrayToColor(line2, 16, WHITE);
-  arrayToColor(line1, 15, WHITE);
-  delay(500);
-  allLeds(CRGB(255,0,0));
-  arrayToColor(line1, 15, WHITE);
-  arrayToColor(line3, 13, WHITE);
-  delay(500);
-  allLeds(CRGB(255,0,0));
-  delay(500);
+  for (int i = 0; i < 3; i++)
+  {
+    arrayToColor(outerBranch1, 9, WHITE);
+    allLeds(CRGB(255, 0, 0));
+    arrayToColor(line3, 13, WHITE);
+    delay(del2);
+    allLeds(CRGB(255, 0, 0));
+    arrayToColor(line2, 16, WHITE);
+    delay(del2);
+    allLeds(CRGB(255, 0, 0));
+    arrayToColor(line1, 15, WHITE);
+    delay(del2);
+  }
+  allLeds(CRGB(255, 0, 0));
+  delay(del2);
 }
 
 void startToEnd(CRGB color, int delayMil)
@@ -114,6 +111,30 @@ void line(int startIndex, int endIndex, CRGB color)
   }
   FastLED.show();
 } // end of line
+
+void gradientLine(int startIndex, int endIndex, CRGB color1, CRGB color2)
+{
+  int numLeds = endIndex - startIndex + 1;
+
+  for (int i = startIndex; i <= endIndex; i++)
+  {
+    // Calculate the interpolation factor based on the current position
+    float factor = float(i - startIndex) / float(numLeds - 1);
+
+    // Interpolate the RGB values for the gradient
+    uint8_t r = color1.r + factor * (color2.r - color1.r);
+    uint8_t g = color1.g + factor * (color2.g - color1.g);
+    uint8_t b = color1.b + factor * (color2.b - color1.b);
+
+    // Set the color of the LED at position i
+    leds[i] = CRGB(r, g, b);
+  }
+
+  FastLED.show();
+} // end of gradientLine
+
+
+
 
 void allOutside(CRGB color)
 {
