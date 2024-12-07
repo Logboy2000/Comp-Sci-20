@@ -12,11 +12,14 @@ const BULLET = preload("res://scenes/objects/bullet.tscn")
 const SHOOT_SOUND = preload("res://assets/Audio/shoot.wav")
 const DASH_SOUND = preload("res://assets/Audio/dash.wav")
 
-@onready var sprite_2d: Sprite2D = $Sprite2D
+@onready var sprite: Sprite2D = $Sprite2D
 @onready var bullet_shoot_point: Node2D = $BulletShootPoint
 @onready var collision_shape: CollisionShape2D = $CollisionShape
 @onready var dash_length_timer: Timer = $DashLengthTimer
 @onready var dash_destroy_area: Area2D = $DashDestroyArea
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+
+@export var hp: int = 4
 
 @export var top_speed: float = 40
 @export var dash_speed: float = 1000
@@ -38,7 +41,11 @@ func _physics_process(_delta: float) -> void:
 	input_direction = Vector2(Input.get_axis("left", "right"), Input.get_axis("up", "down")).normalized()
 	
 	# Calculate the target angle (direction you want to rotate towards)
-	target_angle = (get_global_mouse_position() - global_position).angle()
+	if Input.get_connected_joypads().is_empty():
+		target_angle = (get_global_mouse_position() - global_position).angle()
+	else:
+		target_angle = Vector2(Input.get_axis("look_left","look_right"), Input.get_axis("look_up", "look_down")).angle()
+	
 	# Smoothly interpolate the current angle towards the target angle
 	rotation = lerp_angle(rotation, target_angle, rotation_speed)  # Adjust the speed by changing the factor
 	
@@ -57,10 +64,10 @@ func _physics_process(_delta: float) -> void:
 	
 	match state:
 		States.NORMAL:
-			sprite_2d.modulate = Color(1, 1, 1)
+			sprite.modulate = Color(1, 1, 1)
 			collision_shape.disabled = false
 		States.DASHING:
-			sprite_2d.modulate = Color(0, 0, 1)
+			sprite.modulate = Color(0, 0, 1)
 			velocity = dash_direction * dash_speed
 			collision_shape.disabled = true
 			
@@ -68,7 +75,12 @@ func _physics_process(_delta: float) -> void:
 	for body in dash_destroy_area.get_overlapping_bodies():
 		if body is Asteroid and (velocity.length() > 300):
 			body.hit(dash_damage)
-	
+	if Input.is_key_pressed(KEY_H):
+		hit()
+	if hp <= 2:
+		animation_player.play("damage_flash")
+	else:
+		animation_player.stop()
 	
 		  # White color
 	move_and_slide()
@@ -85,7 +97,11 @@ func shoot():
 	new_bullet.bullet_speed += velocity.length()
 	
 	# Calculate a direction vector towards the mouse position
-	var mouse_direction = (get_global_mouse_position() - global_position).normalized()
+	var mouse_direction: Vector2
+	if Input.get_connected_joypads().is_empty():
+		mouse_direction = (get_global_mouse_position() - global_position).normalized()
+	else:
+		mouse_direction = Vector2(Input.get_axis("look_left", "look_right"), Input.get_axis("look_up", "look_down")).normalized()
 	
 	# Calculate the maximum angle offset based on bullet_accuracy
 	var max_angle_offset = deg_to_rad(180 * (1.0 - bullet_accuracy))  # 180 degrees at bullet_accuracy 0
@@ -107,6 +123,23 @@ func dash():
 	state = States.DASHING
 	dash_length_timer.start(0)
 	AudioPlayer.play_sound(DASH_SOUND)
+
+func hit(damage: int = 1):
+	GameManager.shake_camera(3)
+	hp -= damage
+	if hp <= 0:
+		die()
+		return 0
+	
+
+func heal(damage: int = 1):
+	if (hp + damage) <= sprite.hframes:
+		hp += damage
+		sprite.frame -= damage
+
+func die():
+	GameManager.game_over()
+	queue_free()
 
 func update_debug():
 	DebugMenu.modify_label("pos","Pos: " + str(round(position.x)) + ", " + str(round(position.y)))

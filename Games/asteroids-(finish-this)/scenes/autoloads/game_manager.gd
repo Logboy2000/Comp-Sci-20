@@ -1,7 +1,7 @@
 extends Node
 var debug_mode: bool = false
 var current_room: Room
-
+var current_zoom: float = 1
 func _ready() -> void:
 	process_mode = ProcessMode.PROCESS_MODE_ALWAYS
 
@@ -22,6 +22,9 @@ func shake_camera(intensity: float):
 		camera.addons[0].intensity = intensity
 		camera.addons[0].shake()
 		
+
+func game_over():
+	pass
 
 func quit_game():
 	await TransitionLayer.play_transition(false, 0.25)

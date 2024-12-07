@@ -6,5 +6,6 @@
 
 [node name="ExplosiveAsteroid" instance=ExtResource("1_hk3jy")]
 modulate = Color(1, 0.26, 0.26, 1)
+max_contacts_reported = 15
 script = ExtResource("2_6mnyn")
 DESTROY_SOUND = ExtResource("3_kqxfp")

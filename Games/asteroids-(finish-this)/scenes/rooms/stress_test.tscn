@@ -6,12 +6,4 @@
 [node name="StressTest" instance=ExtResource("1_mf5u1")]
 
 [node name="AsteroidSpawner" parent="Entities" index="1" instance=ExtResource("2_n4xwl")]
-
-[node name="AsteroidSpawner2" parent="Entities" index="2" instance=ExtResource("2_n4xwl")]
-position = Vector2(245, -5)
-
-[node name="AsteroidSpawner3" parent="Entities" index="3" instance=ExtResource("2_n4xwl")]
-position = Vector2(181, 153)
-
-[node name="AsteroidSpawner4" parent="Entities" index="4" instance=ExtResource("2_n4xwl")]
-position = Vector2(-34, 215)
+asteroid_velocity = Vector2(1000, 0)

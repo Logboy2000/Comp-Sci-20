@@ -1,7 +1,8 @@
 class_name Bullet extends Area2D
-
+const ASTEROID_HIT_PARTICLE = preload("res://scenes/particles/asteroid_hit_particle.tscn")
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @export var bullet_speed: float = 700
+@export var bullet_hp: int = 1
 var direction: Vector2
 var velocity: Vector2
 
@@ -23,4 +24,10 @@ func _on_animation_player_animation_finished(_anim_name: StringName) -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if body is Asteroid:
 		body.hit()
-	queue_free()
+	var particle = ASTEROID_HIT_PARTICLE.instantiate()
+	particle.position = global_position
+	add_sibling(particle)
+	
+	bullet_hp -= 1
+	if bullet_hp <= 0:
+		queue_free()

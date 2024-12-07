@@ -11,7 +11,6 @@ const ASTEROID_EXPLOSION_PARTICLE = preload("res://scenes/particles/asteroid_des
 @export var health: int = 2
 
 @export var spawn_animation = false
-@export var screen_shake_intensity: float = 0
 
 func _ready() -> void:
 	if spawn_animation:
@@ -25,7 +24,7 @@ func hit(damage: int = 1):
 		destroy()
 		queue_free()
 	else:
-		sprite.frame += 1
+		sprite.frame += damage
 		AudioPlayer.play_sound(HIT_SOUND)
 
 func destroy():

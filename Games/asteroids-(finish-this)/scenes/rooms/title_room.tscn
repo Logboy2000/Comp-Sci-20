@@ -28,7 +28,6 @@ horizontal_alignment = 1
 position = Vector2(0, 132)
 
 [node name="ProCam2D" parent="." index="3"]
-smooth_zoom_speed = 1.0
 left_limit = -380
 right_limit = 380
 top_limit = -215

@@ -9,7 +9,7 @@ const min_zoom = 0.5
 
 func _ready() -> void:
 	GameManager.current_room = self
-	
+	camera.zoom = GameManager.current_zoom
 	
 
 func _process(_delta: float) -> void:
@@ -20,9 +20,13 @@ func _process(_delta: float) -> void:
 			camera.zoom = max_zoom
 		else:
 			camera.zoom = target_zoom
+		GameManager.current_zoom = target_zoom
+	
 	if Input.is_action_just_pressed("zoom_out"):
 		var target_zoom = camera.zoom / zoom_mult
 		if target_zoom < min_zoom:
 			camera.zoom = min_zoom
 		else:
 			camera.zoom = target_zoom
+		GameManager.current_zoom = target_zoom
+	
