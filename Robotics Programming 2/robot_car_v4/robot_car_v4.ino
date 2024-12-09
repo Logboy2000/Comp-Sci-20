@@ -2,6 +2,7 @@
 #include <Servo.h>
 #include <IRremote.h>
 
+
 #define LED_COUNT 1
 
 
@@ -14,26 +15,40 @@ const int motorLDirPin = 7;
 const int motorRDirPin = 8;
 const int IR_PIN = 9;
 IRrecv irrecv(IR_PIN);
+
+struct States {
+  int pivotLeft = 0;
+  int pivotRight = 1;
+  int driveForward = 3;
+  int driveBackward = 4;
+  int turnLeft = 5;
+  int turnRight = 6;
+  int stopWheels = 7;
+};
+
+
+
 decode_results results;
 
 Servo servo;
 
-// Whole lotta colors
-const int colors[13][3] = {
-  {255, 255, 255}, // White
-  {255, 0, 0},   // Red
-  {0, 255, 0},   // Green
-  {0, 0, 255},   // Blue
-  {255, 0, 255}, // Magenta
-  {255, 255, 0}, // Yellow
-  {0, 255, 255}, // Cyan
-  {128, 0, 128}, // Purple
-  {255, 165, 0}, // Orange
-  {128, 128, 0}, // Olive
-  {0, 128, 128}, // Teal
-  {0, 128, 0},   // Dark Green
-  {128, 0, 0},   // Maroon
-};
+
+const CRGB colors[13] = {
+  CRGB(255, 255, 255),
+  CRGB(255, 0, 0),
+  CRGB(0, 255, 0),
+  CRGB(0, 0, 255),
+  CRGB(255, 0, 255),
+  CRGB(255, 255, 0),
+  CRGB(0, 255, 255),
+  CRGB(128, 0, 128),
+  CRGB(255, 165, 0),
+  CRGB(128, 128, 0),
+  CRGB(0, 128, 128),
+  CRGB(0, 128, 0),
+  CRGB(128, 0, 0),
+}; 
+typedef enum {WHITE, RED, GREEN, BLUE, MAGENTA, YELLOW, CYAN, PURPLE, ORANGE, OLIVE, TEAL, DARK_GREEN, MAROON} colorNames;
 
 CRGB leds[LED_COUNT];
 
@@ -68,8 +83,8 @@ void loop() {
   irRemote();
 }
 
-void setPixelColor(const int color[3]) {
-  leds[0] = CRGB(color[0], color[1], color[2]);
+void setPixelColor(const CRGB color) {
+  leds[0] = color;
   FastLED.show();
 }
 
@@ -112,7 +127,7 @@ void stopWheels() {
 }
 
 void drivePattern() {
-  setPixelColor(colors[0]);
+  setPixelColor(WHITE);
   driveForward(100);
   delay(1000);
   stopWheels();
@@ -148,22 +163,80 @@ unsigned long code = 0;
 
 void irRemote() {
   if (irrecv.decode(&results)) { // Check if a signal is received
-    Serial.println(results.value);
+    //Serial.println(results.value);
     switch (results.value) {
-      case 0xFF22DD:  // Left arrow
-        Serial.println("Left");
+      case 0xFF22DD:
+        Serial.println("Button Left");
+        setPixelColor(colors[0]);
+        pivotRight(100);
         break;
-      case 0xFFC23D:  // Right arrow
-        Serial.println("Right");
+      case 0xFFC23D:
+        Serial.println("Button Right");
+        setPixelColor(colors[1]);
+        pivotLeft(100);
         break;
-      case 16712445: // OK
-        Serial.println("OK");
+      case 16736925:
+        Serial.println("Button Up");
+        setPixelColor(colors[3]);
+        driveForward(100);
         break;
+      case 16754775:
+        Serial.println("Button Down");
+        setPixelColor(colors[4]);
+        driveBackward(100);
+        break;
+      case 16712445:
+        Serial.println("Button OK");
+        setPixelColor(colors[2]);
+        stopWheels();
+        break;
+      case 16738455:
+        Serial.println("Button 1");
+        setPixelColor(colors[5]);
+        drivePattern();
+        break;
+      case 16750695:
+      Serial.println("Button 2");
+      break;
+      case 16756815://3
+      Serial.println("Button 3");
+      break;
+      case 16724175://4
+      Serial.println("Button 4");
+      break;
+      case 16718055://5
+      Serial.println("Button 5");
+      break;
+      case 16743045://6
+      Serial.println("Button 6");
+      break;
+      case 16716015://7
+      Serial.println("Button 7");
+      break;
+      case 16726215://8
+      Serial.println("Button 8");
+      break;
+      case 16734885://9
+      Serial.println("Button 9");
+      break;
+      case 16728765: // *
+      Serial.println("Button *");
+      break;
+      case 16730805: // 0
+      Serial.println("Button 0");
+      break;
+      case 16732845: // #
+      Serial.println("Button #");
+      break;
+
+
+
+
     }
     irrecv.resume(); // Receive the next value
   }
 
-  
+
 }
 
 
