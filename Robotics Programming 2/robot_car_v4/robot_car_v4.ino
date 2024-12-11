@@ -2,9 +2,7 @@
 #include <Servo.h>
 #include <IRremote.h>
 
-
 #define LED_COUNT 1
-
 
 // Pins
 const int motorEnablePin = 3;
@@ -16,22 +14,9 @@ const int motorRDirPin = 8;
 const int IR_PIN = 9;
 IRrecv irrecv(IR_PIN);
 
-struct States {
-  int pivotLeft = 0;
-  int pivotRight = 1;
-  int driveForward = 3;
-  int driveBackward = 4;
-  int turnLeft = 5;
-  int turnRight = 6;
-  int stopWheels = 7;
-};
-
-
-
 decode_results results;
 
-Servo servo;
-
+Servo headServo;
 
 const CRGB colors[13] = {
   CRGB(255, 255, 255),
@@ -52,11 +37,20 @@ typedef enum {WHITE, RED, GREEN, BLUE, MAGENTA, YELLOW, CYAN, PURPLE, ORANGE, OL
 
 CRGB leds[LED_COUNT];
 
+unsigned long previousMillis = 0;
+
+// Universal state management
+enum State { NONE, DRIVE_PATTERN, RAINBOW_LIGHTS };
+State currentState = NONE;
+
 void setup() {
   Serial.begin(9600);
   // Set those pins
-  servo.attach(9);
-  FastLED.setBrightness(10);
+  headServo.attach(9);
+  FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, LED_COUNT);
+
+  // Brighten led
+  FastLED.setBrightness(255);
 
   // Enable the motors
   digitalWrite(motorEnablePin, true);
@@ -64,7 +58,8 @@ void setup() {
   // Enable IR receiver
   irrecv.enableIRIn();
 
-  FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, LED_COUNT);
+  // Prevent immediate driving
+  stopWheels();
 }
 
 void loop() {
@@ -81,6 +76,18 @@ void loop() {
   }
 
   irRemote();
+
+  switch (currentState) {
+    case DRIVE_PATTERN:
+      drivePattern();
+      break;
+    case RAINBOW_LIGHTS:
+      rainbowLights();
+      break;
+    case NONE:
+    default:
+      break;
+  }
 }
 
 void setPixelColor(const CRGB color) {
@@ -127,43 +134,68 @@ void stopWheels() {
 }
 
 void drivePattern() {
-  setPixelColor(WHITE);
-  driveForward(100);
-  delay(1000);
-  stopWheels();
+  static int state = 0;
+  static unsigned long lastUpdate = 0;
+  const unsigned long interval = 1000; // 1 second
 
-  setPixelColor(colors[1]);
-  driveBackward(100);
-  delay(1000);
-  stopWheels();
+  if (millis() - lastUpdate >= interval) {
+    lastUpdate = millis();
 
-  setPixelColor(colors[2]);
-  turnRight(255);
-  delay(1000);
-  stopWheels();
+    switch (state) {
+      case 0:
+        setPixelColor(WHITE);
+        driveForward(100);
+        break;
+      case 1:
+        stopWheels();
+        setPixelColor(colors[1]);
+        driveBackward(100);
+        break;
+      case 2:
+        stopWheels();
+        setPixelColor(colors[2]);
+        turnRight(255);
+        break;
+      case 3:
+        stopWheels();
+        setPixelColor(colors[3]);
+        turnLeft(255);
+        break;
+      case 4:
+        stopWheels();
+        setPixelColor(colors[4]);
+        pivotRight(255);
+        break;
+      case 5:
+        stopWheels();
+        setPixelColor(colors[5]);
+        pivotLeft(255);
+        break;
+      default:
+        stopWheels();
+        state = -1;
+        currentState = NONE; // Reset state
+        break;
+    }
 
-  setPixelColor(colors[3]);
-  turnLeft(255);
-  delay(1000);
-  stopWheels();
-
-  setPixelColor(colors[4]);
-  pivotRight(255);
-  delay(1000);
-  stopWheels();
-
-  setPixelColor(colors[5]);
-  pivotLeft(255);
-  delay(1000);
-  stopWheels();
+    state++;
+  }
 }
 
-unsigned long code = 0;
+void rainbowLights() {
+  static unsigned long rainbowLastUpdate = 0;
+  static int hue = 0;
 
+  if (millis() - rainbowLastUpdate >= 10) {
+    rainbowLastUpdate = millis();
+    leds[0] = CHSV(hue++, 255, 255);
+    if (hue > 255) hue = 0;
+    FastLED.show();
+  }
+}
 
 void irRemote() {
   if (irrecv.decode(&results)) { // Check if a signal is received
-    //Serial.println(results.value);
     switch (results.value) {
       case 0xFF22DD:
         Serial.println("Button Left");
@@ -189,72 +221,17 @@ void irRemote() {
         Serial.println("Button OK");
         setPixelColor(colors[2]);
         stopWheels();
+        currentState = NONE;
         break;
       case 16738455:
         Serial.println("Button 1");
-        setPixelColor(colors[5]);
-        drivePattern();
+        currentState = RAINBOW_LIGHTS;
         break;
       case 16750695:
-      Serial.println("Button 2");
-      break;
-      case 16756815://3
-      Serial.println("Button 3");
-      break;
-      case 16724175://4
-      Serial.println("Button 4");
-      break;
-      case 16718055://5
-      Serial.println("Button 5");
-      break;
-      case 16743045://6
-      Serial.println("Button 6");
-      break;
-      case 16716015://7
-      Serial.println("Button 7");
-      break;
-      case 16726215://8
-      Serial.println("Button 8");
-      break;
-      case 16734885://9
-      Serial.println("Button 9");
-      break;
-      case 16728765: // *
-      Serial.println("Button *");
-      break;
-      case 16730805: // 0
-      Serial.println("Button 0");
-      break;
-      case 16732845: // #
-      Serial.println("Button #");
-      break;
-
-
-
-
+        Serial.println("Button 2");
+        currentState = DRIVE_PATTERN;
+        break;
     }
     irrecv.resume(); // Receive the next value
   }
-
-
-}
-
-
-void cycleColors(const int colorArray[][3], int colorCount, int delayTime) {
-  for (int i = 0; i < colorCount; i++) {
-    setPixelColor(colorArray[i]);
-    delay(delayTime);
-  }
-}
-
-int hue = 0;
-void rainbowCycle(int delayTime, int led) {
-  hue++;
-  // Limit Hue at 255
-  if (hue > 255) {
-    hue = 0;
-  }
-  leds[0] = CHSV(hue, 255, 255);
-  FastLED.show();
-  delay(delayTime);
 }
