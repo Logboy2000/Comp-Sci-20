@@ -12,6 +12,8 @@ const int motorRSpeedPin = 6;
 const int motorLDirPin = 7;
 const int motorRDirPin = 8;
 const int IR_PIN = 9;
+const int US_ECHO_PIN = 12;
+const int US_TRIG_PIN = 13;
 IRrecv irrecv(IR_PIN);
 
 decode_results results;
@@ -40,13 +42,15 @@ CRGB leds[LED_COUNT];
 unsigned long previousMillis = 0;
 
 // Universal state management
-enum State { NONE, DRIVE_PATTERN, RAINBOW_LIGHTS };
+enum State { NONE, DRIVE_PATTERN, RAINBOW_LIGHTS, AVOIDANCE };
 State currentState = NONE;
 
 void setup() {
   Serial.begin(9600);
   // Set those pins
-  headServo.attach(9);
+  headServo.attach(10);
+  pinMode(US_TRIG_PIN, OUTPUT);
+  pinMode(US_ECHO_PIN, INPUT);
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, LED_COUNT);
 
   // Brighten led
@@ -84,7 +88,11 @@ void loop() {
     case RAINBOW_LIGHTS:
       rainbowLights();
       break;
+    case AVOIDANCE:
+      wallAvoidance();
+      break;
     case NONE:
+      break;
     default:
       break;
   }
@@ -194,42 +202,76 @@ void rainbowLights() {
   }
 }
 
+int pos = 0;
+void wallAvoidance(){
+  static unsigned long lastUpdate = 0;
+  if (millis() - lastUpdate >= 15) {
+    lastUpdate = millis();
+    if (pos <= 180) {
+      headServo.write(pos);              // tell servo to go to position in variable 'pos'
+      pos += 1;                          // Increment position
+    } else if (pos >= 180) {
+      pos = 0;                           // Reset position
+    }
+  }
+}
+
+void lineFollow(){
+
+}
+
 void irRemote() {
   if (irrecv.decode(&results)) { // Check if a signal is received
     switch (results.value) {
-      case 0xFF22DD:
-        Serial.println("Button Left");
+      case 0xFF22DD: Serial.println("Button Left");
         setPixelColor(colors[0]);
         pivotRight(100);
         break;
-      case 0xFFC23D:
-        Serial.println("Button Right");
+      case 0xFFC23D: Serial.println("Button Right");
         setPixelColor(colors[1]);
         pivotLeft(100);
         break;
-      case 16736925:
-        Serial.println("Button Up");
+      case 16736925: Serial.println("Button Up");
         setPixelColor(colors[3]);
         driveForward(100);
         break;
-      case 16754775:
-        Serial.println("Button Down");
+      case 16754775: Serial.println("Button Down");
         setPixelColor(colors[4]);
         driveBackward(100);
         break;
-      case 16712445:
-        Serial.println("Button OK");
+      case 16712445: Serial.println("Button OK");
         setPixelColor(colors[2]);
         stopWheels();
         currentState = NONE;
         break;
-      case 16738455:
-        Serial.println("Button 1");
+      case 16738455: Serial.println("Button 1");
+        stopWheels(); 
         currentState = RAINBOW_LIGHTS;
         break;
-      case 16750695:
-        Serial.println("Button 2");
+      case 16750695: Serial.println("Button 2");
         currentState = DRIVE_PATTERN;
+        break;
+      case 16756815: Serial.println("Button 3");
+        stopWheels();
+        currentState = AVOIDANCE;
+        break;
+      case 16724175: Serial.println("Button 4");
+        break;
+      case 16718055: Serial.println("Button 5");
+        break;
+      case 16743045: Serial.println("Button 6");
+        break;
+      case 16716015: Serial.println("Button 7");
+        break;
+      case 16726215:Serial.println("Button 8");
+        break;
+      case 16734885:Serial.println("Button 9");
+        break;
+      case 16728765:Serial.println("Button *");
+        break;
+      case 16730805:Serial.println("Button 0");
+        break;
+      case 16732845: Serial.println("Button #");
         break;
     }
     irrecv.resume(); // Receive the next value
