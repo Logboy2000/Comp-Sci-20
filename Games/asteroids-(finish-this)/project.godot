@@ -12,6 +12,7 @@ config_version=5
 
 config/name="Asteroids"
 config/version="0.0.2"
+config/tags=PackedStringArray("original")
 run/main_scene="res://scenes/rooms/title_room.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)

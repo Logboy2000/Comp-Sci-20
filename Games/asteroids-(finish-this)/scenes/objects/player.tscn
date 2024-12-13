@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://0bv25eepcj8y"]
+[gd_scene load_steps=11 format=3 uid="uid://0bv25eepcj8y"]
 
 [ext_resource type="Texture2D" uid="uid://dnwfhn7gnpkju" path="res://assets/Sprites/player.png" id="1_a5hl3"]
 [ext_resource type="Script" path="res://scenes/objects/player.gd" id="1_es4y8"]
@@ -48,6 +48,17 @@ _data = {
 "damage_flash": SubResource("Animation_04p06")
 }
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yfwv1"]
+bg_color = Color(0.46, 0.46, 0.46, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mor5d"]
+bg_color = Color(0.9, 0.9, 0.9, 1)
+
+[sub_resource type="Theme" id="Theme_5tokp"]
+ProgressBar/styles/background = SubResource("StyleBoxFlat_yfwv1")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_mor5d")
+
 [node name="Player" type="CharacterBody2D"]
 z_index = 1
 motion_mode = 1
@@ -79,6 +90,7 @@ wait_time = 0.2
 one_shot = true
 
 [node name="DashDestroyArea" type="Area2D" parent="."]
+visible = false
 monitorable = false
 
 [node name="CollisionPolygon2D" type="CollisionShape2D" parent="DashDestroyArea"]
@@ -88,5 +100,20 @@ shape = SubResource("RectangleShape2D_qhwlk")
 libraries = {
 "": SubResource("AnimationLibrary_uuv2n")
 }
+
+[node name="HpBar" type="ProgressBar" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -10.0
+offset_top = -9.0
+offset_right = 8.0
+offset_bottom = -4.0
+grow_horizontal = 2
+rotation = 1.5708
+mouse_filter = 2
+theme = SubResource("Theme_5tokp")
+value = 100.0
+show_percentage = false
 
 [connection signal="timeout" from="DashLengthTimer" to="." method="_on_dash_length_timer_timeout"]

@@ -2,10 +2,18 @@ extends Node
 var debug_mode: bool = false
 var current_room: Room
 var current_zoom: float = 1
+var camera
+
+var settings: Dictionary = {
+	"camera_shake": false
+}
+
 func _ready() -> void:
+	
 	process_mode = ProcessMode.PROCESS_MODE_ALWAYS
 
 func _process(_delta: float) -> void:
+	camera = current_room.camera
 	if Input.is_action_just_pressed("fullscreen"):
 		if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
@@ -17,14 +25,13 @@ func _process(_delta: float) -> void:
 		TransitionLayer.change_scene(get_tree().current_scene.scene_file_path)
 
 func shake_camera(intensity: float):
-	if current_room:
-		var camera = current_room.camera
+	if current_room and settings.get("camera_shake") == true:
 		camera.addons[0].intensity = intensity
 		camera.addons[0].shake()
 		
 
 func game_over():
-	pass
+	camera.zoom = 2
 
 func quit_game():
 	await TransitionLayer.play_transition(false, 0.25)

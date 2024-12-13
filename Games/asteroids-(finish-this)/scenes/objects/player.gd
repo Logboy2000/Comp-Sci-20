@@ -18,8 +18,10 @@ const DASH_SOUND = preload("res://assets/Audio/dash.wav")
 @onready var dash_length_timer: Timer = $DashLengthTimer
 @onready var dash_destroy_area: Area2D = $DashDestroyArea
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var hp_bar: ProgressBar = $HpBar
 
-@export var hp: int = 4
+var hp: int = 4
+@export var max_hp: int = 10
 
 @export var top_speed: float = 40
 @export var dash_speed: float = 1000
@@ -33,18 +35,27 @@ const DASH_SOUND = preload("res://assets/Audio/dash.wav")
 var target_angle: float = 0
 var input_direction: Vector2 = Vector2.ZERO
 var dash_direction: Vector2 = Vector2(1, 1)
+var mouse_direction: Vector2
 
 func _ready() -> void:
 	rotation = (get_global_mouse_position() - global_position).angle()
+	hp = max_hp
+
+func _process(_delta: float) -> void:
+	hp_bar.max_value = max_hp
+	hp_bar.value = hp
+	var hp_percent: float = float(hp) / float(max_hp)
+	if hp_percent < 0.25:
+		animation_player.play("damage_flash")
+	else:
+		animation_player.stop()
 
 func _physics_process(_delta: float) -> void:
 	input_direction = Vector2(Input.get_axis("left", "right"), Input.get_axis("up", "down")).normalized()
+	mouse_direction = (get_global_mouse_position() - global_position).normalized()
 	
 	# Calculate the target angle (direction you want to rotate towards)
-	if Input.get_connected_joypads().is_empty():
-		target_angle = (get_global_mouse_position() - global_position).angle()
-	else:
-		target_angle = Vector2(Input.get_axis("look_left","look_right"), Input.get_axis("look_up", "look_down")).angle()
+	target_angle = mouse_direction.angle()
 	
 	# Smoothly interpolate the current angle towards the target angle
 	rotation = lerp_angle(rotation, target_angle, rotation_speed)  # Adjust the speed by changing the factor
@@ -77,10 +88,6 @@ func _physics_process(_delta: float) -> void:
 			body.hit(dash_damage)
 	if Input.is_key_pressed(KEY_H):
 		hit()
-	if hp <= 2:
-		animation_player.play("damage_flash")
-	else:
-		animation_player.stop()
 	
 		  # White color
 	move_and_slide()
@@ -96,12 +103,6 @@ func shoot():
 	new_bullet.rotation = rotation
 	new_bullet.bullet_speed += velocity.length()
 	
-	# Calculate a direction vector towards the mouse position
-	var mouse_direction: Vector2
-	if Input.get_connected_joypads().is_empty():
-		mouse_direction = (get_global_mouse_position() - global_position).normalized()
-	else:
-		mouse_direction = Vector2(Input.get_axis("look_left", "look_right"), Input.get_axis("look_up", "look_down")).normalized()
 	
 	# Calculate the maximum angle offset based on bullet_accuracy
 	var max_angle_offset = deg_to_rad(180 * (1.0 - bullet_accuracy))  # 180 degrees at bullet_accuracy 0
