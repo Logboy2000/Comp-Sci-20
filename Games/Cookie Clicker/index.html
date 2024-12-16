@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='stylesheet' href='style.css'>
+    <title id='tabTitle'>Cockie</title>
+</head>
+
+<body onload='go()'>
+    <div id='cookieContainer'>
+        <canvas id="backgroundLeftCanvas"></canvas>
+        <label id='cookieCount'></label>
+        <label id='cookiesPerSecond'></label>
+        <br>
+        <div id='cookie' onclick='cookieClicked()'>
+            <img src='images/cookie.png' id='cookieImage'>
+        </div>
+
+    </div>
+    <div id='separatorV'></div>
+    <div id='tabbedMenu'>
+
+        <div id='tabs'>
+            <div id='options'>
+                <h1>Options</h1>
+                <hr>
+            </div>
+            <div id="stats">
+                <h1>Statistics</h1>
+                <hr>
+            </div>
+            <div id="debug">
+                <h1>~DEBUG MENU~</h1>
+                <hr>
+                <button onclick="testNotification()">testNotification</button>
+                <br>
+                <label>Cookies Per Click</label> <input type='number' id='cookiesPerClick' value='1'>
+                <br>
+                <button onclick="unlockAll()">unlockAll</button>
+            </div>
+        </div>
+
+
+    </div>
+    <div id='separatorV'></div>
+    <div id='shop'>
+        <h1 style='text-align: center;'>Store</h1>
+        <div id="separatorH"></div>
+        <br>
+    </div>
+    <div id="notificationContainer"></div>
+
+
+    <canvas id="foregroundParticleCanvas"></canvas>
+
+
+
+
+</body>
+<script src="js/settings.js"></script>
+<script src='js/main.js'></script>
+
+
+</html>

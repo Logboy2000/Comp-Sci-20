@@ -12,8 +12,9 @@ function loaded() {
 //End of loaded function
 
 
-//Start of mergeAndSort function
+
 /**
+ * Start of mergeAndSort function
  * Assumes the two arrays are already sorted
  */
 function mergeAndSort(arrayA, arrayB) {
