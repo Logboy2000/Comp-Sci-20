@@ -1,12 +1,12 @@
-#include "FastLED.h"
+#include <FastLED.h>
 
-#define NUM_LEDS 16  // 49
-#define LAST_LED 15  // 48
-#define MIDDLE_LED 8 // 24
+#define NUM_LEDS 49
+#define LAST_LED 48
+#define MIDDLE_LED 24
 
 // Pins
 #define DATA_PIN 10
-#define THE_PERFECT_AMAZING_UNUSED_CLOCK_PIN 13 
+#define THE_PERFECT_AMAZING_UNUSED_CLOCK_PIN 13
 
 // Common Colors
 #define WHITE CRGB(255, 255, 255)
@@ -29,6 +29,12 @@ void setup()
 
 void loop()
 {
+  for (int i = 1000; i > 2; i *= 0.9)
+  {
+    delay(i);
+    pulse(WHITE, 0, 0, i/50);
+  }
+
   int del = 1;
   startToEnd(WHITE, del);
   startToEnd(RED, del);
@@ -38,46 +44,67 @@ void loop()
   endToStart(RED, del);
   for (int i = 0; i < 10; i++)
   {
-    alternatingColors(WHITE, GREEN);
-    delay(50); 
-    alternatingColors(CYAN, YELLOW);
-    delay(50); 
+    alternatingColors(RED, GREEN);
+    delay(50);
+    alternatingColors(WHITE, RED);
+    delay(50);
   }
-  endsToMiddle(WHITE, 10);
-  middleToEnds(BLACK, 10);
+  endsToMiddle(10, WHITE, WHITE);
+  middleToEnds(10, BLACK, BLACK);
+  for (int i = 0; i < 3; i++)
+  {
+    endsToMiddle(i * 5, BLACK, WHITE);
+    middleToEnds(i * 5, CYAN, BLACK);
+    middleToEnds(i * 5, BLACK, GREEN);
+    endsToMiddle(i * 5, RED, BLACK);
+  }
 
-  for (int ledCount = 0; ledCount < NUM_LEDS; ledCount++)
+  for (int ledCount = 0; ledCount < NUM_LEDS; ledCount += 10)
   {
     sparkle(WHITE, 10, ledCount, 10);
   }
 
-  for (int i = 0; i < 3; i++)
-  {
-    fadeTo(WHITE, 10);
-    fadeTo(BLACK, 10);
-  }
+  fadeTo(WHITE, 10);
+  fadeTo(BLACK, 10);
+  fadeTo(GREEN, 10);
+  fadeTo(RED, 10);
+  fadeTo(CYAN, 10);
 
   startToEnd(RED, 10);
   endToStart(BLACK, 10);
 
-  alternatingColors(GREEN, YELLOW); // Alternating green and yellow
-  delay(10);
+  endsToMiddle(10, BLUE, BLUE);
+  endsToMiddle(10, RED, RED);
+  endsToMiddle(10, GREEN, GREEN);
+  endsToMiddle(10, BLUE, BLUE);
+  endsToMiddle(10, CYAN, CYAN);
+  endsToMiddle(10, MAGENTA, MAGENTA);
+  middleToEnds(10, CYAN, CYAN);
+  middleToEnds(10, BLUE, BLUE);
+  middleToEnds(10, GREEN, GREEN);
+  middleToEnds(10, RED, RED);
+  middleToEnds(10, BLUE, BLUE);
 
-  endsToMiddle(BLUE, 10); // Fill to middle with blue
-  middleToEnds(BLUE, 10); // Reverse blue
+  middleToEnds(10, BLACK, BLACK);
 
   fadeTo(YELLOW, 10); // Fill with yellow
-  FastLED.show();
   delay(10);
+  fadeTo(BLACK, 20);
 
   for (int ledCount = 0; ledCount < NUM_LEDS; ledCount++)
   {
     sparkle(WHITE, 10, ledCount, 10); // Sparkle effect
   }
-
-  fadeTo(BLACK, 1); // Fade to black
+  blackout();
 
 } // end of loop
+
+void pulse(CRGB color, int fadeInDel, int holdTime, int fadeOutDel)
+{
+  fadeTo(color, fadeInDel);
+  delay(holdTime);
+  fadeTo(BLACK, fadeOutDel);
+}
 
 void startToEnd(CRGB color, int delayMil)
 {
@@ -112,28 +139,28 @@ void alternatingColors(CRGB color1, CRGB color2)
   line(1, LAST_LED, color2, 2);
 } // end of alternatingColors
 
-void endsToMiddle(CRGB color, int delayMil)
+void endsToMiddle(int delayMil, CRGB colorR, CRGB colorL)
 {
   // Loop for half of the LEDs
   for (int i = 0; i < MIDDLE_LED; i++)
   {
     // Right line
-    line(0, i, color, 1);
+    line(0, i, colorR, 1);
     // Left line
-    line(LAST_LED - i, NUM_LEDS, color, 1);
+    line(LAST_LED - i, NUM_LEDS, colorL, 1);
     delay(delayMil);
   }
 } // end of endsToMiddle
 
-void middleToEnds(CRGB color, int delayMil)
+void middleToEnds(int delayMil, CRGB colorR, CRGB colorL)
 {
   // Loop for half of the LEDs
   for (int i = 0; i <= MIDDLE_LED; i++)
   {
     // Right side
-    line(MIDDLE_LED - i, MIDDLE_LED, color, 1);
+    line(MIDDLE_LED - i, MIDDLE_LED, colorR, 1);
     // Left side
-    line(MIDDLE_LED, MIDDLE_LED + i, color, 1);
+    line(MIDDLE_LED, MIDDLE_LED + i, colorL, 1);
     delay(delayMil);
   }
 } // end of middleToEnds
@@ -190,6 +217,7 @@ void fillAllLeds(CRGB color)
   {
     leds[i] = color;
   }
+  FastLED.show();
 } // end of fillAllLeds
 
 void blackout()
