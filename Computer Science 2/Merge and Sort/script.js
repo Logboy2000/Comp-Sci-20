@@ -3,6 +3,11 @@ var array2 = []
 var arrayMerged = []
 
 //Start of loaded function
+/**
+ * Initializes the arrays with random values and displays them.
+ * Inputs: None
+ * Outputs: Displays array1 and array2 in the respective HTML elements.
+ */
 function loaded() {
     array1 = createRandomArray(424)
     array2 = createRandomArray(53)
@@ -16,6 +21,8 @@ function loaded() {
 /**
  * Start of mergeAndSort function
  * Assumes the two arrays are already sorted
+ * Inputs: arrayA (sorted array), arrayB (sorted array)
+ * Outputs: Merged and sorted array containing elements from both input arrays.
  */
 function mergeAndSort(arrayA, arrayB) {
     var outputArray = []
@@ -50,6 +57,11 @@ function mergeAndSort(arrayA, arrayB) {
 //End of mergeAndSort function
 
 //Start of button function
+/**
+ * Merges the two arrays and displays them.
+ * Inputs: None
+ * Outputs: Displays array1, array2, and the merged array in the respective HTML elements.
+ */
 function button() {
     arrayMerged = mergeAndSort(array1, array2)
     displayArray(array1, "array1")
@@ -59,18 +71,33 @@ function button() {
 //End of button function
 
 //Start of displayArray function
+/**
+ * Displays the contents of an array in a specified HTML element.
+ * Inputs: array (array to display), elementID (ID of the HTML element)
+ * Outputs: Updates the innerHTML of the specified element with the array contents.
+ */
 function displayArray(array, elementID) {
     document.getElementById(elementID).innerHTML = array.join(", ")
 }
 //End of displayArray function
 
 //Start of randomFromInterval
+/**
+ * Generates a random integer between the specified minimum and maximum values.
+ * Inputs: min (minimum value), max (maximum value)
+ * Outputs: A random integer between min and max, inclusive.
+ */
 function randomFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 //End of randomFromInterval
 
 //Start of createRandomArray
+/**
+ * Creates an array of random integers of specified length.
+ * Inputs: arrayLength (length of the array to create)
+ * Outputs: An array filled with random integers.
+ */
 function createRandomArray(arrayLength) {
     var lowest = 0
     var newArray = []

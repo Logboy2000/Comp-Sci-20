@@ -6,7 +6,7 @@
 
 // Pins
 #define DATA_PIN 10
-#define THE_PERFECT_ANAZING_UNUSED_CLOCK_PIN 13 
+#define THE_PERFECT_AMAZING_UNUSED_CLOCK_PIN 13 
 
 // Common Colors
 #define WHITE CRGB(255, 255, 255)

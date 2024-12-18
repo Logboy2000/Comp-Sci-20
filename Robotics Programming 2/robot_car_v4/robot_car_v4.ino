@@ -20,6 +20,7 @@ decode_results results;
 Servo headServo;
 Ultrasonic ultrasonic(13,12);
 
+
 const CRGB colors[13] = {
   CRGB(255, 255, 255),
   CRGB(255, 0, 0),
@@ -40,7 +41,7 @@ typedef enum {WHITE, RED, GREEN, BLUE, MAGENTA, YELLOW, CYAN, PURPLE, ORANGE, OL
 CRGB leds[LED_COUNT];
 
 // I love state machines
-enum State { NONE, DRIVE_PATTERN, RAINBOW_LIGHTS, AVOIDANCE };
+enum State { NONE, DRIVE_PATTERN, RAINBOW_LIGHTS, AVOIDANCE, LINE_FOLLOW};
 State currentState = NONE;
 
 void setup() {
@@ -60,7 +61,7 @@ void setup() {
 
   // Prevent immediate driving
   stopWheels();
-}
+} // end of setup
 
 void loop() {
   if (Serial.available() > 0) {
@@ -87,55 +88,58 @@ void loop() {
     case AVOIDANCE:
       wallAvoidance();
       break;
+    case LINE_FOLLOW:
+      lineFollow();
+    break;
     case NONE:
       break;
     default:
       break;
   }
-}
+} // end of loop
 
 void setPixelColor(const CRGB color) {
   leds[0] = color;
   FastLED.show();
-}
+} // end of setPixelColor
 
 void motorController(int lSpeed, bool lDir, int rSpeed, bool rDir) {
   analogWrite(motorLSpeedPin, lSpeed);
   analogWrite(motorRSpeedPin, rSpeed);
   digitalWrite(motorLDirPin, lDir);
   digitalWrite(motorRDirPin, rDir);
-}
+} // end of motorController
 
 void driveForward(int speed) {
   motorController(speed, true, speed, true);
-}
+} // end of driveForward
 
 void driveBackward(int speed) {
   motorController(speed, false, speed, false);
-}
+} // end of driveBackward
 
 void turnLeft(int speed) {
   motorController(speed, true, speed / 2, true);
-}
+} // end of turnLeft
 
 void turnRight(int speed) {
   motorController(speed / 2, true, speed, true);
-}
+} // end of turnRight
 
 void pivotLeft(int speed) {
   motorController(speed, false, speed, true);
-}
+} // end of pivotLeft
 
 void pivotRight(int speed) {
   motorController(speed, true, speed, false);
-}
+} // end of pivotRight
 
 void stopWheels() {
   analogWrite(motorLSpeedPin, 0);
   analogWrite(motorRSpeedPin, 0);
   digitalWrite(motorLDirPin, 0);
   digitalWrite(motorRDirPin, 0);
-}
+} // end of stopWheels
 
 int driveSpeed = 50;
 
@@ -186,7 +190,7 @@ void drivePattern() {
 
     state++;
   }
-}
+} // end of drivePattern
 
 void rainbowLights() {
   static unsigned long rainbowLastUpdate = 0;
@@ -198,11 +202,11 @@ void rainbowLights() {
     if (hue > 255) hue = 0;
     FastLED.show();
   }
-}
+} // end of rainbowLights
 
 
 int servoPosition = 0;
-int servoTurnAmount = 30;
+int servoPositions[] = {30, 90, 150};
 void wallAvoidance(){
   setPixelColor(BLUE);
 
@@ -210,65 +214,110 @@ void wallAvoidance(){
 
   static unsigned long previousMillis = 0;
   
-  static bool movingForward = true; // Changed to static
+  static bool movingForward = true;
 
   unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis >= 500) { // Runs every 200ms
+  if (currentMillis - previousMillis >= 600) { // Runs every 600ms
+    headServo.write(servoPositions[servoPosition]);
+    distance = ultrasonic.Ranging(CM);
+    Serial.print("Distance in CM: ");
+    Serial.println(distance);
+    switch(servoPosition){
+      case 0:
+        if (distance < 30) {
+          pivotRight(driveSpeed);
+        } else {
+          driveForward(driveSpeed);
+        }
+      break;
+      case 1:
+        if (distance < 50) {
+          pivotRight(driveSpeed);
+        } else {
+          driveForward(driveSpeed);
+        }
+      break;
+      case 2:
+        if (distance < 30) {
+          pivotLeft(driveSpeed);
+          
+        } else {
+          driveForward(driveSpeed);
+        }
+      break;
+    }
+
     previousMillis = currentMillis;
-    headServo.write(servoPosition);
+    
     
     if (movingForward) {
-      servoPosition += servoTurnAmount;
+      servoPosition++;
     } else {
-      servoPosition -= servoTurnAmount;
+      servoPosition--;
     }
-    if (servoPosition >= 180){ 
+    if (servoPosition >= 2){ 
       movingForward = false;
     } else if (servoPosition <= 0) { 
       movingForward = true;
     }
   }
-  
-  distance = ultrasonic.Ranging(CM); // Distance in centimeters
-  
-  Serial.print("Distance in CM: ");
-  Serial.println(distance);
-  if (distance < 20) {
-      stopWheels();
-    } else {
-      driveForward(driveSpeed);
-    }
-}
+} // end of wallAvoidance
+
+
+int followerReadings[3];
+static const uint8_t lineFollowPins[] = {A0, A1, A2}; // {left, middle, right}
 
 void lineFollow(){
-  delay(1000);
-}
+  const int threshold = 300;
+  Serial.println("");
+  for(int i = 0; i < 3; i++){
+    followerReadings[i] = analogRead(lineFollowPins[i]); // Higher reading means darker color
+    Serial.print(followerReadings[i]);
+    Serial.print(", ");
+  }
+
+  // follow line
+  if (followerReadings[1] > threshold && followerReadings[0] < threshold && followerReadings[2] < threshold) {
+    setPixelColor(colors[3]);
+    driveForward(driveSpeed);
+  } else if (followerReadings[0] > threshold) {
+    setPixelColor(colors[1]);
+    turnRight(driveSpeed);
+  } else if (followerReadings[2] > threshold) {
+    setPixelColor(colors[2]);
+    turnLeft(driveSpeed);
+  } else {
+    // stop if no line is detected
+    setPixelColor(colors[0]);
+    stopWheels();
+  }
+} // end of lineFollow
 
 void irRemote() {
   if (irrecv.decode(&results)) { // Check if a signal is received
     switch (results.value) {
       case 0xFF22DD: Serial.println("Button Left");
         setPixelColor(colors[0]);
-        pivotRight(100);
+        pivotRight(driveSpeed);
         currentState = NONE;
         break;
       case 0xFFC23D: Serial.println("Button Right");
         setPixelColor(colors[1]);
-        pivotLeft(100);
+        pivotLeft(driveSpeed);
         currentState = NONE;
         break;
       case 16736925: Serial.println("Button Up");
         setPixelColor(colors[3]);
-        driveForward(100);
+        driveForward(driveSpeed);
         currentState = NONE;
         break;
       case 16754775: Serial.println("Button Down");
         setPixelColor(colors[4]);
-        driveBackward(100);
+        driveBackward(driveSpeed);
         currentState = NONE;
         break;
       case 16712445: Serial.println("Button OK");
-        setPixelColor(colors[2]);
+        setPixelColor(colors[1]);
         stopWheels();
         currentState = NONE;
         break;
@@ -285,26 +334,36 @@ void irRemote() {
         headServo.write(90);
         break;
       case 16724175: Serial.println("Button 4");
+        stopWheels();
+        currentState = LINE_FOLLOW;
         break;
       case 16718055: Serial.println("Button 5");
         break;
       case 16743045: Serial.println("Button 6");
         break;
       case 16716015: Serial.println("Button 7");
+        driveSpeed = 50;
+        setPixelColor(colors[1]);
         break;
       case 16726215:Serial.println("Button 8");
+        driveSpeed = 100;
         break;
       case 16734885:Serial.println("Button 9");
+        driveSpeed = 150;
         break;
       case 16728765:Serial.println("Button *");
-        break;
+        setPixelColor(colors[1]);
+        stopWheels();
+        currentState = NONE;
       case 16730805:Serial.println("Button 0");
+        driveSpeed = 255;
         break;
       case 16732845: Serial.println("Button #");
+        setPixelColor(colors[1]);
         stopWheels();
         currentState = NONE;
         break;
     }
     irrecv.resume(); // Receive the next value
   }
-}
+} // end of irRemote
