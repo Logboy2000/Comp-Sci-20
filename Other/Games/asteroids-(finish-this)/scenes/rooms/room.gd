@@ -6,9 +6,11 @@ const max_zoom = 10
 const min_zoom = 0.5
 @onready var entities: Node2D = $Entities
 @onready var camera: Node2D = $ProCam2D
+@onready var game_over_screen: CanvasLayer = $GameOverScreen
 
 func _ready() -> void:
 	GameManager.current_room = self
+	GameManager.can_pause = true
 	camera.zoom = GameManager.current_zoom
 	
 

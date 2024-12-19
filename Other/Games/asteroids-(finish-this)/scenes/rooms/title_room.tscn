@@ -27,11 +27,5 @@ horizontal_alignment = 1
 [node name="AsteroidPlayButton" parent="Entities" index="2" instance=ExtResource("2_4b3wv")]
 position = Vector2(0, 132)
 
-[node name="ProCam2D" parent="." index="3"]
-left_limit = -380
-right_limit = 380
-top_limit = -215
-bottom_limit = 215
-
 [node name="ExitButtonAsteroid" parent="." index="4" instance=ExtResource("4_f13h1")]
 position = Vector2(243, 119)

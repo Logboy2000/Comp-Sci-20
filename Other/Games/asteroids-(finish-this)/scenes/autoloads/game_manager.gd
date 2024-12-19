@@ -1,11 +1,15 @@
 extends Node
+
+signal game_over_signal
+
 var debug_mode: bool = false
 var current_room: Room
 var current_zoom: float = 1
+var can_pause = true
 var camera
 
 var settings: Dictionary = {
-	"camera_shake": false
+	"camera_shake": true
 }
 
 func _ready() -> void:
@@ -32,6 +36,7 @@ func shake_camera(intensity: float):
 
 func game_over():
 	camera.zoom = 2
+	game_over_signal.emit()
 
 func quit_game():
 	await TransitionLayer.play_transition(false, 0.25)

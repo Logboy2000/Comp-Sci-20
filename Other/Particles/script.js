@@ -53,22 +53,25 @@ function loop() {
     ctx.save()
     ctx.translate(-game.camera.x + canvas.width / 2, -game.camera.y + canvas.height / 2)
     ctx.scale(game.camera.zoom, game.camera.zoom)
-    game.currentScene.addObject(
-        new Particle2D(
-            'images/twirl_02.png',
-            0,
-            0,
-            randomRange(50, 100),
-            randomRange(50, 100),
-            randomRange(-360, 360),
-            randomRange(-360, 360),
-            randomRange(-360, 360),
-            0,
-            0,
-            randomRange(-10, 10),
-            randomRange(1000, 2000),
+    for (var i = 0; i < 20; i++) {
+        game.currentScene.addObject(
+            new Particle2D(
+                'images/fire_01.png',
+                0,
+                0,
+                randomRange(50, 100),
+                randomRange(50, 100),
+                randomRange(-360, 360),
+                randomRange(-360, 360),
+                randomRange(-360, 360),
+                0,
+                0,
+                randomRange(-10, 10),
+                randomRange(1000, 2000),
+            )
         )
-    )
+    }
+
 
 
     game.update()

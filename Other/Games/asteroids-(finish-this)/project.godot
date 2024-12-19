@@ -36,7 +36,7 @@ mouse_cursor/custom_image_hotspot=Vector2(12.5, 12.5)
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/ProCam2D/plugin.cfg")
+enabled=PackedStringArray()
 
 [input]
 
@@ -164,7 +164,6 @@ look_left={
 
 [physics]
 
-2d/run_on_separate_thread=true
 2d/default_gravity_vector=Vector2(0, 0)
 common/physics_interpolation=true
 

@@ -8,4 +8,4 @@ func destroy():
 	call_deferred("change_scene")
 
 func change_scene():
-	TransitionLayer.change_scene("res://scenes/rooms/room.tscn")
+	TransitionLayer.change_scene("res://scenes/rooms/endless_mode.tscn")
