@@ -53,7 +53,6 @@ function loop() {
     ctx.save()
     ctx.translate(-game.camera.x + canvas.width / 2, -game.camera.y + canvas.height / 2)
     ctx.scale(game.camera.zoom, game.camera.zoom)
-
     game.currentScene.addObject(
         new Particle2D(
             'images/twirl_02.png',
@@ -70,6 +69,7 @@ function loop() {
             randomRange(1000, 2000),
         )
     )
+
 
     game.update()
     game.draw(ctx)
@@ -113,46 +113,51 @@ function updateCamera() {
 var fpsHistory = []
 function debugDraw(ctx) {
     drawText(ctx, 'Object Count: ' + game.currentScene.objects.length, 0, 10)
-    drawText(ctx, 'FPS: ' + fps + '  V: ' + vsync, 0, 20)
+    drawText(ctx, 'FPS: ' + fps + '  V-Sync: ' + vsync, 0, 20)
     drawText(ctx, 'Delta Time: ' + deltaTime, 0, 30)
     drawText(ctx, 'Resolution: ' + canvas.width + 'x' + canvas.height, 0, 40)
     drawText(ctx, 'Camera: ' + Math.round(game.camera.x) + ',' + Math.round(game.camera.y) + ',' + game.camera.targetZoom.toFixed(2), 0, 50)
     drawText(ctx, 'Mouse: ' + game.input.getMousePos().x + ',' + game.input.getMousePos().y, 0, 60)
-    drawText(ctx, game.input.getScrollDirection(), 0, 70)
+    if (vsync) {
+
+    }
     drawGraph(
         ctx,
         fps,
         0,
         70,
-        100,
+        150,
         100,
         'FPS',
         'Frames',
         'FPS',
         30,
         60,
+        3,
+        10,
+        60
     )
     drawGraph(
         ctx,
         deltaTime,
         0,
-        270,
-        100,
+        200,
+        150,
         100,
         'Frametimes',
         'Frames',
         'DT',
-        0.03,
+        0.02,
         0.01,
         3,
-        0.1,
+        0.05,
         0,
         2,
         false
     )
 }
 
-function drawGraph(ctx, value, x, y, w, h, title = 'Title', xAxisName = 'x-axis', yAxisName = 'y-axis', yellowThreshold = 50, greenThreshold = 100, labelCount = 3, scaleThreshold = 50, minYScale = 100, decimalPlaces = 0, higherIsBetter = true) {
+function drawGraph(ctx, value, x, y, w, h, title = 'Title', xAxisName = 'x-axis', yAxisName = 'y-axis', yellowThreshold = 50, greenThreshold = 100, labelCount = 3, stepSize = 50, minYScale = 100, decimalPlaces = 0, higherIsBetter = true) {
     // Draw graph 
     // Jank as hell but it works
 
@@ -162,7 +167,7 @@ function drawGraph(ctx, value, x, y, w, h, title = 'Title', xAxisName = 'x-axis'
         drawGraph.currentMaxValues = new Map()
     }
 
-    // Use title as unique identifier for each graph
+    // Use title as unique identifier for graphss
     const graphKey = title
 
     if (!drawGraph.valueHistories.has(graphKey)) {
@@ -183,7 +188,7 @@ function drawGraph(ctx, value, x, y, w, h, title = 'Title', xAxisName = 'x-axis'
     }
 
     const maxValue = Math.max(...valueHistory, minYScale)
-    const targetMaxValue = Math.ceil(maxValue / scaleThreshold) * scaleThreshold
+    const targetMaxValue = Math.ceil(maxValue / stepSize) * stepSize
 
     // Store the current scale in the static map
     if (typeof drawGraph.currentMaxValues.get(graphKey) === 'undefined') {
@@ -300,6 +305,7 @@ class Game {
     constructor(currentScene) {
         this.currentScene = currentScene
         this.input = new Input()
+        this.currentFrame = 0
         this.camera = {
             x: 0,
             y: 0,
@@ -312,6 +318,7 @@ class Game {
         }
     }
     update() {
+        this.currentFrame++
         this.currentScene.update()
     }
     draw(ctx) {
@@ -414,7 +421,7 @@ class Particle2D extends Sprite2D {
 }
 
 
-function drawText(ctx, text, x, y, alignment = 'left', fontSize = 10, fontName = 'Arial') {
+function drawText(ctx, text, x, y, alignment = 'left', fontSize = 10, fontName = 'Comic Sans MS') {
     ctx.font = fontSize + "px " + fontName
     ctx.textAlign = alignment
     ctx.fillText(text, x, y)
