@@ -11,7 +11,7 @@ var price: int = 0
 
 @onready var icon: TextureRect = $Button/MarginContainer/VBoxContainer/Icon
 
-var level = 0
+var level = 1
 
 func _ready() -> void:
 	price = starting_price

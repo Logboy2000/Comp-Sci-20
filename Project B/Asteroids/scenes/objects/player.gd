@@ -22,6 +22,8 @@ const DASH_SOUND = preload("res://assets/Audio/dash.wav")
 @onready var shoot_cooldown_timer: Timer = $Timers/ShootCooldownTimer
 
 @onready var magnet_area: Area2D = $MagnetArea
+@onready var magnet_collision_shape: CollisionShape2D = $MagnetArea/MagnetCollisionShape
+
 @onready var dash_destroy_area: Area2D = $DashDestroyArea
 @onready var collection_area: Area2D = $CollectionArea
 
@@ -42,6 +44,7 @@ var hp: int = 0
 @export var acceleration: float = 600
 @export var deceleration: float = 400
 @export var rotation_speed: float = 0.250
+@export var magnet_radius: float = 10000
 
 var target_angle: float = 0
 var input_direction: Vector2 = Vector2.ZERO
@@ -67,7 +70,7 @@ func _process(_delta: float) -> void:
 func _physics_process(_delta: float) -> void:
 	input_direction = Vector2(Input.get_axis("left", "right"), Input.get_axis("up", "down")).normalized()
 	mouse_direction = (get_global_mouse_position() - global_position).normalized()
-
+	magnet_collision_shape.shape.radius = magnet_radius
 	target_angle = mouse_direction.angle()
 	rotation = lerp_angle(rotation, target_angle, rotation_speed)
 
@@ -95,12 +98,12 @@ func _physics_process(_delta: float) -> void:
 			body.hit(dash_damage)
 	
 	
-	var collection_speed: float = 5
+	var collection_speed: float = 20
 	for area in magnet_area.get_overlapping_areas():
 		if area is Coin:
 			var distance = area.position.distance_to(position)
-			var speed = lerp(collection_speed, collection_speed / 4.0, distance / 100.0)  # Faster when closer, slower when further
-			area.position = area.position.move_toward(position, speed)
+			var speed = lerp(collection_speed, collection_speed / 4.0, distance / magnet_collision_shape.shape.radius) 
+			area.position = area.position.move_toward(position, speed)	
 	for area in collection_area.get_overlapping_areas():
 		if area is Coin:
 			GameManager.coins += 1

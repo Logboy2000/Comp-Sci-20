@@ -51,6 +51,7 @@ center_of_mass = Vector2(3, -3)
 linear_damp = 1.624
 script = ExtResource("1_y3jue")
 DESTROY_SOUND = ExtResource("3_shr3n")
+dropped_coins = 10
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_1kxxj")

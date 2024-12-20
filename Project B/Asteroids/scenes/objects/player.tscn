@@ -49,7 +49,6 @@ height = 12.0
 size = Vector2(30, 30)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1yugf"]
-radius = 87.023
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yfwv1"]
 bg_color = Color(0.46, 0.46, 0.46, 1)
@@ -71,8 +70,8 @@ motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_es4y8")
 dash_damage = 10
-bullet_count = 3
 max_bullet_spread = 120.0
+top_speed = 120.0
 dash_speed = 750.0
 acceleration = 40.0
 deceleration = 30.0
@@ -101,7 +100,7 @@ shape = SubResource("RectangleShape2D_qhwlk")
 [node name="MagnetArea" type="Area2D" parent="."]
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MagnetArea"]
+[node name="MagnetCollisionShape" type="CollisionShape2D" parent="MagnetArea"]
 shape = SubResource("CircleShape2D_1yugf")
 
 [node name="Timers" type="Node" parent="."]

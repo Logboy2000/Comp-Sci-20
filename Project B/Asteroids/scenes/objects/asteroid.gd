@@ -11,6 +11,7 @@ const COIN = preload("res://scenes/objects/coin.tscn")
 @export var health: int = 2
 
 @export var spawn_animation = false
+@export var dropped_coins = 0
 
 func _ready() -> void:
 	if spawn_animation:
@@ -22,16 +23,19 @@ func hit(damage: int = 1):
 	health -= damage
 	if health <= 0:
 		destroy()
-		queue_free()
+		
 	else:
 		sprite.frame += damage
 
 func destroy():
 	GameManager.shake_camera(6)
 	AudioPlayer.play_sound(DESTROY_SOUND)
-	var coin = COIN.instantiate()
-	coin.position = global_position
-	call_deferred("add_sibling", coin)
+	for i in dropped_coins:
+		var coin = COIN.instantiate()
+		coin.position = global_position
+		call_deferred("add_sibling", coin)
 	var particle = ASTEROID_EXPLOSION_PARTICLE.instantiate()
 	particle.position = global_position
 	add_sibling(particle)
+	
+	queue_free()

@@ -112,7 +112,7 @@ text = "Game Over"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/Panel/VBoxContainer"]
+[node name="HBoxContainer" type="VBoxContainer" parent="Control/Panel/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 

@@ -6,6 +6,7 @@
 
 [node name="ExitButtonAsteroid" instance=ExtResource("1_n51wa")]
 script = ExtResource("2_j56sv")
+dropped_coins = 0
 
 [node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("3_pia8w")

@@ -9,3 +9,5 @@ script = ExtResource("2_ljtjt")
 label_text = "Multishot"
 icon_texture = ExtResource("3_sdqv1")
 starting_price = 200
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
