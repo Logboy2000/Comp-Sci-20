@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        CSE 2910 - Project Proposal
+    </title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            background-color: #000000;
+            background-size: 50px 50px;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            border-bottom: 2px solid #333333;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2em;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        section {
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 1.6em;
+            color: #cccccc;
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style: inside;
+            padding-left: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background-color: rgba(20, 20, 20, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #333333;
+        }
+
+        .card h3 {
+            font-size: 20px;
+            color: #dddddd;
+        }
+
+        .card ul {
+            margin-left: 20px;
+        }
+
+        .card ul li {
+            font-size: 15px;
+        }
+
+        a {
+            transition: all 0.2s ease-in-out;
+            color: #cccccc;
+            display: inline-flex;
+
+        }
+
+        a:hover {
+            transition: all 0.3s ease-in-out;
+            transform: scale(1.05);
+
+            color: #ffffff;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+
+        .game-container {
+            width: 500px;
+            text-align: center;
+        }
+    </style>
+</head>
+</head>
+
+<body>
+
+    <header>
+        <h1>
+            CSE 2910 - Project B
+        </h1>
+    </header>
+
+    <section class="container">
+
+        <div class="card">
+
+            <h2>
+                Overview
+            </h2>
+            <p>
+                A top-down shooter game made in the
+                <a href="https://godotengine.org/" target="_blank">
+                    Godot Engine
+                </a>
+                with progressively harder difficulty, an upgrade system,
+                and one "super move" that charges over time.
+            </p>
+
+            <h3>
+                Inspirations:
+            </h3>
+            <div style="text-align: center;">
+                <a href="https://www.enterthegungeon.com/" target="_blank" class="game-container">
+                    <div class="card">
+                        Enter the Gungeon
+                        <img src="gungeon.jpg" alt="Enter the gungeon">
+                    </div>
+                </a>
+                <a href="https://torcado.com/windowkill/" target="_blank" class="game-container">
+                    <div class="card">
+                        Windowkill
+                        <img src="windowkill.jpg" alt="Windowkill">
+                    </div>
+                </a>
+            </div>
+
+
+
+
+
+
+
+
+
+            <h3>
+                Upgrades:
+            </h3>
+
+            <ul>
+                <li>
+                    Move speed
+                </li>
+                <li>
+                    Fire rate
+                </li>
+                <li>
+                    Multishot
+                </li>
+                <li>
+                    Piercing
+                </li>
+                <li>
+                    Max HP
+                </li>
+                <li>
+                    Healing
+                </li>
+                <li>
+                    Explosive bullets/splash damage
+                </li>
+            </ul>
+            <h3>
+                Controls:
+            </h3>
+            <ul>
+                <li>
+                    WASD: Move
+                </li>
+                <li>
+                    Spacebar: Shop
+                </li>
+                <li>
+                    Left Click: Shoot
+                </li>
+                <li>
+                    Right Click: Super Move
+                </li>
+            </ul>
+            <h3>
+                Modules Incorporated:
+            </h3>
+            <ul>
+                <li>
+                    2110: Procedural Programming 1
+                </li>
+                <li>
+                    2120: Data Structures 1
+                </li>
+            </ul>
+            <h3>
+                Required Learning:
+            </h3>
+            <ul>
+                <li>
+                    Understanding of Godot Engine systems
+                </li>
+                <li>
+                    Basic Object Oriented Programming
+                </li>
+                <li>
+                    GDScript Syntax
+                </li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>
+                Expected Outcomes
+            </h2>
+
+            <h3>
+                Multiple Interconnected Systems
+            </h3>
+            <ul>
+                <li>
+                    Game Systems: The game should have seamless integration between various systems such
+                    as player movement, shooting, enemy AI, upgrades, and in-game economy. These systems should interact
+                    with each other in a way that keeps the player engaged while providing the necessary challenge.
+                </li>
+                <li>
+                    Progressive Difficulty: As the player progresses, the difficulty should naturally increase, making
+                    the game more challenging. This includes more enemies, faster enemy spawn rates, and potentially
+                    tougher enemies.
+                </li>
+            </ul>
+
+            <h3>
+                Bug-Free
+            </h3>
+            <ul>
+                <li>
+                    Testing and Debugging: The game should go through testing to ensure that all features work
+                    as expected without errors.
+                </li>
+            </ul>
+
+            <h3>
+                Global Godot Nodes
+            </h3>
+            <ul>
+                <li>
+                    Room Transitions: The use of global nodes to allow for smooth transitions between different levels
+                    or rooms in the game.
+                </li>
+                <li>
+                    Settings Management: Players should be able to adjust game settings (graphics, sound, fullscreen,
+                    etc.)
+                </li>
+                <li>
+                    Debugging: Global nodes can help with debugging by displaing information about various game systems
+                    similar to the Minecraft debug menu
+                    <img src="f3menu.png" alt="Minecraft F3 Menu" style="width: 60%;">
+                </li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>
+                Evaluation Breakdown
+            </h2>
+
+            <h3>
+                30% - Basic Shooting and Player Movement, Enemy Killing, Collision
+            </h3>
+            <ul>
+                <li>
+                    Player Movement: The player should be able to move smoothly in all directions with the WASD keys.
+                </li>
+                <li>
+                    Shooting Mechanism: The basic shooting mechanics should be implemented, allowing the player to shoot
+                    in the direction of the cursor with a left-click.
+                </li>
+                <li>
+                    Enemy Killing and Collision Detection: Enemies should be easily killed when hit by bullets, and
+                    collision detection should be precise.
+                </li>
+            </ul>
+
+            <h3>
+                50% - Currency, Upgrades, Random Enemy Spawns
+            </h3>
+            <ul>
+                <li>
+                    Currency System: A currency system will allow players to collect resources by defeating enemies,
+                    used to purchase upgrades.
+                </li>
+                <li>
+                    Upgrades: The player will be able to spend currency to upgrade various aspects of their character.
+                </li>
+                <li>
+                    Random Enemy Spawning: Enemies will spawn at random intervals and locations, keeping gameplay
+                    dynamic.
+                </li>
+            </ul>
+
+            <h3>
+                80% - Multiple Enemy Types, Difficulty Scaling, Game Menu, Upgrade System
+            </h3>
+            <ul>
+                <li>
+                    Multiple Enemy Types: Several types of enemies are introduced to keep gameplay varied.
+                </li>
+                <li>
+                    Difficulty Scaling: The game will progressively become harder over time by increasing spawn rate,
+                    health, and damage of enemies.
+                </li>
+                <li>
+                    Game Menu System: The game should include a functional menu system with options like starting a new
+                    game, exiting, pausing, etc.
+                </li>
+                <li>
+                    Upgrades and Pricing System: Each upgrade will increase in price after each purchase, creating
+                    progression.
+                </li>
+            </ul>
+
+            <h3>
+                100% - Visual Effects, Audio, Randomized Shop Upgrades
+            </h3>
+            <ul>
+                <li>
+                    Visual Effects: The game will feature cool visual effects like shaders, camera shake, and particle
+                    systems.
+                </li>
+                <li>
+                    Audio: The game includes fitting background music and sound effects.
+                </li>
+                <li>
+                    Randomized Shop Upgrades: The in-game shop will randomly cycle through available upgrades.
+                </li>
+            </ul>
+        </div>
+
+    </section>
+
+</body>
+
+</html>

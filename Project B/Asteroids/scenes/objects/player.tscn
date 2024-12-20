@@ -1,0 +1,143 @@
+[gd_scene load_steps=13 format=3 uid="uid://0bv25eepcj8y"]
+
+[ext_resource type="Texture2D" uid="uid://dnwfhn7gnpkju" path="res://assets/Sprites/player.png" id="1_a5hl3"]
+[ext_resource type="Script" path="res://scenes/objects/player.gd" id="1_es4y8"]
+
+[sub_resource type="Animation" id="Animation_u3fof"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_04p06"]
+resource_name = "damage_flash"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0335031, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 0, 0, 1), Color(1, 0.0670062, 0.0670062, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uuv2n"]
+_data = {
+"RESET": SubResource("Animation_u3fof"),
+"damage_flash": SubResource("Animation_04p06")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_56nwc"]
+radius = 4.0
+height = 12.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qhwlk"]
+size = Vector2(30, 30)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1yugf"]
+radius = 87.023
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yfwv1"]
+bg_color = Color(0.46, 0.46, 0.46, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mor5d"]
+bg_color = Color(0.9, 0.9, 0.9, 1)
+
+[sub_resource type="Theme" id="Theme_5tokp"]
+ProgressBar/styles/background = SubResource("StyleBoxFlat_yfwv1")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_mor5d")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gev2g"]
+size = Vector2(4, 4)
+
+[node name="Player" type="CharacterBody2D"]
+z_index = 1
+motion_mode = 1
+wall_min_slide_angle = 0.0
+script = ExtResource("1_es4y8")
+dash_damage = 10
+bullet_count = 3
+max_bullet_spread = 120.0
+dash_speed = 750.0
+acceleration = 40.0
+deceleration = 30.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_uuv2n")
+}
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+position = Vector2(-2, 0)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_56nwc")
+
+[node name="BulletShootPoint" type="Node2D" parent="."]
+position = Vector2(11, 0)
+rotation = 1.5708
+
+[node name="DashDestroyArea" type="Area2D" parent="."]
+visible = false
+monitorable = false
+
+[node name="CollisionPolygon2D" type="CollisionShape2D" parent="DashDestroyArea"]
+shape = SubResource("RectangleShape2D_qhwlk")
+
+[node name="MagnetArea" type="Area2D" parent="."]
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MagnetArea"]
+shape = SubResource("CircleShape2D_1yugf")
+
+[node name="Timers" type="Node" parent="."]
+
+[node name="DashLengthTimer" type="Timer" parent="Timers"]
+process_callback = 0
+wait_time = 0.2
+one_shot = true
+
+[node name="ShootCooldownTimer" type="Timer" parent="Timers"]
+one_shot = true
+
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Visuals"]
+rotation = 1.5708
+texture = ExtResource("1_a5hl3")
+
+[node name="HpBar" type="ProgressBar" parent="Visuals"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -10.0
+offset_top = -9.0
+offset_right = 8.0
+offset_bottom = -4.0
+grow_horizontal = 2
+rotation = 1.5708
+mouse_filter = 2
+theme = SubResource("Theme_5tokp")
+value = 100.0
+show_percentage = false
+
+[node name="CollectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollectionArea"]
+shape = SubResource("RectangleShape2D_gev2g")
+
+[connection signal="timeout" from="Timers/DashLengthTimer" to="." method="_on_dash_length_timer_timeout"]

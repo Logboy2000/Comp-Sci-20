@@ -1,0 +1,14 @@
+CollisionShape2D
+Area2D
+Node2D
+Node
+Timer
+Sprite2D
+TextureRect
+HBoxContainer
+Label
+Control
+CanvasLayer
+TextEdit
+Panel
+CenterContainer

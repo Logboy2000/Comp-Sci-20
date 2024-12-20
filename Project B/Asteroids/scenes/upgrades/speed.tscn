@@ -1,0 +1,12 @@
+[gd_scene load_steps=4 format=3 uid="uid://b3yvgityqwps7"]
+
+[ext_resource type="Script" path="res://scenes/upgrades/speed.gd" id="1_m3qs1"]
+[ext_resource type="PackedScene" uid="uid://dt40l6aqui5r2" path="res://scenes/upgrade.tscn" id="1_osef0"]
+[ext_resource type="Texture2D" uid="uid://dm0vsl7oo66i1" path="res://assets/Sprites/circle-particle.png" id="3_j25q3"]
+
+[node name="Speed" instance=ExtResource("1_osef0")]
+script = ExtResource("1_m3qs1")
+label_text = "Speed"
+icon_texture = ExtResource("3_j25q3")
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

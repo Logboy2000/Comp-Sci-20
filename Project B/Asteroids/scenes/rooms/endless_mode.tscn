@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://b642te4ed7el7"]
+
+[ext_resource type="PackedScene" uid="uid://bsrko37thm624" path="res://scenes/rooms/room.tscn" id="1_56is4"]
+[ext_resource type="Script" path="res://scenes/rooms/endless_mode.gd" id="2_eu4y7"]
+[ext_resource type="Texture2D" uid="uid://bq07qdnmialrh" path="res://assets/Sprites/coin.png" id="3_6xp8x"]
+[ext_resource type="PackedScene" uid="uid://dn4fkspjojon1" path="res://scenes/objects/asteroid_spawner.tscn" id="3_i2hpb"]
+[ext_resource type="PackedScene" uid="uid://b3yvgityqwps7" path="res://scenes/upgrades/speed.tscn" id="3_o42k4"]
+
+[node name="EndlessMode" instance=ExtResource("1_56is4")]
+script = ExtResource("2_eu4y7")
+
+[node name="AsteroidSpawner" parent="Entities" index="1" instance=ExtResource("3_i2hpb")]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/Control" index="0"]
+layout_mode = 1
+offset_right = 48.0
+offset_bottom = 22.0
+
+[node name="TextureRect" type="TextureRect" parent="UI/Control/HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+texture = ExtResource("3_6xp8x")
+stretch_mode = 4
+
+[node name="CoinLabel" type="Label" parent="UI/Control/HBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "69"
+
+[node name="Speed" parent="UI/Control" index="1" instance=ExtResource("3_o42k4")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 87.0
+offset_top = 428.0
+offset_right = -885.0
+offset_bottom = -62.0
+grow_horizontal = 2
+grow_vertical = 2

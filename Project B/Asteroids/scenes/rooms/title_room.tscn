@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://w1y7c683f6vl"]
+
+[ext_resource type="Script" path="res://scenes/rooms/title_room.gd" id="1_dq1rf"]
+[ext_resource type="PackedScene" uid="uid://bsrko37thm624" path="res://scenes/rooms/room.tscn" id="1_oi3pm"]
+[ext_resource type="PackedScene" uid="uid://cqaiejjfp75b8" path="res://scenes/objects/asteroid_button.tscn" id="2_4b3wv"]
+[ext_resource type="PackedScene" uid="uid://ctww86bimsj43" path="res://scenes/objects/exit_button_asteroid.tscn" id="4_f13h1"]
+
+[node name="TitleRoom" instance=ExtResource("1_oi3pm")]
+script = ExtResource("1_dq1rf")
+
+[node name="Label" type="Label" parent="Entities" index="0"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -203.5
+offset_top = -166.095
+offset_right = 203.5
+offset_bottom = -61.095
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 76
+text = "ASTEROIDS"
+horizontal_alignment = 1
+
+[node name="Player" parent="Entities" index="1"]
+can_die = false
+
+[node name="AsteroidPlayButton" parent="Entities" index="2" instance=ExtResource("2_4b3wv")]
+position = Vector2(0, 132)
+
+[node name="ExitButtonAsteroid" parent="." index="4" instance=ExtResource("4_f13h1")]
+position = Vector2(243, 119)

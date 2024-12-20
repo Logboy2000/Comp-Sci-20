@@ -1,0 +1,67 @@
+[gd_scene load_steps=5 format=3 uid="uid://dt40l6aqui5r2"]
+
+[ext_resource type="Script" path="res://scenes/upgrade.gd" id="1_pyddb"]
+[ext_resource type="Theme" uid="uid://dmpi6gp8ax486" path="res://theme.tres" id="2_wuv5s"]
+[ext_resource type="Texture2D" uid="uid://ex5tbtfb5pg7" path="res://icon.svg" id="3_eubcl"]
+[ext_resource type="Texture2D" uid="uid://bq07qdnmialrh" path="res://assets/Sprites/coin.png" id="4_c25wu"]
+
+[node name="Upgrade" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 131.0
+offset_bottom = 97.0
+theme = ExtResource("2_wuv5s")
+script = ExtResource("1_pyddb")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Button"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Button/MarginContainer"]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="Button/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+texture = ExtResource("3_eubcl")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="Name" type="Label" parent="Button/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "upgrade"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Button/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="TextureRect" type="TextureRect" parent="Button/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("4_c25wu")
+
+[node name="Cost" type="Label" parent="Button/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "1223"
+horizontal_alignment = 1
