@@ -1,11 +1,12 @@
 [gd_scene load_steps=4 format=3 uid="uid://ctww86bimsj43"]
 
-[ext_resource type="PackedScene" uid="uid://87lypw8l8210" path="res://scenes/objects/asteroid.tscn" id="1_n51wa"]
+[ext_resource type="PackedScene" uid="uid://87lypw8l8210" path="res://scenes/objects/asteroids/asteroid.tscn" id="1_n51wa"]
 [ext_resource type="Script" path="res://scenes/objects/exit_button_asteroid.gd" id="2_j56sv"]
-[ext_resource type="Texture2D" uid="uid://d3qtv3lhhnxtt" path="res://assets/Sprites/exit_button.png" id="3_pia8w"]
+[ext_resource type="Texture2D" uid="uid://d3qtv3lhhnxtt" path="res://assets/sprites/exit_button.png" id="3_pia8w"]
 
 [node name="ExitButtonAsteroid" instance=ExtResource("1_n51wa")]
 script = ExtResource("2_j56sv")
+dropped_coins = 0
 
 [node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("3_pia8w")

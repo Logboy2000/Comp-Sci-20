@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dn4fkspjojon1"]
 
 [ext_resource type="Script" path="res://scenes/objects/asteroid_spawner.gd" id="1_4lg56"]
-[ext_resource type="Texture2D" uid="uid://dm0vsl7oo66i1" path="res://assets/Sprites/circle-particle.png" id="2_ar3k4"]
+[ext_resource type="Texture2D" uid="uid://dm0vsl7oo66i1" path="res://assets/sprites/circle-particle.png" id="2_ar3k4"]
 
 [sub_resource type="Gradient" id="Gradient_3i626"]
 offsets = PackedFloat32Array(0, 0.0972222, 0.833333, 1)

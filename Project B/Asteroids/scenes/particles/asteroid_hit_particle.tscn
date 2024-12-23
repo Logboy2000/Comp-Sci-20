@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://6tm0p3t6kw14"]
 
-[ext_resource type="Texture2D" uid="uid://dm0vsl7oo66i1" path="res://assets/Sprites/circle-particle.png" id="1_rkh03"]
+[ext_resource type="Texture2D" uid="uid://dm0vsl7oo66i1" path="res://assets/sprites/circle-particle.png" id="1_rkh03"]
 [ext_resource type="Script" path="res://scenes/particles/particle.gd" id="2_1lmgp"]
 
 [sub_resource type="Gradient" id="Gradient_7g3c8"]
@@ -20,6 +20,7 @@ color_ramp = SubResource("GradientTexture1D_23qq3")
 [node name="AsteroidHitParticle" type="GPUParticles2D"]
 z_index = 10
 emitting = false
+amount = 2
 process_material = SubResource("ParticleProcessMaterial_m1qud")
 texture = ExtResource("1_rkh03")
 one_shot = true

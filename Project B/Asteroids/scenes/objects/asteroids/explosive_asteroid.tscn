@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://bov7wk5pugdn1"]
+
+[ext_resource type="PackedScene" uid="uid://87lypw8l8210" path="res://scenes/objects/asteroids/asteroid.tscn" id="1_hk3jy"]
+[ext_resource type="Script" path="res://scenes/objects/asteroids/explosive_asteroid.gd" id="2_6mnyn"]
+[ext_resource type="AudioStream" uid="uid://c6713xdtal05a" path="res://assets/Audio/asteroid_boom.ogg" id="3_k0twa"]
+
+[node name="ExplosiveAsteroid" instance=ExtResource("1_hk3jy")]
+modulate = Color(1, 0.26, 0.26, 1)
+max_contacts_reported = 15
+script = ExtResource("2_6mnyn")
+destroy_sound = ExtResource("3_k0twa")

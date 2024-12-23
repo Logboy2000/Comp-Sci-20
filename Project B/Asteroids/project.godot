@@ -11,33 +11,36 @@ config_version=5
 [application]
 
 config/name="Asteroids"
-config/version="0.0.2"
+config/version="0.0.5"
 config/tags=PackedStringArray("original")
-run/main_scene="res://scenes/rooms/title_room.tscn"
+run/main_scene="res://scenes/rooms/intro_room.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/image="res://icon.png"
 boot_splash/fullsize=false
+config/icon="res://icon.png"
 
 [autoload]
 
+Upgrades="*res://scenes/autoloads/upgrades.gd"
 GameManager="*res://scenes/autoloads/game_manager.gd"
 ShaderFilter="*res://scenes/autoloads/shader_filter.tscn"
-DebugMenu="*res://scenes/autoloads/debug_menu.tscn"
 AudioPlayer="*res://scenes/autoloads/audio_player.tscn"
-TransitionLayer="*res://scenes/autoloads/transition_layer.tscn"
+DebugMenu="*res://scenes/autoloads/debug_menu.tscn"
 procam="*res://addons/ProCam2D/scripts/autoload.gd"
+TransitionLayer="*res://scenes/autoloads/transition_layer.tscn"
 
 [display]
 
 window/stretch/mode="canvas_items"
-window/stretch/aspect="ignore"
+window/stretch/aspect="expand"
 window/vsync/vsync_mode=0
-mouse_cursor/custom_image="res://assets/Sprites/crosshair.png"
+mouse_cursor/custom_image="res://assets/sprites/crosshair.png"
 mouse_cursor/custom_image_hotspot=Vector2(12.5, 12.5)
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/ProCam2D/plugin.cfg", "res://addons/radial_progress/plugin.cfg")
 
 [gui]
 
@@ -85,6 +88,7 @@ shoot={
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":1,"position":Vector2(316, 19),"global_position":Vector2(325, 65),"factor":1.0,"button_index":1,"canceled":false,"pressed":true,"double_click":false,"script":null)
 , Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":5,"axis_value":1.0,"script":null)
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":10,"pressure":0.0,"pressed":true,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194325,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
 zoom_in={
@@ -122,6 +126,7 @@ shop={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":32,"key_label":0,"unicode":32,"location":0,"echo":false,"script":null)
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":9,"pressure":0.0,"pressed":true,"script":null)
 , Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":4,"axis_value":1.0,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":69,"key_label":0,"unicode":101,"location":0,"echo":false,"script":null)
 ]
 }
 fullscreen={
@@ -132,7 +137,7 @@ fullscreen={
 }
 toggle_shaders={
 "deadzone": 0.5,
-"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":true,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":49,"key_label":0,"unicode":49,"location":0,"echo":false,"script":null)
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194341,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
 pause={
@@ -166,9 +171,20 @@ look_left={
 , Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":2,"axis_value":-1.0,"script":null)
 ]
 }
+cheat={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194343,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+die={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194340,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
 
 [physics]
 
+2d/default_gravity=0.0
 2d/default_gravity_vector=Vector2(0, 0)
 common/physics_interpolation=true
 

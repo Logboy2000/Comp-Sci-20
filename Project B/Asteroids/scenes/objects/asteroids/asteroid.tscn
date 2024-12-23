@@ -1,0 +1,65 @@
+[gd_scene load_steps=6 format=3 uid="uid://87lypw8l8210"]
+
+[ext_resource type="Script" path="res://scenes/objects/asteroids/asteroid.gd" id="1_y3jue"]
+[ext_resource type="Texture2D" uid="uid://dygghiqcjsqva" path="res://assets/sprites/asteroid-large.png" id="2_1kxxj"]
+
+[sub_resource type="Animation" id="Animation_fjxej"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_vdifs"]
+resource_name = "spawn"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.333333, 0.5),
+"transitions": PackedFloat32Array(0.170755, 0.307786, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1.4, 1.4), Vector2(0.8, 0.8), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3gua5"]
+_data = {
+"RESET": SubResource("Animation_fjxej"),
+"spawn": SubResource("Animation_vdifs")
+}
+
+[node name="Asteroid" type="RigidBody2D"]
+collision_layer = 3
+collision_mask = 3
+mass = 10.0
+gravity_scale = 0.0
+center_of_mass_mode = 1
+center_of_mass = Vector2(3, -3)
+linear_damp = 1.624
+script = ExtResource("1_y3jue")
+sprite_frames_for_health = true
+dropped_coins = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_1kxxj")
+hframes = 4
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-27, -4, -19, 16, -12, 15, -9, 18, -8, 23, 3, 25, 12, 25, 16, 23, 18, 7, 16, -1, 19, -10, 14, -14, 14, -17, 4, -20, -7, -18, -10, -20, -24, -15, -24, -10)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_3gua5")
+}

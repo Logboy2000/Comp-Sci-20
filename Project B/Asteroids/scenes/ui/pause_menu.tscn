@@ -1,7 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://c0iivkwkhpe8y"]
+[gd_scene load_steps=13 format=3 uid="uid://ce42ygo6hx81o"]
 
-[ext_resource type="Script" path="res://scenes/ui/pause_menu.gd" id="1_j3rul"]
-[ext_resource type="Theme" uid="uid://dmpi6gp8ax486" path="res://theme.tres" id="2_d73qk"]
+[ext_resource type="Script" path="res://scenes/ui/pause_menu.gd" id="1_2qice"]
+[ext_resource type="Theme" uid="uid://dmpi6gp8ax486" path="res://theme.tres" id="2_54fyh"]
 
 [sub_resource type="Animation" id="Animation_n4yyk"]
 length = 0.001
@@ -15,7 +15,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 0)]
+"values": [Vector2(0, 648)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -269,17 +269,19 @@ _data = {
 
 [node name="PauseMenu" type="CanvasLayer"]
 process_mode = 3
-script = ExtResource("1_j3rul")
+script = ExtResource("1_2qice")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 648.0
+offset_bottom = 648.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-theme = ExtResource("2_d73qk")
+theme = ExtResource("2_54fyh")
 
 [node name="Panel" type="Panel" parent="Control"]
 layout_mode = 1

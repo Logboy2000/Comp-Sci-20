@@ -1,0 +1,21 @@
+A Game By Logan Howarth
+Art, Programming and Design: Logan Howarth
+
+
+SMW Font: wye
+
+Software:
+	Engine: Godot Engine
+	Art: Pixelorama
+	Audio: Audacity, FFMPEG
+	OS: Linux
+
+Special Thanks:
+	uhhh
+
+
+
+Inspirations:
+	Windowkill
+	Enter the Gungeon
+	Vampire Survivors

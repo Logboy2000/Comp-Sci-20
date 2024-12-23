@@ -1,7 +1,7 @@
 extends Node2D
-const EXPLOSIVE_ASTEROID = preload("res://scenes/objects/explosive_asteroid.tscn")
-const ASTEROID = preload("res://scenes/objects/asteroid.tscn")
-const SPAWN_AUDIO = preload("res://assets/Audio/spawn.wav")
+const EXPLOSIVE_ASTEROID = preload("res://scenes/objects/asteroids/explosive_asteroid.tscn")
+const ASTEROID = preload("res://scenes/objects/asteroids/asteroid.tscn")
+const SPAWN_AUDIO = preload("res://assets/Audio/spawn.ogg")
 
 @export var asteroid_velocity: Vector2 = Vector2.ZERO
 @onready var particles: GPUParticles2D = $GPUParticles2D

@@ -1,13 +1,22 @@
-[gd_resource type="Theme" load_steps=6 format=3 uid="uid://dmpi6gp8ax486"]
+[gd_resource type="Theme" load_steps=11 format=3 uid="uid://dmpi6gp8ax486"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2ce4b"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ichp5"]
-bg_color = Color(0.0214346, 0.0214346, 0.0214346, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rjk33"]
+bg_color = Color(0, 0, 0, 1)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2ce4b"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ichp5"]
+bg_color = Color(0.099986, 0.099986, 0.099986, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_detail = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_36jx7"]
 bg_color = Color(0, 0, 0, 1)
@@ -24,6 +33,22 @@ border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fnxxj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1cuid"]
+bg_color = Color(0.752582, 0.752582, 0.752582, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3hdrj"]
+bg_color = Color(0.860369, 0.860369, 0.860369, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a3kxo"]
+content_margin_left = 0.0
+content_margin_top = 4.0
+content_margin_right = 0.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_detail = 6
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ivg3l"]
 bg_color = Color(0, 0, 0, 0.878431)
 border_width_left = 4
@@ -33,10 +58,16 @@ border_width_bottom = 4
 border_color = Color(1, 1, 1, 1)
 
 [resource]
+Button/colors/font_disabled_color = Color(1, 1, 1, 1)
+Button/styles/disabled = SubResource("StyleBoxFlat_rjk33")
 Button/styles/focus = SubResource("StyleBoxEmpty_2ce4b")
 Button/styles/hover = SubResource("StyleBoxFlat_ichp5")
 Button/styles/normal = SubResource("StyleBoxFlat_36jx7")
 Button/styles/pressed = SubResource("StyleBoxFlat_xusx0")
+HScrollBar/styles/grabber = SubResource("StyleBoxFlat_fnxxj")
+HScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_1cuid")
+HScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_3hdrj")
+HScrollBar/styles/scroll = SubResource("StyleBoxFlat_a3kxo")
 MarginContainer/constants/margin_bottom = 3
 MarginContainer/constants/margin_left = 3
 MarginContainer/constants/margin_right = 3

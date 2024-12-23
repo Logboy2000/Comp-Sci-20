@@ -1,41 +1,161 @@
-[gd_scene load_steps=6 format=3 uid="uid://b642te4ed7el7"]
+[gd_scene load_steps=15 format=3 uid="uid://b642te4ed7el7"]
 
 [ext_resource type="PackedScene" uid="uid://bsrko37thm624" path="res://scenes/rooms/room.tscn" id="1_56is4"]
 [ext_resource type="Script" path="res://scenes/rooms/endless_mode.gd" id="2_eu4y7"]
-[ext_resource type="Texture2D" uid="uid://bq07qdnmialrh" path="res://assets/Sprites/coin.png" id="3_6xp8x"]
+[ext_resource type="Texture2D" uid="uid://bq07qdnmialrh" path="res://assets/sprites/coin.png" id="3_6xp8x"]
 [ext_resource type="PackedScene" uid="uid://dn4fkspjojon1" path="res://scenes/objects/asteroid_spawner.tscn" id="3_i2hpb"]
-[ext_resource type="PackedScene" uid="uid://b3yvgityqwps7" path="res://scenes/upgrades/speed.tscn" id="3_o42k4"]
+[ext_resource type="PackedScene" uid="uid://c0iivkwkhpe8y" path="res://scenes/ui/upgrade_menu.tscn" id="4_ahdbj"]
+[ext_resource type="Script" path="res://scenes/ui/coin_label.gd" id="6_gmyru"]
+[ext_resource type="Script" path="res://scenes/rooms/hp_label.gd" id="7_cvdda"]
+[ext_resource type="Script" path="res://addons/radial_progress/RadialProgress.gd" id="7_x8dde"]
+
+[sub_resource type="Animation" id="Animation_uvut3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_avw8s"]
+resource_name = "collect"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(0.125, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.5, 1.5)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_f4ipb"]
+_data = {
+"RESET": SubResource("Animation_uvut3"),
+"collect": SubResource("Animation_avw8s")
+}
+
+[sub_resource type="Animation" id="Animation_u3fof"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_04p06"]
+resource_name = "damage_flash"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0335031, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 0, 0, 1), Color(1, 0.0670062, 0.0670062, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uuv2n"]
+_data = {
+"RESET": SubResource("Animation_u3fof"),
+"damage_flash": SubResource("Animation_04p06")
+}
 
 [node name="EndlessMode" instance=ExtResource("1_56is4")]
 script = ExtResource("2_eu4y7")
 
 [node name="AsteroidSpawner" parent="Entities" index="1" instance=ExtResource("3_i2hpb")]
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/Control" index="0"]
+[node name="UI" parent="." index="2"]
+process_mode = 3
+
+[node name="Control" parent="UI" index="0"]
+process_mode = 3
+
+[node name="UpgradeMenu" parent="UI/Control" index="0" instance=ExtResource("4_ahdbj")]
+
+[node name="CoinContainer" type="HBoxContainer" parent="UI/Control" index="1"]
 layout_mode = 1
 offset_right = 48.0
 offset_bottom = 22.0
+script = ExtResource("6_gmyru")
 
-[node name="TextureRect" type="TextureRect" parent="UI/Control/HBoxContainer" index="0"]
+[node name="TextureRect" type="TextureRect" parent="UI/Control/CoinContainer" index="0"]
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
 texture = ExtResource("3_6xp8x")
 stretch_mode = 4
 
-[node name="CoinLabel" type="Label" parent="UI/Control/HBoxContainer" index="1"]
+[node name="CoinLabel" type="Label" parent="UI/Control/CoinContainer" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "69"
 
-[node name="Speed" parent="UI/Control" index="1" instance=ExtResource("3_o42k4")]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/Control/CoinContainer" index="2"]
+libraries = {
+"": SubResource("AnimationLibrary_f4ipb")
+}
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="UI/Control" index="2"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 1
+anchor_left = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 87.0
-offset_top = 428.0
-offset_right = -885.0
-offset_bottom = -62.0
+offset_left = -112.0
+offset_bottom = 114.0
+grow_horizontal = 0
+
+[node name="RadialProgress" type="Control" parent="UI/Control/HBoxContainer2" index="0"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+script = ExtResource("7_x8dde")
+radius = 37.565
+thickness = 8.0
+bg_color = Color(0.091034, 0.388918, 0.0871034, 1)
+
+[node name="HPLabel" type="Label" parent="UI/Control/HBoxContainer2/RadialProgress" index="0"]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -33.0
+offset_top = -11.0
+offset_right = 33.0
+offset_bottom = 11.0
 grow_horizontal = 2
 grow_vertical = 2
+text = "14560"
+horizontal_alignment = 1
+script = ExtResource("7_cvdda")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/Control/HBoxContainer2/RadialProgress" index="1"]
+libraries = {
+"": SubResource("AnimationLibrary_uuv2n")
+}

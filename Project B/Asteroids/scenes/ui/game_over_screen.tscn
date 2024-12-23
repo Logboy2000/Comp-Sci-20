@@ -4,7 +4,7 @@
 [ext_resource type="Theme" uid="uid://dmpi6gp8ax486" path="res://theme.tres" id="2_adn4m"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2vco5"]
-bg_color = Color(1, 0, 0, 0.192157)
+bg_color = Color(1, 0, 0, 0.470588)
 
 [sub_resource type="Animation" id="Animation_5gr22"]
 length = 0.001
@@ -112,7 +112,7 @@ text = "Game Over"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/Panel/VBoxContainer"]
+[node name="HBoxContainer" type="VBoxContainer" parent="Control/Panel/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 

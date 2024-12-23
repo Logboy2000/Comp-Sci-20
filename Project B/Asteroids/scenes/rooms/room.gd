@@ -10,8 +10,6 @@ const min_zoom = 0.5
 
 func _ready() -> void:
 	GameManager.current_room = self
-	GameManager.can_pause = true
-	camera.zoom = GameManager.current_zoom
 	DebugMenu.modify_label("room", "Room: " + name)
 	
 
@@ -23,7 +21,7 @@ func _process(_delta: float) -> void:
 			camera.zoom = max_zoom
 		else:
 			camera.zoom = target_zoom
-		GameManager.current_zoom = target_zoom
+		GameManager.set_cam_zoom(target_zoom)
 	
 	if Input.is_action_just_pressed("zoom_out"):
 		var target_zoom = camera.zoom / zoom_mult
@@ -31,5 +29,5 @@ func _process(_delta: float) -> void:
 			camera.zoom = min_zoom
 		else:
 			camera.zoom = target_zoom
-		GameManager.current_zoom = target_zoom
+		GameManager.set_cam_zoom(target_zoom)
 	
