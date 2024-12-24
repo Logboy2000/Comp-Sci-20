@@ -7,7 +7,6 @@
 
 [node name="Coin" type="Area2D"]
 z_index = -1
-monitoring = false
 script = ExtResource("1_v2sof")
 speed_range = 5.0
 

@@ -56,6 +56,7 @@ var in_danger: bool = false
 @export var bullet_count: int = 1
 @export var max_bullet_spread: float = 360.0
 @export var recoil: float = 0
+var can_shoot: bool = true
 
 @export_group("Movement")
 var top_speed: float = 0
@@ -103,7 +104,10 @@ func _physics_process(_delta: float) -> void:
 		velocity = velocity.move_toward(input_direction * top_speed, acceleration)
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, deceleration)
-	if Input.is_action_just_pressed("shoot"):
+	if Input.is_action_pressed("shoot") and can_shoot:
+		shoot_cooldown_timer.wait_time = 10/float(Upgrades.get_level("fire_rate"))
+		shoot_cooldown_timer.start()
+		can_shoot = false
 		shoot(bullet_count)
 	if Input.is_action_just_pressed("ability") and state == States.NORMAL and input_direction != Vector2.ZERO:
 		dash()
@@ -137,7 +141,6 @@ func _physics_process(_delta: float) -> void:
 	magnet_collision_shape.shape.radius = (Upgrades.get_level("magnet_radius") * 30) + 50
 	bullet_count = Upgrades.get_level("multishot")
 	top_speed = (Upgrades.get_level("speed") * 20) + starting_top_speed
-	
 	# collisions
 	for body in dash_destroy_area.get_overlapping_bodies():
 		if (body is DestructableObject) and (state == States.DASHING):
@@ -155,7 +158,7 @@ func _physics_process(_delta: float) -> void:
 	
 	for area in collection_area.get_overlapping_areas():
 		if area is Coin:
-			GameManager.change_coins_by(round(pow(area.value, Upgrades.get_level("greed"))))
+			GameManager.change_coins_by(round(Upgrades.get_level("greed") * area.value))
 			area.queue_free()
 			AudioPlayer.play_sound(COIN_SOUNDS.pick_random())
 	
@@ -225,7 +228,7 @@ func die():
 		GameManager.game_over()
 		var explosion = EXPLOSION.instantiate()
 		explosion.position = position
-		call_deferred("add_sibling", "explosion")
+		call_deferred("add_sibling", explosion)
 		queue_free()
 
 func update_debug():
@@ -238,3 +241,7 @@ func update_debug():
 
 func _on_dash_length_timer_timeout() -> void:
 	state = States.NORMAL
+
+
+func _on_shoot_cooldown_timer_timeout() -> void:
+	can_shoot = true

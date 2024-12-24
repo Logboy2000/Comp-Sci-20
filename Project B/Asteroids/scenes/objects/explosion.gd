@@ -6,7 +6,7 @@ func _ready() -> void:
 	AudioPlayer.play_sound(EXPLOSION_SOUND)
 
 func _on_body_entered(body: Node2D) -> void:
-	if body is DestructableObject or Player:
+	if body is DestructableObject or body is Player:
 		body.hit(5, self)
 
 

@@ -90,16 +90,9 @@ script = ExtResource("2_eu4y7")
 [node name="Enemy0" parent="Entities" index="0" instance=ExtResource("3_k8b83")]
 position = Vector2(-46, 378)
 
-[node name="AsteroidSpawner" parent="Entities" index="2" instance=ExtResource("3_i2hpb")]
-
-[node name="Enemy1" parent="Entities" index="3" instance=ExtResource("3_k8b83")]
-position = Vector2(31, 393)
-
-[node name="Enemy2" parent="Entities" index="4" instance=ExtResource("3_k8b83")]
-position = Vector2(-82, 295)
-
-[node name="Enemy3" parent="Entities" index="5" instance=ExtResource("3_k8b83")]
-position = Vector2(5, 308)
+[node name="Spawner" parent="Entities" index="1" instance=ExtResource("3_i2hpb")]
+position = Vector2(214, -169)
+asteroid_velocity = Vector2(0, 0)
 
 [node name="UI" parent="." index="2"]
 process_mode = 3
@@ -142,6 +135,7 @@ offset_bottom = 114.0
 grow_horizontal = 0
 
 [node name="RadialProgress" type="Control" parent="UI/Control/HBoxContainer2" index="0"]
+process_mode = 3
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
@@ -151,7 +145,6 @@ thickness = 8.0
 bg_color = Color(0.091034, 0.388918, 0.0871034, 1)
 
 [node name="HPLabel" type="Label" parent="UI/Control/HBoxContainer2/RadialProgress" index="0"]
-process_mode = 3
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

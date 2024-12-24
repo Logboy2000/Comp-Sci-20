@@ -113,3 +113,4 @@ texture = ExtResource("1_a5hl3")
 shape = SubResource("RectangleShape2D_gev2g")
 
 [connection signal="timeout" from="Timers/DashLengthTimer" to="." method="_on_dash_length_timer_timeout"]
+[connection signal="timeout" from="Timers/ShootCooldownTimer" to="." method="_on_shoot_cooldown_timer_timeout"]

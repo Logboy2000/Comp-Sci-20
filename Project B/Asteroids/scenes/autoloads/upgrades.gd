@@ -171,3 +171,9 @@ func add_default_upgrades() -> void:
 		1.1,
 		preload("res://assets/sprites/upgrade_icons/greed.png")
 	)
+	add_upgrade(
+		"fire_rate",
+		"Fire Rate",
+		1,
+		1.2
+	)

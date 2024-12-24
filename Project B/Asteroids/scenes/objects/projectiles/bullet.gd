@@ -31,8 +31,9 @@ func _on_animation_player_animation_finished(_anim_name: StringName) -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:
-	if body is DestructableObject:
-		body.hit(1, self)
+	if body is DestructableObject or body is TileMapLayer:
+		if body is DestructableObject:
+			body.hit(1, self)
 		bullet_hp -= 1
 		if bullet_hp <= 0:
 			queue_free()

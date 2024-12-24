@@ -20,7 +20,7 @@ func _ready() -> void:
 func _on_timer_timeout() -> void:
 	var new_object = DESTRUCTABLE_OBJECTS.pick_random().instantiate()
 	new_object.linear_velocity = asteroid_velocity
-	new_object.position = global_position + Vector2(randi_range(-100,100), randi_range(-100,100))
+	new_object.position = global_position + Vector2(randi_range(-1000,1000), randi_range(-1000,1000))
 	new_object.angular_velocity = randi_range(-10, 10)
 	new_object.spawn_animation = true
 	add_sibling(new_object)

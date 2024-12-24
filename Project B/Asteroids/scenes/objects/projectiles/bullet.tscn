@@ -49,6 +49,7 @@ texture = ExtResource("1_ya53c")
 polygon = PackedVector2Array(-5, 2, 4, 2, 5, 1, 5, -1, 4, -2, -5, -2)
 
 [node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
 one_shot = true
 autostart = true
 
