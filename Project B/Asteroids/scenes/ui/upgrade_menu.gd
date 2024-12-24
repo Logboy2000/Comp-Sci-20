@@ -1,7 +1,7 @@
 extends CanvasLayer
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
-@onready var upgrade_container: HBoxContainer = $Control/Panel/VBoxContainer/ScrollContainer/MarginContainer/UpgradeContainer
+@onready var upgrade_container: GridContainer = $Control/Panel/VBoxContainer/ScrollContainer/MarginContainer/UpgradeContainer
 
 const UPGRADE_BUTTON = preload("res://scenes/ui/buttons/upgrade_button.tscn")
 var upgrade_buttons: Array = []

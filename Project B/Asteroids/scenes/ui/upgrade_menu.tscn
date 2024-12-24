@@ -322,7 +322,7 @@ horizontal_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 follow_focus = true
-vertical_scroll_mode = 0
+horizontal_scroll_mode = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/Panel/VBoxContainer/ScrollContainer"]
 layout_mode = 2
@@ -333,11 +333,11 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="UpgradeContainer" type="HBoxContainer" parent="Control/Panel/VBoxContainer/ScrollContainer/MarginContainer"]
+[node name="UpgradeContainer" type="GridContainer" parent="Control/Panel/VBoxContainer/ScrollContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 1
+columns = 4
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/Panel/VBoxContainer"]
 layout_mode = 2

@@ -9,6 +9,7 @@
 z_index = -1
 monitoring = false
 script = ExtResource("1_v2sof")
+speed_range = 5.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_34hby")

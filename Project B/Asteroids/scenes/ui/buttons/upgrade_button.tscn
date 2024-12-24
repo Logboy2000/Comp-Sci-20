@@ -196,7 +196,7 @@ _data = {
 }
 
 [node name="UpgradeButton" type="Control"]
-custom_minimum_size = Vector2(200, 150)
+custom_minimum_size = Vector2(220, 220)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

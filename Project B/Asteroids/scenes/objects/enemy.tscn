@@ -1,7 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://gp11dts8y87f"]
+[gd_scene load_steps=4 format=3 uid="uid://didxydllp85s0"]
 
 [ext_resource type="PackedScene" uid="uid://3472tx6h1vxs" path="res://scenes/objects/destructable_object.tscn" id="1_827mr"]
 [ext_resource type="Script" path="res://scenes/objects/enemy.gd" id="2_fbtf1"]
+[ext_resource type="Texture2D" uid="uid://c3etu6wbot4si" path="res://assets/sprites/enemies/0.png" id="3_05d2c"]
 
 [node name="Enemy" instance=ExtResource("1_827mr")]
 script = ExtResource("2_fbtf1")
+follow_speed = 1.0
+do_contact_damage = true
+contact_damage = 1
+spawn_animation = true
+dropped_coins = 10
+
+[node name="Sprite2D" parent="." index="1"]
+texture = ExtResource("3_05d2c")

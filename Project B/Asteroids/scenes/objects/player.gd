@@ -9,6 +9,7 @@ enum States {
 var state = States.NORMAL
 #objects
 const BULLET = preload("res://scenes/objects/projectiles/bullet.tscn")
+const EXPLOSION = preload("res://scenes/objects/explosion.tscn")
 #sounds
 const SHOOT_SOUND = preload("res://assets/Audio/shoot.ogg")
 const DASH_SOUND = preload("res://assets/Audio/dash.ogg")
@@ -37,17 +38,19 @@ const COIN_SOUNDS = [
 @onready var dash_destroy_area: Area2D = $DashDestroyArea
 @onready var collection_area: Area2D = $CollectionArea
 
+@export var player_index: int = 1
+@export var keyboard_only_controls = false
+
+@export_group("Health")
+@export var starting_max_hp: int = 20
+@export var can_die: bool = true
+@export var invincibility_frames: int = 30
+var remaining_invincibility_frames: int
+var hit_this_frame: bool = false
 var hp: int = 0
 var max_hp: int = 0
 var vulnerable: bool = true
 var in_danger: bool = false
-@export var player_index: int = 1
-@export var keyboard_only_controls = false
-@export var starting_max_hp: int = 20
-@export var dash_damage: int = 1
-@export var can_die: bool = true
-@export var invincibility_frames_that_need_doing: int = 30 # THIS +1
-var remaining_invincibility_frames: int
 
 @export_group("Shooting")
 @export var bullet_count: int = 1
@@ -59,22 +62,30 @@ var top_speed: float = 0
 @export var starting_top_speed: float = 120
 @export var min_dash_speed: float = 800
 @export var max_dash_speed: float = 2000
-@export var dash_mult: float = 1
 @export var acceleration: float = 40
 @export var deceleration: float = 400
 @export var rotation_speed: float = 0.250
 
+@export_group("Dash")
+@export var dash_mult: float = 1
+@export var dash_damage: float = 10
+@export var dash_knockback: float = 3
+var velocity_at_start_of_dash: Vector2  # what else do i name this
+
+
+
+#input
 var target_angle: float = 0
 var input_direction: Vector2 = Vector2.ZERO
 var dash_direction: Vector2 = Vector2(1, 1)
 var mouse_direction: Vector2
-var velocity_at_start_of_dash: Vector2  # what else do i name this
 
 func _ready() -> void:
 	GameManager.player = self
 	max_hp = starting_max_hp
 	hp = max_hp
 	top_speed = starting_top_speed
+	remaining_invincibility_frames = invincibility_frames
 	rotation = (get_global_mouse_position() - global_position).angle()
 
 
@@ -97,7 +108,7 @@ func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ability") and state == States.NORMAL and input_direction != Vector2.ZERO:
 		dash()
 	if Input.is_action_just_pressed("die"):
-		hit(max_hp)
+		hit(max_hp, self)
 	
 	if can_die:
 		var hp_percent: float = float(hp) / float(max_hp)
@@ -106,6 +117,10 @@ func _physics_process(_delta: float) -> void:
 			animation_player.play("damage_flash")
 		else:
 			in_danger = false
+	
+	remaining_invincibility_frames -= 1
+	
+	
 	#states
 	match state:
 		States.NORMAL:
@@ -125,8 +140,8 @@ func _physics_process(_delta: float) -> void:
 	
 	# collisions
 	for body in dash_destroy_area.get_overlapping_bodies():
-		if body is Asteroid and (velocity.length() > 300):
-			body.hit(dash_damage)
+		if (body is DestructableObject) and (state == States.DASHING):
+			body.hit(dash_damage, self, dash_knockback)
 	
 	var collection_speed: float = 20
 	for area in magnet_area.get_overlapping_areas():
@@ -136,11 +151,11 @@ func _physics_process(_delta: float) -> void:
 			area.position = area.position.move_toward(position, speed)
 		if area is Bullet:
 			if area.bullet_owner == Bullet.BulletOwner.ENEMY:
-				hit()
+				hit(1, area)
 	
 	for area in collection_area.get_overlapping_areas():
 		if area is Coin:
-			GameManager.change_coins_by(area.value * Upgrades.get_level("greed"))
+			GameManager.change_coins_by(round(pow(area.value, Upgrades.get_level("greed"))))
 			area.queue_free()
 			AudioPlayer.play_sound(COIN_SOUNDS.pick_random())
 	
@@ -177,14 +192,24 @@ func dash():
 	dash_length_timer.start(0)
 	AudioPlayer.play_sound(DASH_SOUND)
 
-func hit(damage: int = 1):
 
-	
-	if can_die and vulnerable:
+
+func hit(damage: int, damage_source_node: Node2D):
+	if can_die == true and vulnerable == true and remaining_invincibility_frames <= 0:
+		remaining_invincibility_frames = invincibility_frames
 		player_hurt.emit()
 		GameManager.shake_camera(8)
 		AudioPlayer.play_sound(PLAYER_HIT_SOUND)
 		animation_player.play("damage_flash")
+		
+		# Calculate direction away from the damage source
+		var direction_away = (global_position - damage_source_node.global_position).normalized()
+		var knockback_force = 600
+		
+		# Apply knockback to velocity
+		velocity += direction_away * knockback_force
+		
+		# Apply damage
 		hp -= damage
 		if hp <= 0:
 			die()
@@ -198,12 +223,16 @@ func heal(damage: int = 1):
 func die():
 	if can_die:
 		GameManager.game_over()
+		var explosion = EXPLOSION.instantiate()
+		explosion.position = position
+		call_deferred("add_sibling", "explosion")
 		queue_free()
 
 func update_debug():
 	DebugMenu.modify_label("pos", "Pos: " + str(round(position.x)) + ", " + str(round(position.y)))
 	DebugMenu.modify_label("vel", "Vel: " + str(round(velocity.x)) + ", " + str(round(velocity.y)))
 	DebugMenu.modify_label("state", "State: " + str(state))
+	DebugMenu.modify_label("inv_frames", "IFrames: " + str(remaining_invincibility_frames))
 
 
 

@@ -1,6 +1,8 @@
+CollisionPolygon2D
+CollisionShape2D
+GridContainer
 Sprite2D
 RigidBody2D
-CollisionShape2D
 AnimationPlayer
 Area2D
 Line2D
@@ -11,4 +13,3 @@ HBoxContainer
 VSeparator
 Timer
 AudioStreamPlayer
-RadialProgress

@@ -151,7 +151,7 @@ func add_default_upgrades() -> void:
 		200, 
 		1.8,
 		preload("res://assets/sprites/upgrade_icons/max_health.png"),
-		null,
+		preload("res://assets/Audio/heal.ogg"),
 		UpgradeType.INCREMENTAL,
 		func(): 
 			GameManager.player.max_hp  = GameManager.player.starting_max_hp + (get_level("max_health") * 5) - 5
@@ -169,4 +169,5 @@ func add_default_upgrades() -> void:
 		"Greed",
 		100,
 		1.1,
+		preload("res://assets/sprites/upgrade_icons/greed.png")
 	)

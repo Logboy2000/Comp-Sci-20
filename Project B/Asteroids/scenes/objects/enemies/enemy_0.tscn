@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://ciumc245yhd34"]
+
+[ext_resource type="PackedScene" uid="uid://didxydllp85s0" path="res://scenes/objects/enemy.tscn" id="1_s4rrw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bhq3s"]
+
+[node name="Enemy0" instance=ExtResource("1_s4rrw")]
+follow_speed = 1.0
+do_contact_damage = true
+contact_damage = 1
+
+[node name="AnimationPlayer" parent="." index="0"]
+playback_default_blend_time = 0.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2"]
+shape = SubResource("CircleShape2D_bhq3s")

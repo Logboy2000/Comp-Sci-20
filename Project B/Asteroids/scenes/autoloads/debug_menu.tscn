@@ -149,10 +149,12 @@ horizontal_alignment = 2
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 size_flags_horizontal = 8
+mouse_filter = 2
 theme_override_styles/separator = SubResource("StyleBoxLine_mhmry")
 
 [node name="KeybindsContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Keybinds2" type="Label" parent="Control/MarginContainer/VBoxContainer/KeybindsContainer"]
 layout_mode = 2
@@ -189,7 +191,7 @@ horizontal_alignment = 2
 [node name="RoomSelector" type="ScrollContainer" parent="Control/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-mouse_filter = 0
+mouse_filter = 2
 horizontal_scroll_mode = 0
 script = ExtResource("2_pk6wl")
 
