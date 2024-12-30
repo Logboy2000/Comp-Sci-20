@@ -57,9 +57,10 @@ z_index = 1
 motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_es4y8")
+coin_collection_speed = 50.0
 starting_max_hp = 10
 invincibility_frames = 100
-max_bullet_spread = 120.0
+max_bullet_spread = 100.0
 deceleration = 20.0
 dash_mult = 1.5
 dash_damage = 1.0
@@ -86,6 +87,8 @@ monitorable = false
 shape = SubResource("RectangleShape2D_qhwlk")
 
 [node name="MagnetArea" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
 monitorable = false
 
 [node name="MagnetCollisionShape" type="CollisionShape2D" parent="MagnetArea"]
@@ -108,6 +111,8 @@ rotation = 1.5708
 texture = ExtResource("1_a5hl3")
 
 [node name="CollectionArea" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CollectionArea"]
 shape = SubResource("RectangleShape2D_gev2g")

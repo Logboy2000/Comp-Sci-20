@@ -5,6 +5,7 @@ var is_fading_out: bool = false
 var fade_duration: float = 1.0
 var fade_timer: float = 0.0
 var start_volume: float = 0.0
+var max_sfx: int = 50
 
 func _ready():
 	# Initialize the music player as a child node
@@ -13,6 +14,8 @@ func _ready():
 	add_child(music_player)
 
 func play_sound(stream: AudioStream):
+	if get_child_count() > max_sfx:
+		return
 	# Create a new AudioStreamPlayer for each sound
 	var stream_player = AudioStreamPlayer.new()
 	stream_player.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -51,7 +54,7 @@ func _process(delta: float):
 	if is_fading_out:
 		fade_timer += delta
 		# Calculate the new volume using lerp
-		music_player.volume_db = lerp(start_volume, -80, fade_timer / fade_duration)
+		music_player.volume_db = lerp(start_volume, -80.0, fade_timer / fade_duration)
 
 		# Stop fading if the duration is complete
 		if fade_timer >= fade_duration:

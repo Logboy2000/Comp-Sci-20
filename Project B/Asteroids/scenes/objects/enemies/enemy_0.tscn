@@ -2,12 +2,14 @@
 
 [ext_resource type="PackedScene" uid="uid://didxydllp85s0" path="res://scenes/objects/enemy.tscn" id="1_s4rrw"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_bhq3s"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oi1ea"]
+size = Vector2(16, 16)
 
 [node name="Enemy0" instance=ExtResource("1_s4rrw")]
+dropped_coins = 3
 
 [node name="AnimationPlayer" parent="." index="0"]
 playback_default_blend_time = 0.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2"]
-shape = SubResource("CircleShape2D_bhq3s")
+shape = SubResource("RectangleShape2D_oi1ea")

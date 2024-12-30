@@ -1,19 +1,26 @@
 A Game By Logan Howarth
+
 Art, Programming and Design: Logan Howarth
 
 
 SMW Font: wye
+CRT Shader: pend00
 
-Software:
-	Engine: Godot Engine
-	Art: Pixelorama
-	Audio: Audacity, FFMPEG
-	OS: Linux
+Engine: Godot Engine
+
+Art tools: 
+	Pixelorama
+	PixelSpace: Deep-Fold
+Audio tools: 
+	Audacity
+	FFMPEG
+
+Godot Assets:
+	ProCam2D: kalulu_games
+	RadialProgress: DaveTheCoder
 
 Special Thanks:
 	uhhh
-
-
 
 Inspirations:
 	Windowkill

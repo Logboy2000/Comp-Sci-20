@@ -20,7 +20,6 @@ var save: Dictionary = {
 
 
 func _ready() -> void:
-
 	process_mode = ProcessMode.PROCESS_MODE_ALWAYS
 
 func _process(_delta: float) -> void:
@@ -53,7 +52,7 @@ func set_cam_zoom(zoom: float):
 	camera.zoom = zoom
 
 func game_over():
-	set_cam_zoom(2)
+	set_cam_zoom(0.5)
 	game_over_signal.emit()
 
 func quit_game():
@@ -64,3 +63,6 @@ func quit_game():
 	await TransitionLayer.play_transition(true)
 	
 	get_tree().quit(69)
+
+func add_entity(entity: Node):
+	current_room.add_entity(entity)

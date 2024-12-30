@@ -11,15 +11,15 @@ var state = States.NORMAL
 const BULLET = preload("res://scenes/objects/projectiles/bullet.tscn")
 const EXPLOSION = preload("res://scenes/objects/explosion.tscn")
 #sounds
-const SHOOT_SOUND = preload("res://assets/Audio/shoot.ogg")
-const DASH_SOUND = preload("res://assets/Audio/dash.ogg")
-const PLAYER_HIT_SOUND = preload("res://assets/Audio/player_hit.ogg")
+const SHOOT_SOUND = preload("res://assets/audio/shoot.ogg")
+const DASH_SOUND = preload("res://assets/audio/dash.ogg")
+const PLAYER_HIT_SOUND = preload("res://assets/audio/player_hit.ogg")
 const COIN_SOUNDS = [
-	preload("res://assets/Audio/coin1.ogg"),
-	preload("res://assets/Audio/coin2.ogg"),
-	preload("res://assets/Audio/coin3.ogg"),
-	preload("res://assets/Audio/coin4.ogg"),
-	preload("res://assets/Audio/coin5.ogg")
+	preload("res://assets/audio/coin1.ogg"),
+	preload("res://assets/audio/coin2.ogg"),
+	preload("res://assets/audio/coin3.ogg"),
+	preload("res://assets/audio/coin4.ogg"),
+	preload("res://assets/audio/coin5.ogg")
 ]
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -38,8 +38,10 @@ const COIN_SOUNDS = [
 @onready var dash_destroy_area: Area2D = $DashDestroyArea
 @onready var collection_area: Area2D = $CollectionArea
 
+
 @export var player_index: int = 1
 @export var keyboard_only_controls = false
+@export var coin_collection_speed: float = 20
 
 @export_group("Health")
 @export var starting_max_hp: int = 20
@@ -54,7 +56,7 @@ var in_danger: bool = false
 
 @export_group("Shooting")
 @export var bullet_count: int = 1
-@export var max_bullet_spread: float = 360.0
+@export var max_bullet_spread: float = 120.0
 @export var recoil: float = 0
 var can_shoot: bool = true
 
@@ -104,10 +106,7 @@ func _physics_process(_delta: float) -> void:
 		velocity = velocity.move_toward(input_direction * top_speed, acceleration)
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, deceleration)
-	if Input.is_action_pressed("shoot") and can_shoot:
-		shoot_cooldown_timer.wait_time = 10/float(Upgrades.get_level("fire_rate"))
-		shoot_cooldown_timer.start()
-		can_shoot = false
+	if Input.is_action_just_pressed("shoot") and can_shoot:
 		shoot(bullet_count)
 	if Input.is_action_just_pressed("ability") and state == States.NORMAL and input_direction != Vector2.ZERO:
 		dash()
@@ -128,12 +127,11 @@ func _physics_process(_delta: float) -> void:
 	#states
 	match state:
 		States.NORMAL:
-			sprite.modulate = Color(1, 1, 1)
-			collision_shape.disabled = false
+			collision_mask = 1
 			vulnerable = true
 		States.DASHING:
-			sprite.modulate = Color(0, 0, 1)
 			# jank as hell dash speed cap thingy
+			collision_mask = 4
 			velocity = dash_direction * min(max(dash_mult * top_speed, min_dash_speed), max_dash_speed)
 			vulnerable = false
 	
@@ -141,25 +139,24 @@ func _physics_process(_delta: float) -> void:
 	magnet_collision_shape.shape.radius = (Upgrades.get_level("magnet_radius") * 30) + 50
 	bullet_count = Upgrades.get_level("multishot")
 	top_speed = (Upgrades.get_level("speed") * 20) + starting_top_speed
-	# collisions
+	
+	# dash collisions
 	for body in dash_destroy_area.get_overlapping_bodies():
 		if (body is DestructableObject) and (state == States.DASHING):
 			body.hit(dash_damage, self, dash_knockback)
 	
-	var collection_speed: float = 20
-	for area in magnet_area.get_overlapping_areas():
-		if area is Coin:
-			var distance = area.position.distance_to(position)
-			var speed = lerp(collection_speed, collection_speed / 4.0, distance / magnet_collision_shape.shape.radius)
-			area.position = area.position.move_toward(position, speed)
-		if area is Bullet:
-			if area.bullet_owner == Bullet.BulletOwner.ENEMY:
-				hit(1, area)
+	# Move the coins towards player
+
+	for body in magnet_area.get_overlapping_bodies():
+		if body is Coin:
+			var direction = (position - body.position).normalized()  
+			body.linear_velocity += direction * coin_collection_speed  
 	
-	for area in collection_area.get_overlapping_areas():
-		if area is Coin:
-			GameManager.change_coins_by(round(Upgrades.get_level("greed") * area.value))
-			area.queue_free()
+	# collect coins
+	for body in collection_area.get_overlapping_bodies():
+		if body is Coin:
+			GameManager.change_coins_by(round(Upgrades.get_level("greed") * body.value))
+			body.queue_free()
 			AudioPlayer.play_sound(COIN_SOUNDS.pick_random())
 	
 	
@@ -168,6 +165,8 @@ func _physics_process(_delta: float) -> void:
 	
 	# various debug
 	update_debug()
+	
+	
 
 func shoot(count: int):
 	AudioPlayer.play_sound(SHOOT_SOUND)
@@ -201,7 +200,7 @@ func hit(damage: int, damage_source_node: Node2D):
 	if can_die == true and vulnerable == true and remaining_invincibility_frames <= 0:
 		remaining_invincibility_frames = invincibility_frames
 		player_hurt.emit()
-		GameManager.shake_camera(8)
+		GameManager.shake_camera(4)
 		AudioPlayer.play_sound(PLAYER_HIT_SOUND)
 		animation_player.play("damage_flash")
 		

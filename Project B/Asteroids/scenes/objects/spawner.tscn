@@ -24,7 +24,6 @@ color_ramp = SubResource("GradientTexture1D_65h65")
 
 [node name="Spawner" type="Node2D"]
 script = ExtResource("1_srb28")
-asteroid_velocity = Vector2(-1000, 0)
 spawn_delay_seconds = 0.1
 
 [node name="Timer" type="Timer" parent="."]

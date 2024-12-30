@@ -1,6 +1,8 @@
 extends CanvasLayer
 
-const TRANSITION_SOUND = preload("res://assets/Audio/transition.ogg")
+signal transition_finished
+
+const TRANSITION_SOUND = preload("res://assets/audio/transition.ogg")
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 var screen_transition: String = "default"
@@ -25,7 +27,7 @@ func change_scene(target: String, extra_delay_seconds: float = 0.5) -> void:
 		if not ResourceLoader.exists(target):
 			target = "res://scenes/rooms/load_failed_room.tscn"
 		GameManager.can_pause = false
-		
+		AudioPlayer.fade_out_music()
 		play_transition()
 		transitioning = true
 		await animation_player.animation_finished
@@ -39,7 +41,7 @@ func change_scene(target: String, extra_delay_seconds: float = 0.5) -> void:
 		get_tree().paused = false
 		play_transition(true)
 		await animation_player.animation_finished
-		
+		transition_finished.emit()
 		GameManager.can_pause = true
 
 func play_transition(reverse: bool = false, speed_scale: float = 1, show_loading: bool = true):

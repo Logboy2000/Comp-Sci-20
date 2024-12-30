@@ -18,7 +18,7 @@ func add_upgrade(
 	starting_price: int, 
 	price_multiplier: float,
 	icon: Texture2D = preload("res://assets/sprites/upgrade_icons/placeholder.png"),
-	buy_sound: AudioStream = preload("res://assets/Audio/buy.ogg"),
+	buy_sound: AudioStream = preload("res://assets/audio/buy.ogg"),
 	type: UpgradeType = UpgradeType.INCREMENTAL,
 	buy_function: Callable = func (): pass,
 	restocks: bool = true,
@@ -140,7 +140,7 @@ func add_default_upgrades() -> void:
 		50, 
 		1.6,
 		preload("res://assets/sprites/upgrade_icons/heal.png"),
-		preload("res://assets/Audio/heal.ogg"),
+		preload("res://assets/audio/heal.ogg"),
 		UpgradeType.ONE_SHOT,
 		func():
 			GameManager.player.heal(5)
@@ -151,7 +151,7 @@ func add_default_upgrades() -> void:
 		200, 
 		1.8,
 		preload("res://assets/sprites/upgrade_icons/max_health.png"),
-		preload("res://assets/Audio/heal.ogg"),
+		preload("res://assets/audio/heal.ogg"),
 		UpgradeType.INCREMENTAL,
 		func(): 
 			GameManager.player.max_hp  = GameManager.player.starting_max_hp + (get_level("max_health") * 5) - 5
@@ -171,9 +171,21 @@ func add_default_upgrades() -> void:
 		1.1,
 		preload("res://assets/sprites/upgrade_icons/greed.png")
 	)
+	#add_upgrade(
+		#"fire_rate",
+		#"Fire Rate",
+		#1,
+		#1.2
+	#)
 	add_upgrade(
-		"fire_rate",
-		"Fire Rate",
+		"punch",
+		"Punch",
 		1,
-		1.2
+		1.3,
+	)
+	add_upgrade(
+		"homing",
+		"Homing",
+		100,
+		1.5,
 	)
