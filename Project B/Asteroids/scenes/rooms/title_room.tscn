@@ -7,6 +7,7 @@
 
 [node name="TitleRoom" instance=ExtResource("1_oi3pm")]
 script = ExtResource("1_dq1rf")
+room_size = Vector2(1920, 1080)
 
 [node name="Label" type="Label" parent="Entities" index="0"]
 anchors_preset = 8
@@ -33,11 +34,13 @@ metadata/_edit_group_ = true
 [node name="AsteroidPlayButton" parent="Entities" index="2" instance=ExtResource("2_4b3wv")]
 position = Vector2(960, 678)
 physics_material_override = null
+spawn_sound = null
 spawn_animation = false
 
 [node name="ExitButtonAsteroid" parent="Entities" index="3" instance=ExtResource("4_f13h1")]
 position = Vector2(1181, 673)
 physics_material_override = null
+spawn_sound = null
 spawn_animation = false
 
 [node name="RoomBounds" parent="." index="3"]
@@ -68,7 +71,7 @@ metadata/_edit_lock_ = true
 metadata/_edit_lock_ = true
 
 [node name="ProCam2D" parent="." index="4"]
-position = Vector2(966, 566)
+position = Vector2(963, 565)
 
 [node name="Control" parent="UI" index="0"]
 metadata/_edit_lock_ = true

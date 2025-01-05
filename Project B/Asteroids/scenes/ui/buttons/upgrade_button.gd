@@ -35,7 +35,7 @@ func update_labels() -> void:
 			level_label.text = "Lv " + str(Upgrades.get_level(upgrade_name))
 
 func _on_button_pressed() -> void:
-	AudioPlayer.play_sound(buy_sound)
+	Audio.play_sound(buy_sound)
 	Upgrades.buy(upgrade_name)
 	new_upgrade()
 

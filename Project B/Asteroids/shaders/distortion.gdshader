@@ -2,7 +2,7 @@ shader_type canvas_item;
 
 uniform float ripple_strength : hint_range(0.0, 1.0);  // Strength of the ripple effect
 uniform float time : hint_range(0.0, 10.0);  // Time for animation (can be animated in the script)
-uniform vec2 center : hint_range(0.0, 1.0);  // The center of the distortion (usually the middle of the rect)
+uniform vec2 center;  // The center of the distortion (usually the middle of the rect)
 uniform float edge_thickness : hint_range(0.0, 1.0);  // Thickness of the edge where the distortion is applied
 
 void fragment() {

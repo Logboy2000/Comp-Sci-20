@@ -7,6 +7,7 @@ extends DestructableObject # extends rigidbody2d
 var follow_target: Node2D = null  
 
 func _ready() -> void:
+	super._ready()
 	if GameManager.player:
 		follow_target = GameManager.player
 

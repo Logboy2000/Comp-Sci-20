@@ -27,7 +27,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	# UUpgrades
-	homing_distance = Upgrades.get_level("homing")-1 * 40
+	homing_distance = (Upgrades.get_level("homing") - 1) * 40
 	bullet_knockback = Upgrades.get_level("punch") * 35
 	
 	if target == null: 

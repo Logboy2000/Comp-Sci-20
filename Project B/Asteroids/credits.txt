@@ -2,27 +2,33 @@ A Game By Logan Howarth
 
 Art, Programming and Design: Logan Howarth
 
-
 SMW Font: wye
 CRT Shader: pend00
 
-Engine: Godot Engine
+Playtesting:
+	uhhhhhh (coming soon)
+
+
+Game Assets:
+	ProCam2D: kalulu_games
+	RadialProgress: DaveTheCoder
+
+
 
 Art tools: 
 	Pixelorama
 	PixelSpace: Deep-Fold
+
 Audio tools: 
 	Audacity
 	FFMPEG
 
-Godot Assets:
-	ProCam2D: kalulu_games
-	RadialProgress: DaveTheCoder
-
 Special Thanks:
-	uhhh
+	Neil Lindstrom
 
 Inspirations:
 	Windowkill
 	Enter the Gungeon
 	Vampire Survivors
+
+Godot Engine: The Godot Foundation

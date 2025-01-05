@@ -18,7 +18,7 @@ func add_upgrade(
 	starting_price: int, 
 	price_multiplier: float,
 	icon: Texture2D = preload("res://assets/sprites/upgrade_icons/placeholder.png"),
-	buy_sound: AudioStream = preload("res://assets/audio/buy.ogg"),
+	buy_sound: AudioStream = preload("res://assets/audio/click.ogg"),
 	type: UpgradeType = UpgradeType.INCREMENTAL,
 	buy_function: Callable = func (): pass,
 	restocks: bool = true,
@@ -171,12 +171,13 @@ func add_default_upgrades() -> void:
 		1.1,
 		preload("res://assets/sprites/upgrade_icons/greed.png")
 	)
-	#add_upgrade(
-		#"fire_rate",
-		#"Fire Rate",
-		#1,
-		#1.2
-	#)
+	add_upgrade(
+		"fire_rate",
+		"Fire Rate",
+		1,
+		1.2,
+		preload("res://assets/sprites/upgrade_icons/fire_rate.png")
+	)
 	add_upgrade(
 		"punch",
 		"Punch",

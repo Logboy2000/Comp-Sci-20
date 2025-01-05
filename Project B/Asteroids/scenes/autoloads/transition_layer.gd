@@ -27,7 +27,7 @@ func change_scene(target: String, extra_delay_seconds: float = 0.5) -> void:
 		if not ResourceLoader.exists(target):
 			target = "res://scenes/rooms/load_failed_room.tscn"
 		GameManager.can_pause = false
-		AudioPlayer.fade_out_music()
+		Audio.fade_out_music()
 		play_transition()
 		transitioning = true
 		await animation_player.animation_finished
@@ -50,7 +50,7 @@ func play_transition(reverse: bool = false, speed_scale: float = 1, show_loading
 	if reverse:
 		animation_player.play_backwards(screen_transition)
 	else:
-		AudioPlayer.play_sound(TRANSITION_SOUND)
+		Audio.play_sound(TRANSITION_SOUND)
 		animation_player.play(screen_transition, -1, speed_scale)
 	await animation_player.animation_finished
 	

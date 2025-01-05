@@ -30,7 +30,6 @@ const COIN_SOUNDS = [
 @onready var collision_shape: CollisionShape2D = $CollisionShape
 
 @onready var dash_length_timer: Timer = $Timers/DashLengthTimer
-@onready var shoot_cooldown_timer: Timer = $Timers/ShootCooldownTimer
 
 @onready var magnet_area: Area2D = $MagnetArea
 @onready var magnet_collision_shape: CollisionShape2D = $MagnetArea/MagnetCollisionShape
@@ -157,19 +156,19 @@ func _physics_process(_delta: float) -> void:
 		if body is Coin:
 			GameManager.change_coins_by(round(Upgrades.get_level("greed") * body.value))
 			body.queue_free()
-			AudioPlayer.play_sound(COIN_SOUNDS.pick_random())
+			Audio.play_sound(COIN_SOUNDS.pick_random(), 0.9, 1.1)
 	
 	
 	# actually move and shit
 	move_and_slide()
 	
-	# various debug
+	# various debug thingys
 	update_debug()
 	
 	
 
 func shoot(count: int):
-	AudioPlayer.play_sound(SHOOT_SOUND)
+	Audio.play_sound(SHOOT_SOUND)
 	for i in count:
 		var new_bullet = BULLET.instantiate() as Bullet
 		new_bullet.bullet_owner = Bullet.BulletOwner.PLAYER
@@ -192,7 +191,7 @@ func dash():
 	state = States.DASHING
 	velocity_at_start_of_dash = velocity
 	dash_length_timer.start(0)
-	AudioPlayer.play_sound(DASH_SOUND)
+	Audio.play_sound(DASH_SOUND)
 
 
 
@@ -201,7 +200,7 @@ func hit(damage: int, damage_source_node: Node2D):
 		remaining_invincibility_frames = invincibility_frames
 		player_hurt.emit()
 		GameManager.shake_camera(4)
-		AudioPlayer.play_sound(PLAYER_HIT_SOUND)
+		Audio.play_sound(PLAYER_HIT_SOUND)
 		animation_player.play("damage_flash")
 		
 		# Calculate direction away from the damage source
@@ -217,7 +216,6 @@ func hit(damage: int, damage_source_node: Node2D):
 			die()
 
 func heal(damage: int = 1):
-
 	hp += damage
 	if hp > max_hp:
 		hp = max_hp

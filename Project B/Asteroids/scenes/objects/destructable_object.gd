@@ -18,7 +18,7 @@ func _ready() -> void:
 		animation_player.play("spawn")
 	if sprite_frames_for_health:
 		health = sprite.hframes
-	AudioPlayer.play_sound(spawn_sound)
+	Audio.play_sound(spawn_sound)
 
 
 func hit(damage: int, damage_source_node: Node2D, knockback_force: float = 30):
@@ -31,7 +31,7 @@ func hit(damage: int, damage_source_node: Node2D, knockback_force: float = 30):
 		var particle = hit_particle.instantiate()
 		particle.position = global_position
 		add_sibling(particle)
-		AudioPlayer.play_sound(hit_sound)
+		Audio.play_sound(hit_sound)
 		
 		# Get bullet velocity or knockback force depending on the damage source
 		var bullet_velocity = Vector2.ZERO
@@ -59,7 +59,7 @@ func hit(damage: int, damage_source_node: Node2D, knockback_force: float = 30):
 	
 
 func destroy():
-	AudioPlayer.play_sound(destroy_sound)
+	Audio.play_sound(destroy_sound)
 	for i in dropped_coins:
 		var coin = COIN.instantiate()
 		coin.position = global_position

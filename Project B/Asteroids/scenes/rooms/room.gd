@@ -30,7 +30,7 @@ func _ready() -> void:
 	camera.top_limit = top_bound.position.y
 	camera.bottom_limit = bottom_bound.position.y
 	
-	camera.zoom = 1
+	camera.zoom = 2
 
 func _process(_delta: float) -> void:
 	DebugMenu.modify_label("node_count", "Entities: " + str(entities.get_child_count()))

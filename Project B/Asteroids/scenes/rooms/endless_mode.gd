@@ -32,13 +32,13 @@ const DESTRUCTABLE_OBJECTS = [
 
 
 func _ready() -> void:
-	AudioPlayer.fade_out_music()
+	Audio.fade_out_music()
 	spawn_timer.wait_time = spawn_delay_seconds
 	super._ready()
 
 func _process(delta: float) -> void:
-	if not AudioPlayer.is_playing_music():
-		AudioPlayer.play_music(MUSIC_CHILL)
+	if not Audio.is_playing_music():
+		Audio.play_music(MUSIC_CHILL)
 	super._process(delta)
 
 func _on_difficulty_increase_timer_timeout() -> void:
