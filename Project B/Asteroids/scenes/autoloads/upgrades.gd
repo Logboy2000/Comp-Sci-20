@@ -123,7 +123,7 @@ func add_default_upgrades() -> void:
 	add_upgrade(
 		"multishot", 
 		"Multishot", 
-		400, 
+		50, 
 		1.8,
 		preload("res://assets/sprites/upgrade_icons/multishot.png")
 	)
@@ -137,7 +137,7 @@ func add_default_upgrades() -> void:
 	add_upgrade(
 		"heal", 
 		"Heal", 
-		50, 
+		10, 
 		1.6,
 		preload("res://assets/sprites/upgrade_icons/heal.png"),
 		preload("res://assets/audio/heal.ogg"),
@@ -148,7 +148,7 @@ func add_default_upgrades() -> void:
 	add_upgrade(
 		"max_health", 
 		"Max Health", 
-		200, 
+		50, 
 		1.8,
 		preload("res://assets/sprites/upgrade_icons/max_health.png"),
 		preload("res://assets/audio/heal.ogg"),
@@ -160,7 +160,7 @@ func add_default_upgrades() -> void:
 	add_upgrade(
 		"piercing", 
 		"Piercing", 
-		150, 
+		50, 
 		2,
 		preload("res://assets/sprites/upgrade_icons/piercing.png")
 	)
@@ -174,19 +174,19 @@ func add_default_upgrades() -> void:
 	add_upgrade(
 		"fire_rate",
 		"Fire Rate",
-		1,
+		75,
 		1.2,
 		preload("res://assets/sprites/upgrade_icons/fire_rate.png")
 	)
 	add_upgrade(
 		"punch",
 		"Punch",
-		1,
-		1.3,
+		10,
+		1.1,
 	)
 	add_upgrade(
 		"homing",
 		"Homing",
 		100,
-		1.5,
+		1.6,
 	)

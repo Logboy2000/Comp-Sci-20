@@ -319,7 +319,12 @@ horizontal_alignment = 1
 [node name="Resume" type="Button" parent="Control/CenterContainer/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 1
-text = "Resume"
+text = "Resume Game"
+
+[node name="Settings" type="Button" parent="Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Settings"
 
 [node name="ReturnToTitle" type="Button" parent="Control/CenterContainer/VBoxContainer"]
 layout_mode = 2
@@ -338,5 +343,6 @@ libraries = {
 speed_scale = 2.0
 
 [connection signal="pressed" from="Control/CenterContainer/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Control/CenterContainer/VBoxContainer/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="Control/CenterContainer/VBoxContainer/ReturnToTitle" to="." method="_on_return_to_title_pressed"]
 [connection signal="pressed" from="Control/CenterContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]

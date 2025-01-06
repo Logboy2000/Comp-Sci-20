@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://bbiwn1p001e5x"]
+[gd_scene load_steps=8 format=3 uid="uid://bbiwn1p001e5x"]
 
 [ext_resource type="Script" path="res://scenes/autoloads/debug_menu.gd" id="1_ya07w"]
-[ext_resource type="Script" path="res://scenes/autoloads/room_selector.gd" id="2_pk6wl"]
 [ext_resource type="Theme" uid="uid://dmpi6gp8ax486" path="res://theme.tres" id="2_vql46"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_mhmry"]
@@ -100,7 +99,7 @@ _data = {
 
 [node name="DebugMenu" type="CanvasLayer"]
 process_mode = 3
-layer = 10
+layer = 100
 script = ExtResource("1_ya07w")
 
 [node name="Control" type="Control" parent="."]
@@ -156,14 +155,16 @@ theme_override_styles/separator = SubResource("StyleBoxLine_mhmry")
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Keybinds2" type="Label" parent="Control/MarginContainer/VBoxContainer/KeybindsContainer"]
+[node name="KeybindNames" type="Label" parent="Control/MarginContainer/VBoxContainer/KeybindsContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 0
-text = "show this menu
+text = "room switcher
+show this menu
 reset room
+kill yourself
 toggle shaders
-"
+ruin the fun"
 horizontal_alignment = 2
 
 [node name="FakeVSeparator" type="Label" parent="Control/MarginContainer/VBoxContainer/KeybindsContainer"]
@@ -171,35 +172,22 @@ layout_mode = 2
 size_flags_horizontal = 8
 text = " | 
  | 
+ | 
+ | 
+ | 
  | "
 
-[node name="Keybinds3" type="Label" parent="Control/MarginContainer/VBoxContainer/KeybindsContainer"]
+[node name="KeybindKeys" type="Label" parent="Control/MarginContainer/VBoxContainer/KeybindsContainer"]
 layout_mode = 2
 size_flags_vertical = 0
-text = "`
+text = "F1
+` / F3
 R / F5
- F10
+F9
+F10
+F12
 "
 horizontal_alignment = 2
-
-[node name="Room" type="Label" parent="Control/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "Room Switcher"
-horizontal_alignment = 2
-
-[node name="RoomSelector" type="ScrollContainer" parent="Control/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
-horizontal_scroll_mode = 0
-script = ExtResource("2_pk6wl")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/RoomSelector"]
-layout_mode = 2
-size_flags_horizontal = 10
-size_flags_vertical = 3
-mouse_filter = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

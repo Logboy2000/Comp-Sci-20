@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bsrko37thm624"]
+[gd_scene load_steps=19 format=3 uid="uid://bsrko37thm624"]
 
 [ext_resource type="Script" path="res://scenes/rooms/room.gd" id="1_baw6i"]
 [ext_resource type="PackedScene" uid="uid://0bv25eepcj8y" path="res://scenes/objects/player.tscn" id="1_x4ct1"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://qka3marnmtaa" path="res://scenes/ui/game_over_screen.tscn" id="6_8oovr"]
 [ext_resource type="Script" path="res://addons/ProCam2D/scripts/core/nds/a.gd" id="7_s34sh"]
 [ext_resource type="Script" path="res://addons/ProCam2D/scripts/core/addns/pcam_shake.gd" id="8_4xrid"]
+[ext_resource type="PackedScene" uid="uid://fab4mmfsxbxn" path="res://scenes/ui/room_selector.tscn" id="13_25dvw"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_cmuvo"]
 
@@ -79,6 +80,7 @@ script = ExtResource("4_pybdd")
 
 [node name="Parallax2D3" type="Parallax2D" parent="FG"]
 modulate = Color(1, 1, 1, 0.180392)
+scroll_scale = Vector2(1.2, 1.2)
 repeat_size = Vector2(1000, 1000)
 autoscroll = Vector2(10, 10)
 repeat_times = 3
@@ -164,3 +166,5 @@ grow_vertical = 2
 
 [node name="GameOverScreen" parent="UI" instance=ExtResource("6_8oovr")]
 visible = false
+
+[node name="RoomSelector" parent="UI" instance=ExtResource("13_25dvw")]

@@ -68,6 +68,7 @@ HScrollBar/styles/grabber = SubResource("StyleBoxFlat_fnxxj")
 HScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_1cuid")
 HScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_3hdrj")
 HScrollBar/styles/scroll = SubResource("StyleBoxFlat_a3kxo")
+Label/constants/outline_size = 10
 MarginContainer/constants/margin_bottom = 3
 MarginContainer/constants/margin_left = 3
 MarginContainer/constants/margin_right = 3

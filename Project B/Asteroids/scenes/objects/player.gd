@@ -1,4 +1,5 @@
-class_name Player extends CharacterBody2D
+class_name Player
+extends CharacterBody2D
 
 signal player_hurt
 
@@ -6,11 +7,14 @@ enum States {
 	NORMAL,
 	DASHING,
 }
+
 var state = States.NORMAL
-#objects
+
+# Objects
 const BULLET = preload("res://scenes/objects/projectiles/bullet.tscn")
 const EXPLOSION = preload("res://scenes/objects/explosion.tscn")
-#sounds
+
+# Sounds
 const SHOOT_SOUND = preload("res://assets/audio/shoot.ogg")
 const DASH_SOUND = preload("res://assets/audio/dash.ogg")
 const PLAYER_HIT_SOUND = preload("res://assets/audio/player_hit.ogg")
@@ -23,20 +27,17 @@ const COIN_SOUNDS = [
 ]
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
-
 @onready var sprite: Sprite2D = $Visuals/Sprite2D
-
 @onready var bullet_shoot_point: Node2D = $BulletShootPoint
 @onready var collision_shape: CollisionShape2D = $CollisionShape
-
 @onready var dash_length_timer: Timer = $Timers/DashLengthTimer
-
 @onready var magnet_area: Area2D = $MagnetArea
 @onready var magnet_collision_shape: CollisionShape2D = $MagnetArea/MagnetCollisionShape
-
 @onready var dash_destroy_area: Area2D = $DashDestroyArea
 @onready var collection_area: Area2D = $CollectionArea
 
+# Shooting timer
+@onready var shooting_timer: Timer = Timer.new()
 
 @export var player_index: int = 1
 @export var keyboard_only_controls = false
@@ -72,11 +73,8 @@ var top_speed: float = 0
 @export var dash_mult: float = 1
 @export var dash_damage: float = 10
 @export var dash_knockback: float = 3
-var velocity_at_start_of_dash: Vector2  # what else do i name this
+var velocity_at_start_of_dash: Vector2
 
-
-
-#input
 var target_angle: float = 0
 var input_direction: Vector2 = Vector2.ZERO
 var dash_direction: Vector2 = Vector2(1, 1)
@@ -90,10 +88,13 @@ func _ready() -> void:
 	remaining_invincibility_frames = invincibility_frames
 	rotation = (get_global_mouse_position() - global_position).angle()
 
-
+	# Initialize the shooting timer
+	shooting_timer.one_shot = false
+	shooting_timer.connect("timeout", Callable(self, "_on_shooting_timer_timeout"))
+	add_child(shooting_timer)
 
 func _physics_process(_delta: float) -> void:
-	# Input
+	
 	input_direction = Vector2(Input.get_axis("left", "right"), Input.get_axis("up", "down")).normalized()
 	mouse_direction = (get_global_mouse_position() - global_position).normalized()
 	if keyboard_only_controls:
@@ -105,84 +106,81 @@ func _physics_process(_delta: float) -> void:
 		velocity = velocity.move_toward(input_direction * top_speed, acceleration)
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, deceleration)
-	if Input.is_action_just_pressed("shoot") and can_shoot:
-		shoot(bullet_count)
+	
+	
+	if GameManager.settings.get("do_shoot_delay") == true:
+		if Input.is_action_pressed("shoot") and can_shoot:
+			shoot(bullet_count)
+	else:
+		if Input.is_action_just_pressed("shoot"):
+			shoot(bullet_count)
+	
 	if Input.is_action_just_pressed("ability") and state == States.NORMAL and input_direction != Vector2.ZERO:
 		dash()
 	if Input.is_action_just_pressed("die"):
 		hit(max_hp, self)
 	
+	
 	if can_die:
 		var hp_percent: float = float(hp) / float(max_hp)
-		if hp_percent < 0.25:
-			in_danger = true
+		in_danger = hp_percent < 0.25
+		if in_danger:
 			animation_player.play("damage_flash")
-		else:
-			in_danger = false
-	
+
 	remaining_invincibility_frames -= 1
-	
-	
-	#states
+
 	match state:
 		States.NORMAL:
 			collision_mask = 1
 			vulnerable = true
 		States.DASHING:
-			# jank as hell dash speed cap thingy
 			collision_mask = 4
 			velocity = dash_direction * min(max(dash_mult * top_speed, min_dash_speed), max_dash_speed)
 			vulnerable = false
-	
-	#apply upgrades
+
 	magnet_collision_shape.shape.radius = (Upgrades.get_level("magnet_radius") * 30) + 50
 	bullet_count = Upgrades.get_level("multishot")
 	top_speed = (Upgrades.get_level("speed") * 20) + starting_top_speed
-	
-	# dash collisions
+
 	for body in dash_destroy_area.get_overlapping_bodies():
 		if (body is DestructableObject) and (state == States.DASHING):
 			body.hit(dash_damage, self, dash_knockback)
-	
-	# Move the coins towards player
 
 	for body in magnet_area.get_overlapping_bodies():
 		if body is Coin:
-			var direction = (position - body.position).normalized()  
-			body.linear_velocity += direction * coin_collection_speed  
-	
-	# collect coins
+			var direction = (position - body.position).normalized()
+			body.linear_velocity += direction * coin_collection_speed
+
 	for body in collection_area.get_overlapping_bodies():
 		if body is Coin:
 			GameManager.change_coins_by(round(Upgrades.get_level("greed") * body.value))
 			body.queue_free()
 			Audio.play_sound(COIN_SOUNDS.pick_random(), 0.9, 1.1)
-	
-	
-	# actually move and shit
+
 	move_and_slide()
-	
-	# various debug thingys
 	update_debug()
 	
-	
-
 func shoot(count: int):
-	Audio.play_sound(SHOOT_SOUND)
+	can_shoot = false
+	shooting_timer.wait_time = 0.5 / Upgrades.get_level("fire_rate")
+	shooting_timer.start()
+	Audio.play_sound(SHOOT_SOUND, 0.9, 1.1)
 	for i in count:
-		var new_bullet = BULLET.instantiate() as Bullet
-		new_bullet.bullet_owner = Bullet.BulletOwner.PLAYER
-		new_bullet.position = bullet_shoot_point.global_position
+		var new_bullet: Bullet = BULLET.instantiate()
+		new_bullet.bullet_owner = new_bullet.BulletOwner.PLAYER
+		new_bullet.global_position = bullet_shoot_point.global_position
 		var spread = 0.0
 		if count > 1:
-			var spread_factor = min(count / 10.0, 1.0)  # increase spread up to max at 10 bullets
+			var spread_factor = min(count / 10.0, 1.0)
 			spread = max_bullet_spread * spread_factor * (float(i) / (count - 1) - 0.5)
 		new_bullet.direction = mouse_direction.rotated(deg_to_rad(spread))
 		new_bullet.rotation = new_bullet.direction.angle()
 		new_bullet.bullet_speed += velocity.length()
 		velocity -= new_bullet.direction * recoil
-
 		add_sibling(new_bullet)
+
+func _on_shooting_timer_timeout():
+	can_shoot = true
 
 
 
@@ -238,7 +236,3 @@ func update_debug():
 
 func _on_dash_length_timer_timeout() -> void:
 	state = States.NORMAL
-
-
-func _on_shoot_cooldown_timer_timeout() -> void:
-	can_shoot = true

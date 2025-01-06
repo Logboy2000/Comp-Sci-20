@@ -12,7 +12,9 @@ var coins: int = 0
 
 var settings: Dictionary = {
 	"camera_shake": true,
-	"upgrade_count": 4
+	"upgrade_count": 4,
+	"show_bg": true,
+	"do_shoot_delay": true,
 }
 var save: Dictionary = {
 	"played_tutorial": true

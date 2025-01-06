@@ -1,7 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://bt5gntkfgkcg6"]
+[gd_scene load_steps=7 format=3 uid="uid://bt5gntkfgkcg6"]
 
 [ext_resource type="Script" path="res://scenes/objects/projectiles/bullet.gd" id="1_gcnnn"]
 [ext_resource type="Texture2D" uid="uid://2vxk33nux3cr" path="res://assets/sprites/bullet.png" id="1_ya53c"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7cgci"]
+size = Vector2(22, 10)
 
 [sub_resource type="Animation" id="Animation_6ne6l"]
 length = 0.001
@@ -45,13 +48,12 @@ script = ExtResource("1_gcnnn")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_ya53c")
 
-[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
-polygon = PackedVector2Array(-10, 4, 8, 4, 10, 2, 10, -2, 8, -4, -10, -4)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_7cgci")
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 5.0
+wait_time = 1.5
 one_shot = true
-autostart = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

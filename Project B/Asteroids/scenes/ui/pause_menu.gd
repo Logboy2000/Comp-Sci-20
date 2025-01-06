@@ -56,3 +56,7 @@ func _on_return_to_title_pressed() -> void:
 
 func _on_quit_pressed() -> void:
 	GameManager.quit_game()
+
+
+func _on_settings_pressed() -> void:
+	pass
