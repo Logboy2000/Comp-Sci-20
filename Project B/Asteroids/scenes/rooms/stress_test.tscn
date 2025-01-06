@@ -1,9 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://dg4gu28w5650a"]
-
-[ext_resource type="PackedScene" uid="uid://bsrko37thm624" path="res://scenes/rooms/room.tscn" id="1_mf5u1"]
-[ext_resource type="PackedScene" uid="uid://dn4fkspjojon1" path="res://scenes/objects/asteroid_spawner.tscn" id="2_n4xwl"]
-
-[node name="StressTest" instance=ExtResource("1_mf5u1")]
-
-[node name="AsteroidSpawner" parent="Entities" index="1" instance=ExtResource("2_n4xwl")]
-asteroid_velocity = Vector2(1000, 0)

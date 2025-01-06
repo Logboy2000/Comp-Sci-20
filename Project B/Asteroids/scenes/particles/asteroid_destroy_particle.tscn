@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://dogkwe33uof0w"]
 
-[ext_resource type="Texture2D" uid="uid://4w77rudkmcv8" path="res://assets/Sprites/small-asteroid-particle.png" id="1_udytp"]
+[ext_resource type="Texture2D" uid="uid://4w77rudkmcv8" path="res://assets/sprites/small-asteroid-particle.png" id="1_udytp"]
 [ext_resource type="Script" path="res://scenes/particles/particle.gd" id="2_pen11"]
 
 [sub_resource type="Gradient" id="Gradient_3r8ox"]
@@ -22,9 +22,10 @@ gravity = Vector3(0, 0, 0)
 color_ramp = SubResource("GradientTexture1D_3g4q2")
 
 [node name="AsteroidExplosionParticle" type="GPUParticles2D"]
-z_index = -1
+z_index = 100
+z_as_relative = false
 emitting = false
-amount = 10
+amount = 7
 process_material = SubResource("ParticleProcessMaterial_ivkhm")
 texture = ExtResource("1_udytp")
 one_shot = true

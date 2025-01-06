@@ -1,10 +1,7 @@
 extends Room
-
+const SONG_1 = preload("res://assets/audio/song1.ogg")
 func _ready() -> void:
-	TransitionLayer.play_transition(true)
-	GameManager.current_zoom = 1
 	super._ready()
-	
-
-func _process(delta: float) -> void:
-	super._process(delta)
+	camera.zoom = 1.5
+	await TransitionLayer.transition_finished
+	Audio.play_music(SONG_1)

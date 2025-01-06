@@ -4,7 +4,7 @@
 [ext_resource type="Theme" uid="uid://dmpi6gp8ax486" path="res://theme.tres" id="2_adn4m"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2vco5"]
-bg_color = Color(1, 0, 0, 0.192157)
+bg_color = Color(1, 0, 0, 0.470588)
 
 [sub_resource type="Animation" id="Animation_5gr22"]
 length = 0.001

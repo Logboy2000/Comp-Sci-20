@@ -1,16 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://ctww86bimsj43"]
+[gd_scene load_steps=5 format=3 uid="uid://ctww86bimsj43"]
 
-[ext_resource type="PackedScene" uid="uid://87lypw8l8210" path="res://scenes/objects/asteroid.tscn" id="1_n51wa"]
+[ext_resource type="PackedScene" uid="uid://87lypw8l8210" path="res://scenes/objects/asteroids/asteroid.tscn" id="1_n51wa"]
 [ext_resource type="Script" path="res://scenes/objects/exit_button_asteroid.gd" id="2_j56sv"]
-[ext_resource type="Texture2D" uid="uid://d3qtv3lhhnxtt" path="res://assets/Sprites/exit_button.png" id="3_pia8w"]
+[ext_resource type="Texture2D" uid="uid://d3qtv3lhhnxtt" path="res://assets/sprites/exit_button.png" id="3_pia8w"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_oqcam"]
+bounce = 1.0
 
 [node name="ExitButtonAsteroid" instance=ExtResource("1_n51wa")]
+physics_material_override = SubResource("PhysicsMaterial_oqcam")
 script = ExtResource("2_j56sv")
 dropped_coins = 0
 
-[node name="Sprite2D" parent="." index="0"]
+[node name="Sprite2D" parent="." index="1"]
 texture = ExtResource("3_pia8w")
 hframes = 5
 
-[node name="CollisionPolygon2D" parent="." index="1"]
+[node name="CollisionPolygon2D" parent="." index="2"]
 polygon = PackedVector2Array(-27, -39, 4, -40, 35, -17, 37, 11, 21, 50, 4, 50, -19, 42, -39, 29, -54, -14)

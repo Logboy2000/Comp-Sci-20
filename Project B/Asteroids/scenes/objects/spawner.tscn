@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3 uid="uid://dn4fkspjojon1"]
+
+[ext_resource type="Script" path="res://scenes/objects/spawner.gd" id="1_srb28"]
+[ext_resource type="Texture2D" uid="uid://dm0vsl7oo66i1" path="res://assets/sprites/circle-particle.png" id="2_x0v6c"]
+
+[sub_resource type="Gradient" id="Gradient_3i626"]
+offsets = PackedFloat32Array(0, 0.0972222, 0.833333, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_65h65"]
+gradient = SubResource("Gradient_3i626")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ygryg"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(15, 15, 0)
+initial_velocity_max = 12.0
+angular_velocity_min = -180.0
+angular_velocity_max = 180.0
+radial_velocity_min = 4.47998
+radial_velocity_max = 21.43
+gravity = Vector3(0, 0, 0)
+color_ramp = SubResource("GradientTexture1D_65h65")
+
+[node name="Spawner" type="Node2D"]
+script = ExtResource("1_srb28")
+spawn_delay_seconds = 0.1
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.128
+autostart = true
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_ygryg")
+texture = ExtResource("2_x0v6c")
+lifetime = 9.22
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

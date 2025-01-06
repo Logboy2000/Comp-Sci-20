@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://bcr3u2tul2eoi"]
 
-[ext_resource type="Texture2D" uid="uid://cp7sskmggendm" path="res://assets/Sprites/large-asteroid-particle.png" id="1_7u32p"]
+[ext_resource type="Texture2D" uid="uid://cp7sskmggendm" path="res://assets/sprites/large-asteroid-particle.png" id="1_7u32p"]
 [ext_resource type="Script" path="res://scenes/particles/particle.gd" id="2_svl1v"]
 
 [sub_resource type="Gradient" id="Gradient_toxte"]
