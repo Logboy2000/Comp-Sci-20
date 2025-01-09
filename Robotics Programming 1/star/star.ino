@@ -46,7 +46,13 @@ int line1[] = {43, 42, 41, 40, 39, 38, 78, 77, 68, 67, 8, 7, 6, 2, 3};
 int line2[] = {20, 21, 17, 16, 15, 14, 70, 69, 84, 83, 57, 56, 55, 54, 50, 51};
 int line3[] = {27, 26, 30, 31, 32, 33, 76, 85, 86, 87, 88, 93, 92};
 
-int letterS[] = {82, 79, 37, 34, 33, 76, 85, 86, 62, 66, 10, 13};
+int letterS[] = {82, 79, 37, 34, 33, 76, 85, 86, 62, 67, 10, 13};
+int letterI[] = {41,40,39,38,78,77,68,67,8,7,11,10,66,65,35,36,38,79,80,81};
+int letterG[] = {40};
+int text100[] = {};
+int letterQuestionMark[] = {};
+int percentSymbol[] = {};
+
 
 
 void setup()
@@ -126,6 +132,9 @@ void lightshow()
   }
   allLeds(CRGB(255, 0, 0));
   arrayToColor(letterS, 13, WHITE);
+  delay(1000);
+  allLeds(CRGB(255, 0, 0));
+  arrayToColor(letterI, 20, WHITE);
 
 
 
