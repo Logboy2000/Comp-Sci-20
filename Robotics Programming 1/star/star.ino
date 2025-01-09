@@ -1,21 +1,31 @@
-// Strip Diagram https://raw.githubusercontent.com/Logboy2000/Comp-Sci-20/refs/heads/main/Robotics%20Programming%201/final_light_show/Star.png
+//https://raw.githubusercontent.com/Logboy2000/Comp-Sci-20/refs/heads/main/Robotics%20Programming%201/final_light_show/Star.png
 #include <FastLED.h>
 
 // 95th led is cooked
 #define NUM_LEDS 94
 
 // First LED is 0
-
 #define LAST_LED 93
+#define MIDDLE_LED 46
 
+// Pins
+#define OUTPUT_PIN 7
+#define INPUT_PIN 8
 #define DATA_PIN 10
 #define CLOCK_PIN 13
 
-// Define the array of leds
+// the array of leds
 CRGB leds[NUM_LEDS];
 
-// Colors
-CRGB WHITE = CRGB(255, 255, 255);
+// Common Colors
+#define WHITE CRGB(255, 255, 255)
+#define RED CRGB(255, 0, 0)
+#define GREEN CRGB(0, 255, 0)
+#define BLUE CRGB(0, 0, 255)
+#define CYAN CRGB(0, 255, 255)
+#define MAGENTA CRGB(255, 0, 255)
+#define YELLOW CRGB(255, 255, 0)
+#define BLACK CRGB(0, 0, 0)
 
 int outerBranch1[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};          // Bottom
 int outerBranch2[] = {15, 16, 17, 18, 19, 20, 21, 22, 23}; // Bottom Left
@@ -36,14 +46,28 @@ int line1[] = {43, 42, 41, 40, 39, 38, 78, 77, 68, 67, 8, 7, 6, 2, 3};
 int line2[] = {20, 21, 17, 16, 15, 14, 70, 69, 84, 83, 57, 56, 55, 54, 50, 51};
 int line3[] = {27, 26, 30, 31, 32, 33, 76, 85, 86, 87, 88, 93, 92};
 
+int letterS[] = {82, 79, 37, 34, 33, 76, 85, 86, 62, 66, 10, 13};
+
+
 void setup()
 {
+  Serial.begin(9600);
+  pinMode(OUTPUT_PIN, OUTPUT);
+  pinMode(INPUT_PIN, INPUT);
   FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_LEDS);
+
+
+  digitalWrite(OUTPUT_PIN, HIGH);
 } // end of setup
 
 void loop()
 {
-  lightshow();
+  delay(50);
+  // wait until HIGH
+  if (digitalRead(INPUT_PIN) == HIGH) {
+    Serial.println("Lightshow Go!");
+    lightshow();
+  }
 } // end of loop
 
 void lightshow()
@@ -81,7 +105,31 @@ void lightshow()
     arrayToColor(line1, 15, WHITE);
     delay(del2);
   }
+  for (int i = 0; i < 10; i++)
+  {
+    allOutside(RED);
+    allInside(GREEN);
+    delay(50);
+    allOutside(WHITE);
+    allInside(RED);
+    delay(50);
+  }
+  middleToEnds(1, BLACK, BLACK);
+  endsToMiddle(1, WHITE, WHITE);
+
+  for (int i = 0; i < 2; i++)
+  {
+    endsToMiddle(i * 2, BLACK, WHITE);
+    middleToEnds(i * 2, CYAN, BLACK);
+    middleToEnds(i * 2, BLACK, GREEN);
+    endsToMiddle(i * 2, RED, BLACK);
+  }
   allLeds(CRGB(255, 0, 0));
+  arrayToColor(letterS, 13, WHITE);
+
+
+
+
   delay(del2);
 }
 
@@ -170,3 +218,29 @@ void arrayToColor(int arr[], int length, CRGB color)
   }
   FastLED.show();
 } // end of arrayToColor
+
+void endsToMiddle(int delayMil, CRGB colorR, CRGB colorL)
+{
+  // Loop for half of the LEDs
+  for (int i = 0; i < MIDDLE_LED; i++)
+  {
+    // Right line
+    line(0, i, colorR);
+    // Left line
+    line(LAST_LED - i, NUM_LEDS, colorL);
+    delay(delayMil);
+  }
+} // end of endsToMiddle
+
+void middleToEnds(int delayMil, CRGB colorR, CRGB colorL)
+{
+  // Loop for half of the LEDs
+  for (int i = 0; i <= MIDDLE_LED; i++)
+  {
+    // Right side
+    line(MIDDLE_LED - i, MIDDLE_LED, colorR);
+    // Left side
+    line(MIDDLE_LED, MIDDLE_LED + i, colorL);
+    delay(delayMil);
+  }
+} // end of middleToEnds
