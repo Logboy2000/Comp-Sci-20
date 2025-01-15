@@ -8,6 +8,9 @@
 #define DATA_PIN 10
 #define THE_PERFECT_AMAZING_UNUSED_CLOCK_PIN 13
 
+#define OUTPUT_PIN 7
+#define INPUT_PIN 8
+
 // Common Colors
 #define WHITE CRGB(255, 255, 255)
 #define RED CRGB(255, 0, 0)
@@ -23,16 +26,36 @@ CRGB leds[NUM_LEDS];
 
 void setup()
 {
+  pinMode(OUTPUT_PIN, OUTPUT);
+  pinMode(INPUT_PIN, INPUT);
   FastLED.addLeds<WS2811, DATA_PIN, BRG>(leds, NUM_LEDS);
+
+  digitalWrite(OUTPUT_PIN, LOW);
   blackout();
 } // end of setup
 
 void loop()
 {
-  for (int i = 1000; i > 2; i *= 0.9)
+  delay(50);
+  
+  // wait until HIGH
+  if (digitalRead(INPUT_PIN) == HIGH) {
+    Serial.println("Lightshow Go!");
+    digitalWrite(OUTPUT_PIN, LOW);
+    lightshow();
+    digitalWrite(OUTPUT_PIN, HIGH);
+  }
+  
+  
+} // end of loop
+
+void lightshow()
+{
+  delay(5000);
+  for (int i = 1000; i > 2; i *= 0.5)
   {
     delay(i);
-    pulse(WHITE, 0, 0, i/50);
+    pulse(WHITE, 0, 0, i / 50);
   }
 
   int del = 1;
@@ -79,32 +102,38 @@ void loop()
   endsToMiddle(10, BLUE, BLUE);
   endsToMiddle(10, CYAN, CYAN);
   endsToMiddle(10, MAGENTA, MAGENTA);
-  middleToEnds(10, CYAN, CYAN);
+
   middleToEnds(10, BLUE, BLUE);
-  middleToEnds(10, GREEN, GREEN);
   middleToEnds(10, RED, RED);
+  middleToEnds(10, GREEN, GREEN);
   middleToEnds(10, BLUE, BLUE);
+  middleToEnds(10, CYAN, CYAN);
+  middleToEnds(10, MAGENTA, MAGENTA);
 
   middleToEnds(10, BLACK, BLACK);
 
   fadeTo(YELLOW, 10); // Fill with yellow
   delay(10);
   fadeTo(BLACK, 20);
-
-  for (int ledCount = 0; ledCount < NUM_LEDS; ledCount++)
+  for (int ledCount = 0; ledCount < NUM_LEDS; ledCount = ledCount + 2)
   {
-    sparkle(WHITE, 10, ledCount, 10); // Sparkle effect
+    sparkle(RED, 10, ledCount, 10);
+  }
+  for (int ledCount = NUM_LEDS; ledCount > 2; ledCount = ledCount - 1)
+  {
+    sparkle(GREEN, 10, ledCount, 10);
   }
   blackout();
-
-} // end of loop
+  //delay(800);// resync arch+star
+  pulse(RED, 0, 0, 20);
+} // end of lightshow
 
 void pulse(CRGB color, int fadeInDel, int holdTime, int fadeOutDel)
 {
   fadeTo(color, fadeInDel);
   delay(holdTime);
   fadeTo(BLACK, fadeOutDel);
-}
+} // end of pulse
 
 void startToEnd(CRGB color, int delayMil)
 {
@@ -166,13 +195,8 @@ void middleToEnds(int delayMil, CRGB colorR, CRGB colorL)
 } // end of middleToEnds
 
 /**
- * Sparkles the LEDs with the given color for the specified number of times.
- *
- * @param color The color to use for the sparkles.
- * @param delayMil The delay in milliseconds between each sparkle.
- * @param numSparkle The number of LEDs to sparkle each time.
- * @param sparkleRepeat The number of times to repeat the sparkle effect.
- */
+   Sparkles the LEDs with the given color for 'sparkleRepeat' number of times.
+*/
 void sparkle(CRGB color, int delayMil, int numSparkle, int sparkleRepeat)
 {
   for (int count = 0; count < sparkleRepeat; count++)
@@ -202,14 +226,14 @@ void fadeTo(CRGB color, int delayMil)
     {
       CRGB currentColor = leds[j]; // Get the current color of each LED
       leds[j] = CRGB(
-          currentColor.r + (color.r - currentColor.r) * i / 255,
-          currentColor.g + (color.g - currentColor.g) * i / 255,
-          currentColor.b + (color.b - currentColor.b) * i / 255);
+                  currentColor.r + (color.r - currentColor.r) * i / 255,
+                  currentColor.g + (color.g - currentColor.g) * i / 255,
+                  currentColor.b + (color.b - currentColor.b) * i / 255);
     }
     FastLED.show();
     delay(delayMil);
   }
-} // end of fadeIn
+} // end of fadeTo
 
 void fillAllLeds(CRGB color)
 {
