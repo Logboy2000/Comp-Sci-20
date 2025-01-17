@@ -18,9 +18,9 @@ func pull_from_pool() -> Node2D:
 	var object: Node2D
 	if object_pool.is_empty():
 		add_new_object()
-		object = object_pool.pop_back()  # Retrieve the newly added object
+		object = object_pool.pop_back()
 	else:
-		object = object_pool.pop_back()  # Improved efficiency
+		object = object_pool.pop_back()
 	object.set_process(true)
 	object.set_physics_process(true)
 	object.show()

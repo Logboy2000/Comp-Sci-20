@@ -176,7 +176,6 @@ func shoot(count: int):
 				spread = max_bullet_spread * spread_factor * (float(i) / (count - 1) - 0.5)
 			new_bullet.direction = mouse_direction.rotated(deg_to_rad(spread))
 			new_bullet.rotation = new_bullet.direction.angle()
-			new_bullet.bullet_speed += velocity.length()
 			velocity -= new_bullet.direction * recoil
 			new_bullet.apply_velocity()
 

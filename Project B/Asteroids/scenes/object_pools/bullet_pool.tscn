@@ -6,3 +6,4 @@
 [node name="BulletPool" type="Node2D"]
 script = ExtResource("1_epasm")
 object_scene = ExtResource("2_prnfe")
+starting_size = 100
