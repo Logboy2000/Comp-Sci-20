@@ -58,3 +58,5 @@ func _process(_delta: float) -> void:
 
 func add_entity(entity: Node):
 	entities.add_child(entity)
+
+@onready var bullet_pool: ObjectPool = $BulletPool

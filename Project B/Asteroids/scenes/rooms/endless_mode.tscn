@@ -1,83 +1,246 @@
-[gd_scene load_steps=7 format=3 uid="uid://b642te4ed7el7"]
+[gd_scene load_steps=15 format=3 uid="uid://b642te4ed7el7"]
 
 [ext_resource type="PackedScene" uid="uid://bsrko37thm624" path="res://scenes/rooms/room.tscn" id="1_56is4"]
 [ext_resource type="Script" path="res://scenes/rooms/endless_mode.gd" id="2_eu4y7"]
-[ext_resource type="Texture2D" uid="uid://bq07qdnmialrh" path="res://assets/Sprites/coin.png" id="3_6xp8x"]
-[ext_resource type="PackedScene" uid="uid://dn4fkspjojon1" path="res://scenes/objects/asteroid_spawner.tscn" id="3_i2hpb"]
-[ext_resource type="PackedScene" uid="uid://b3yvgityqwps7" path="res://scenes/upgrades/speed.tscn" id="3_o42k4"]
-[ext_resource type="PackedScene" uid="uid://bfte46twiupo5" path="res://scenes/upgrades/multishot.tscn" id="6_y2sph"]
+[ext_resource type="Texture2D" uid="uid://bq07qdnmialrh" path="res://assets/sprites/coin.png" id="3_6xp8x"]
+[ext_resource type="Texture2D" uid="uid://egsshigqwov8" path="res://assets/sprites/bg/otherlayer4.png" id="3_77uki"]
+[ext_resource type="PackedScene" uid="uid://c0iivkwkhpe8y" path="res://scenes/ui/upgrade_menu.tscn" id="4_ahdbj"]
+[ext_resource type="Script" path="res://scenes/ui/coin_label.gd" id="6_gmyru"]
+[ext_resource type="Script" path="res://scenes/rooms/hp_label.gd" id="7_cvdda"]
+[ext_resource type="Script" path="res://addons/radial_progress/RadialProgress.gd" id="7_x8dde"]
+
+[sub_resource type="Animation" id="Animation_uvut3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_avw8s"]
+resource_name = "collect"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(0.125, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.5, 1.5)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_f4ipb"]
+_data = {
+"RESET": SubResource("Animation_uvut3"),
+"collect": SubResource("Animation_avw8s")
+}
+
+[sub_resource type="Animation" id="Animation_u3fof"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_04p06"]
+resource_name = "damage_flash"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0335031, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 0, 0, 1), Color(1, 0.0670062, 0.0670062, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uuv2n"]
+_data = {
+"RESET": SubResource("Animation_u3fof"),
+"damage_flash": SubResource("Animation_04p06")
+}
 
 [node name="EndlessMode" instance=ExtResource("1_56is4")]
 script = ExtResource("2_eu4y7")
+asteroid_speed = 10.0
+spawn_delay_seconds = 2.0
+min_spawn_delay_seconds = 0.5
+room_size = Vector2(1280, 720)
+
+[node name="DifficultyIncreaseTimer" type="Timer" parent="." index="0"]
+wait_time = 20.0
+autostart = true
+
+[node name="SpawnTimer" type="Timer" parent="." index="1"]
+autostart = true
+
+[node name="BG" parent="." index="2"]
+metadata/_edit_lock_ = true
+
+[node name="Parallax2D" parent="BG" index="0"]
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" parent="BG/Parallax2D" index="0"]
+metadata/_edit_lock_ = true
+
+[node name="Parallax2D2" parent="BG" index="1"]
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" parent="BG/Parallax2D2" index="0"]
+metadata/_edit_lock_ = true
+
+[node name="Parallax2D3" parent="BG" index="2"]
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" parent="BG/Parallax2D3" index="0"]
+texture = ExtResource("3_77uki")
+metadata/_edit_lock_ = true
+
+[node name="Entities" parent="." index="3"]
+metadata/_edit_lock_ = true
 
 [node name="Player" parent="Entities" index="0"]
-bullet_count = 1
+position = Vector2(962, 533)
+metadata/_edit_group_ = true
 
-[node name="AsteroidSpawner" parent="Entities" index="1" instance=ExtResource("3_i2hpb")]
+[node name="FG" parent="." index="4"]
+metadata/_edit_lock_ = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/Control" index="0"]
+[node name="Parallax2D3" parent="FG" index="0"]
+scroll_offset = Vector2(376, 235)
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" parent="FG/Parallax2D3" index="0"]
+metadata/_edit_lock_ = true
+
+[node name="RoomBounds" parent="." index="5"]
+metadata/_edit_lock_ = true
+
+[node name="BottomBound" parent="RoomBounds" index="0"]
+metadata/_edit_lock_ = true
+
+[node name="BottomBoundShape" parent="RoomBounds/BottomBound" index="0"]
+metadata/_edit_lock_ = true
+
+[node name="TopBound" parent="RoomBounds" index="1"]
+metadata/_edit_lock_ = true
+
+[node name="TopBoundShape" parent="RoomBounds/TopBound" index="0"]
+metadata/_edit_lock_ = true
+
+[node name="LeftBound" parent="RoomBounds" index="2"]
+metadata/_edit_lock_ = true
+
+[node name="LeftBoundShape" parent="RoomBounds/LeftBound" index="0"]
+metadata/_edit_lock_ = true
+
+[node name="RightBound" parent="RoomBounds" index="3"]
+position = Vector2(2000, 0)
+metadata/_edit_lock_ = true
+
+[node name="RightBoundShape" parent="RoomBounds/RightBound" index="0"]
+metadata/_edit_lock_ = true
+
+[node name="ProCam2D" parent="." index="6"]
+position = Vector2(967, 538)
+drag_type = 1
+prediction_time = Vector2(9, 9)
+
+[node name="UI" parent="." index="7"]
+process_mode = 3
+
+[node name="Control" parent="UI" index="0"]
+process_mode = 3
+metadata/_edit_lock_ = true
+
+[node name="UpgradeMenu" parent="UI/Control" index="0" instance=ExtResource("4_ahdbj")]
+
+[node name="CoinContainer" type="HBoxContainer" parent="UI/Control" index="1"]
 layout_mode = 1
 offset_right = 48.0
 offset_bottom = 22.0
+script = ExtResource("6_gmyru")
 
-[node name="TextureRect" type="TextureRect" parent="UI/Control/HBoxContainer" index="0"]
+[node name="TextureRect" type="TextureRect" parent="UI/Control/CoinContainer" index="0"]
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
 texture = ExtResource("3_6xp8x")
 stretch_mode = 4
 
-[node name="CoinLabel" type="Label" parent="UI/Control/HBoxContainer" index="1"]
+[node name="CoinLabel" type="Label" parent="UI/Control/CoinContainer" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "69"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="UI/Control" index="1"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/Control/CoinContainer" index="2"]
+libraries = {
+"": SubResource("AnimationLibrary_f4ipb")
+}
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="UI/Control" index="2"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 1
+anchor_left = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 30.0
-offset_right = -755.0
-offset_bottom = -480.0
+offset_left = -112.0
+offset_bottom = 114.0
+grow_horizontal = 0
+
+[node name="RadialProgress" type="Control" parent="UI/Control/HBoxContainer2" index="0"]
+process_mode = 3
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+script = ExtResource("7_x8dde")
+radius = 37.565
+thickness = 8.0
+bg_color = Color(0.091034, 0.388918, 0.0871034, 1)
+
+[node name="HPLabel" type="Label" parent="UI/Control/HBoxContainer2/RadialProgress" index="0"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -33.0
+offset_top = -11.0
+offset_right = 33.0
+offset_bottom = 11.0
 grow_horizontal = 2
 grow_vertical = 2
-alignment = 1
+text = "number go here"
+horizontal_alignment = 1
+script = ExtResource("7_cvdda")
 
-[node name="Speed" parent="UI/Control/HBoxContainer2" index="0" instance=ExtResource("3_o42k4")]
-layout_mode = 2
-size_flags_horizontal = 3
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/Control/HBoxContainer2/RadialProgress" index="1"]
+libraries = {
+"": SubResource("AnimationLibrary_uuv2n")
+}
 
-[node name="Multishot" parent="UI/Control/HBoxContainer2" index="1" instance=ExtResource("6_y2sph")]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="ProCam2D" parent="." index="5"]
-process_frame = 2
-follow_mode = 0
-drag_type = 0
-smooth_drag = true
-smooth_drag_speed = Vector2(5, 5)
-max_distance = Vector2(100000, 100000)
-offset = Vector2(0, 0)
-smooth_offset = true
-smooth_offset_speed = 2.0
-allow_rotation = true
-smooth_rotation = true
-smooth_rotation_speed = 5.0
-zoom = 1.0
-smooth_zoom = true
-smooth_zoom_speed = 5.0
-auto_zoom = true
-min_zoom = 0.0
-max_zoom = 1.0
-zoom_margin = 5.0
-smooth_limit = true
-left_limit = -10000000
-right_limit = 10000000
-top_limit = -10000000
-bottom_limit = 10000000
-use_h_margins = false
-use_v_margins = false
-working_radius = 2000.0
-global_debug_draw = false
+[connection signal="timeout" from="DifficultyIncreaseTimer" to="." method="_on_difficulty_increase_timer_timeout"]
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]

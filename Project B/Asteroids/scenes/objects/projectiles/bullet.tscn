@@ -43,6 +43,7 @@ _data = {
 }
 
 [node name="Bullet" type="Area2D"]
+collision_layer = 0
 script = ExtResource("1_gcnnn")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -60,6 +61,5 @@ libraries = {
 "": SubResource("AnimationLibrary_jbem3")
 }
 
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bsrko37thm624"]
+[gd_scene load_steps=22 format=3 uid="uid://bsrko37thm624"]
 
 [ext_resource type="Script" path="res://scenes/rooms/room.gd" id="1_baw6i"]
 [ext_resource type="PackedScene" uid="uid://0bv25eepcj8y" path="res://scenes/objects/player.tscn" id="1_x4ct1"]
@@ -10,9 +10,13 @@
 [ext_resource type="Texture2D" uid="uid://lf6ihlcdc2fc" path="res://assets/sprites/bg/layer4.png" id="4_wr7gp"]
 [ext_resource type="PackedScene" uid="uid://ce42ygo6hx81o" path="res://scenes/ui/pause_menu.tscn" id="5_2iira"]
 [ext_resource type="PackedScene" uid="uid://qka3marnmtaa" path="res://scenes/ui/game_over_screen.tscn" id="6_8oovr"]
+[ext_resource type="Texture2D" uid="uid://2vxk33nux3cr" path="res://assets/sprites/bullet.png" id="7_a0ubl"]
 [ext_resource type="Script" path="res://addons/ProCam2D/scripts/core/nds/a.gd" id="7_s34sh"]
 [ext_resource type="Script" path="res://addons/ProCam2D/scripts/core/addns/pcam_shake.gd" id="8_4xrid"]
 [ext_resource type="PackedScene" uid="uid://fab4mmfsxbxn" path="res://scenes/ui/room_selector.tscn" id="13_25dvw"]
+[ext_resource type="PackedScene" uid="uid://oblkt1hwsrkq" path="res://scenes/object_pools/bullet_pool.tscn" id="15_jcv8q"]
+
+[sub_resource type="MultiMesh" id="MultiMesh_elscw"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_cmuvo"]
 
@@ -75,6 +79,10 @@ region_rect = Rect2(0, 0, 2198.01, 2014.13)
 
 [node name="PCamTarget" type="Node2D" parent="Entities/Player"]
 script = ExtResource("4_pybdd")
+
+[node name="BulletContainer" type="MultiMeshInstance2D" parent="Entities"]
+multimesh = SubResource("MultiMesh_elscw")
+texture = ExtResource("7_a0ubl")
 
 [node name="FG" type="Node2D" parent="."]
 
@@ -168,3 +176,5 @@ grow_vertical = 2
 visible = false
 
 [node name="RoomSelector" parent="UI" instance=ExtResource("13_25dvw")]
+
+[node name="BulletPool" parent="." instance=ExtResource("15_jcv8q")]

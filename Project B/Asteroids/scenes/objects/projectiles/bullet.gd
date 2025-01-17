@@ -18,18 +18,17 @@ enum BulletOwner {
 }
 var bullet_owner: BulletOwner = BulletOwner.ENEMY
 
-func _ready() -> void:
-	velocity = direction * bullet_speed
-	bullet_hp = Upgrades.get_level("piercing")
 var r = 0
 
-func _process(delta: float) -> void:
-	# Only runs every 60 physics frames
+func _physics_process(_delta: float) -> void:
+	# Only runs every 60 frames
 	if r == 0:
 		target = get_closest_target()
 	r += 1
 	if r > 60:
 		r = 0
+
+func _process(delta: float) -> void:
 	# Upgrades
 	rotation_speed = (Upgrades.get_level("homing") - 1) * 1
 	bullet_knockback = Upgrades.get_level("punch") * 35
@@ -52,9 +51,7 @@ func _process(delta: float) -> void:
 			body.hit(1, self)
 			bullet_hp -= 1
 			if bullet_hp <= 0:
-				print("hit")
-				queue_free()
-				#BulletPool.return_object(self)
+				get_parent().add_to_pool(self)
 	
 	
 	# Update the bullet's rotation to match the direction of movement
@@ -68,8 +65,8 @@ func _on_timer_timeout() -> void:
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if anim_name != "RESET":
-		queue_free()
-		#BulletPool.return_object(self)
+		get_parent().add_to_pool(self)
+		
 
 # find the closest DestructableObject
 func get_closest_target() -> DestructableObject:
@@ -85,12 +82,11 @@ func get_closest_target() -> DestructableObject:
 				closest_target = node as DestructableObject  # Explicitly cast to DestructableObject
 	return closest_target
 
-func on_activate():
-	timer.start()
+func _pulled_from_pool():
 	animation_player.play("RESET")
-	visible = true
+	timer.start()
 
 
-func on_deactivate():
-	print("deactive")
-	
+func apply_velocity():
+	velocity = direction * bullet_speed
+	bullet_hp = Upgrades.get_level("piercing")

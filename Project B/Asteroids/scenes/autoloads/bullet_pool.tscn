@@ -1,9 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://3pp1gymqe6kl"]
-
-[ext_resource type="Script" path="res://scripts/object_pool.gd" id="1_ubwkn"]
-[ext_resource type="PackedScene" uid="uid://bt5gntkfgkcg6" path="res://scenes/objects/projectiles/bullet.tscn" id="2_clkss"]
-
-[node name="BulletPool" type="Node"]
-script = ExtResource("1_ubwkn")
-object_scene = ExtResource("2_clkss")
-pool_size = 500

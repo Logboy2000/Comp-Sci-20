@@ -6,6 +6,7 @@
 [node name="Asteroid" instance=ExtResource("1_psgtw")]
 spawn_animation = true
 sprite_frames_for_health = true
+dropped_coins = 1
 
 [node name="Sprite2D" parent="." index="1"]
 texture = ExtResource("2_1kxxj")
