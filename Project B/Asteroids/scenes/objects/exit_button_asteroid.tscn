@@ -1,8 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://ctww86bimsj43"]
+[gd_scene load_steps=9 format=3 uid="uid://ctww86bimsj43"]
 
-[ext_resource type="PackedScene" uid="uid://87lypw8l8210" path="res://scenes/objects/asteroids/asteroid.tscn" id="1_n51wa"]
+[ext_resource type="PackedScene" uid="uid://87lypw8l8210" path="res://scenes/objects/destructable_object.tscn" id="1_n51wa"]
 [ext_resource type="Script" path="res://scenes/objects/exit_button_asteroid.gd" id="2_j56sv"]
+[ext_resource type="PackedScene" uid="uid://dogkwe33uof0w" path="res://scenes/particles/asteroid_destroy_particle.tscn" id="3_52lg1"]
 [ext_resource type="Texture2D" uid="uid://d3qtv3lhhnxtt" path="res://assets/sprites/exit_button.png" id="3_pia8w"]
+[ext_resource type="PackedScene" uid="uid://6tm0p3t6kw14" path="res://scenes/particles/asteroid_hit_particle.tscn" id="4_j1kbj"]
+[ext_resource type="AudioStream" uid="uid://cnv7n7imrr2mp" path="res://assets/audio/asteroid_destroy.ogg" id="5_8avhv"]
+[ext_resource type="AudioStream" uid="uid://dyvi7w33lau4n" path="res://assets/audio/asteroid_hit.ogg" id="6_2umb7"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_oqcam"]
 bounce = 1.0
@@ -10,10 +14,18 @@ bounce = 1.0
 [node name="ExitButtonAsteroid" instance=ExtResource("1_n51wa")]
 physics_material_override = SubResource("PhysicsMaterial_oqcam")
 script = ExtResource("2_j56sv")
+destroy_particle = ExtResource("3_52lg1")
+hit_particle = ExtResource("4_j1kbj")
+destroy_sound = ExtResource("5_8avhv")
+hit_sound = ExtResource("6_2umb7")
+health = 2
+spawn_animation = false
+sprite_frames_for_health = false
+dropped_coins = 0
 
-[node name="Sprite2D" parent="." index="1"]
+[node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("3_pia8w")
 hframes = 5
 
-[node name="CollisionPolygon2D" parent="." index="2"]
+[node name="CollisionPolygon2D" parent="." index="1"]
 polygon = PackedVector2Array(-27, -39, 4, -40, 35, -17, 37, 11, 21, 50, 4, 50, -19, 42, -39, 29, -54, -14)

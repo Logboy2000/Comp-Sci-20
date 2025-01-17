@@ -1,11 +1,1 @@
 res://default_bus_layout.tres
-res://scenes/objects/enemies/enemy_1.tscn
-res://theme.tres
-res://shaders/distortion.gdshader
-res://scenes/rooms/room.tscn
-res://scenes/rooms/endless_mode.tscn
-res://scenes/objects/destructable_object.tscn
-res://scenes/autoloads/audio.gd
-res://scenes/autoloads/audio.tscn
-res://scenes/rooms/endless_mode.gd
-res://scenes/autoloads/upgrades.gd

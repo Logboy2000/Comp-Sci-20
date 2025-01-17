@@ -46,13 +46,6 @@ int line1[] = {43, 42, 41, 40, 39, 38, 78, 77, 68, 67, 8, 7, 6, 2, 3};
 int line2[] = {20, 21, 17, 16, 15, 14, 70, 69, 84, 83, 57, 56, 55, 54, 50, 51};
 int line3[] = {27, 26, 30, 31, 32, 33, 76, 85, 86, 87, 88, 93, 92};
 
-int letterS[] = {82, 79, 37, 34, 33, 76, 85, 86, 62, 67, 10, 13};
-int letterI[] = {41,40,39,38,78,77,68,67,8,7,11,10,66,65,35,36,38,79,80,81};
-int letterG[] = {40};
-int text100[] = {};
-int letterQuestionMark[] = {};
-int percentSymbol[] = {};
-
 
 
 void setup()
@@ -61,9 +54,7 @@ void setup()
   pinMode(OUTPUT_PIN, OUTPUT);
   pinMode(INPUT_PIN, INPUT);
   FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_LEDS);
-
-
-  digitalWrite(OUTPUT_PIN, HIGH);
+  digitalWrite(OUTPUT_PIN, HIGH); // tell arch to start
 } // end of setup
 
 void loop()
@@ -89,7 +80,7 @@ void lightshow()
   endToStart(CRGB(255, 255, 0), del);
   endToStart(CRGB(255, 255, 255), del);
   endToStart(CRGB(0, 0, 0), del);
-  for (int i = 0; i < 6; i++)
+  for (int i = 0; i < 5; i++)
   {
     allOutside(CRGB(0, 255, 255));
     allInside(CRGB(255, 255, 255));
@@ -121,26 +112,47 @@ void lightshow()
     delay(50);
   }
   middleToEnds(1, BLACK, BLACK);
-  endsToMiddle(1, WHITE, WHITE);
 
-  for (int i = 0; i < 2; i++)
+
+  endsToMiddle(1, BLACK, WHITE);
+  middleToEnds(1, CYAN, BLACK);
+  middleToEnds(1, BLACK, GREEN);
+  endsToMiddle(1, RED, RED);
+  endsToMiddle(2, BLACK, WHITE);
+  middleToEnds(2, CYAN, BLACK);
+  middleToEnds(2, BLACK, GREEN);
+
+  for (int ledCount = 49; ledCount < NUM_LEDS; ledCount += 10)
   {
-    endsToMiddle(i * 2, BLACK, WHITE);
-    middleToEnds(i * 2, CYAN, BLACK);
-    middleToEnds(i * 2, BLACK, GREEN);
-    endsToMiddle(i * 2, RED, BLACK);
+    sparkle(WHITE, 10, ledCount, 10);
   }
-  allLeds(CRGB(255, 0, 0));
-  arrayToColor(letterS, 13, WHITE);
-  delay(1000);
-  allLeds(CRGB(255, 0, 0));
-  arrayToColor(letterI, 20, WHITE);
+  endsToMiddle(1, RED, RED);
+  fadeTo(RED, 10);
+  fadeTo(CYAN, 10);
+
+  endsToMiddle(10, BLUE, BLUE);
+  endsToMiddle(10, RED, RED);
+  middleToEnds(10, GREEN, GREEN);
+  endsToMiddle(10, BLUE, BLUE);
+  endsToMiddle(10, CYAN, CYAN);
+  endsToMiddle(10, GREEN, GREEN);
+  middleToEnds(10, BLUE, BLUE);
+  endsToMiddle(10, MAGENTA, MAGENTA);
 
 
+  for (int ledCount = 59; ledCount < NUM_LEDS; ledCount++)
+  {
+    sparkle(WHITE, 10, ledCount, 10);
+  }
+  for (int ledCount = NUM_LEDS; ledCount > 2; ledCount = ledCount - 3)
+  {
+    sparkle(WHITE, 10, ledCount, 10);
+  }
+  blackout();
+  delay(200);
+  pulse(WHITE, 0, 0, 20);
+} // end of lightshow
 
-
-  delay(del2);
-}
 
 void startToEnd(CRGB color, int delayMil)
 {
@@ -175,15 +187,12 @@ void gradientLine(int startIndex, int endIndex, CRGB color1, CRGB color2)
 
   for (int i = startIndex; i <= endIndex; i++)
   {
-    // Calculate the interpolation factor based on the current position
     float factor = float(i - startIndex) / float(numLeds - 1);
 
-    // Interpolate the RGB values for the gradient
     uint8_t r = color1.r + factor * (color2.r - color1.r);
     uint8_t g = color1.g + factor * (color2.g - color1.g);
     uint8_t b = color1.b + factor * (color2.b - color1.b);
 
-    // Set the color of the LED at position i
     leds[i] = CRGB(r, g, b);
   }
 
@@ -211,7 +220,7 @@ void allInside(CRGB color)
 void allLeds(CRGB color)
 {
   line(0, NUM_LEDS, color);
-}
+} // end of allLeds
 
 void blackout()
 {
@@ -253,3 +262,54 @@ void middleToEnds(int delayMil, CRGB colorR, CRGB colorL)
     delay(delayMil);
   }
 } // end of middleToEnds
+
+void sparkle(CRGB color, int delayMil, int numSparkle, int sparkleRepeat)
+{
+  for (int count = 0; count < sparkleRepeat; count++)
+  {
+    for (int i = 0; i < numSparkle; i++)
+    {
+      int ledIndex = random(NUM_LEDS); // Randomly select an LED to light up
+      leds[ledIndex] = color;
+    }
+    FastLED.show();
+    delay(delayMil);
+
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      leds[i] = BLACK; // Turn off the LED
+    }
+  }
+} // end of sparkle
+
+void pulse(CRGB color, int fadeInDel, int holdTime, int fadeOutDel)
+{
+  fadeTo(color, fadeInDel);
+  delay(holdTime);
+  fadeTo(BLACK, fadeOutDel);
+} // end of pulse
+
+void fadeTo(CRGB color, int delayMil)
+{
+  int fadeAmount = 5; // Adjust this value for the fade speed
+
+  for (int i = 0; i < 256; i += fadeAmount)
+  {
+    for (int j = 0; j < NUM_LEDS; j++)
+    {
+      CRGB currentColor = leds[j]; // Get the current color of each LED
+      leds[j] = CRGB(
+                  currentColor.r + (color.r - currentColor.r) * i / 255,
+                  currentColor.g + (color.g - currentColor.g) * i / 255,
+                  currentColor.b + (color.b - currentColor.b) * i / 255);
+    }
+    FastLED.show();
+    delay(delayMil);
+  }
+} // end of fadeTo
+
+void alternatingColors(CRGB color1, CRGB color2)
+{
+  line(0, LAST_LED, color1);
+  line(1, LAST_LED, color2);
+} // end of alternatingColors
