@@ -1,9 +1,1 @@
 res://default_bus_layout.tres
-res://scenes/objects/projectiles/bullet.tscn
-res://shaders/crt.gdshader
-res://theme.tres
-res://shaders/distortion.gdshader
-res://scenes/object_pools/bullet_pool.tscn
-res://scenes/rooms/room.tscn
-res://scenes/autoloads/object_pool.gd
-res://scenes/objects/player.gd
