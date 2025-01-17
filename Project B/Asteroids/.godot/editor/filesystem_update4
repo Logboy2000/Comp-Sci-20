@@ -1,1 +1,4 @@
 res://default_bus_layout.tres
+res://shaders/crt.gdshader
+res://theme.tres
+res://shaders/distortion.gdshader
