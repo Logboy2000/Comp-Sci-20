@@ -26,7 +26,11 @@ const OBJECTS = [
 		"weight": 20,
 		"min_difficulty": 5
 	},
-	
+	{
+		"scene": preload("res://scenes/objects/enemies/worm_boss.tscn"),
+		"weight": 100,
+		"min_difficulty": 1
+	},
 
 ]
 
@@ -96,9 +100,9 @@ func _on_spawn_timer_timeout() -> void:
 			randf_range(0, room_size.x),
 			randf_range(0, room_size.y)
 		)
-		
-		new_object.linear_velocity = Vector2(randf_range(-1,1),randf_range(-1,1)) * asteroid_speed
-		new_object.angular_velocity = randi_range(-10, 10)
-		new_object.spawn_animation = true
+		if new_object is DestructableObject:
+			new_object.linear_velocity = Vector2(randf_range(-1,1),randf_range(-1,1)) * asteroid_speed
+			new_object.angular_velocity = randi_range(-10, 10)
+			new_object.spawn_animation = true
 		
 		GameManager.add_entity(new_object)

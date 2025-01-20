@@ -31,8 +31,8 @@ func hit(damage: int, damage_source_node: Node2D, knockback_force: float = 30):
 		else:
 			if sprite_frames_for_health:
 				sprite.frame += damage
-			var particle = hit_particle.instantiate()
-			particle.position = global_position
+			var particle: Node2D = hit_particle.instantiate()
+			particle.global_position = global_position
 			add_sibling(particle)
 			Audio.play_sound(hit_sound)
 			
@@ -65,10 +65,10 @@ func destroy():
 	Audio.play_sound(destroy_sound)
 	for i in dropped_coins:
 		var coin = COIN.instantiate()
-		coin.position = global_position
+		coin.global_position = global_position
 		call_deferred("add_sibling", coin)
 	var particle = destroy_particle.instantiate()
-	particle.position = global_position
+	particle.global_position = global_position
 	add_sibling(particle)
 	
 	queue_free()
