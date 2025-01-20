@@ -1,4 +1,10 @@
 html, body, canvas {
     padding: 0;
-    margin: 0
+    margin: 0;
+    height: 100%;
+}
+
+#canvas {
+    display: block;
+    height: 100%;
 }

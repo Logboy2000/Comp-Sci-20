@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://0bv25eepcj8y"]
+[gd_scene load_steps=12 format=3 uid="uid://0bv25eepcj8y"]
 
 [ext_resource type="Texture2D" uid="uid://dnwfhn7gnpkju" path="res://assets/sprites/player.png" id="1_a5hl3"]
 [ext_resource type="Script" path="res://scenes/objects/player.gd" id="1_es4y8"]
+[ext_resource type="Shader" path="res://shaders/distortion.gdshader" id="2_gthgs"]
 
 [sub_resource type="Animation" id="Animation_u3fof"]
 length = 0.001
@@ -48,6 +49,20 @@ height = 12.0
 size = Vector2(30, 30)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1yugf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mvr7f"]
+shader = ExtResource("2_gthgs")
+shader_parameter/spin_rotation_speed = 100.0
+shader_parameter/move_speed = 7.0
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/colour_1 = Color(0.870588, 0.266667, 0.231373, 0)
+shader_parameter/colour_2 = Color(0, 0.419608, 0.705882, 0)
+shader_parameter/colour_3 = Color(0.0862745, 0.137255, 0.145098, 0)
+shader_parameter/contrast = 3.5
+shader_parameter/lighting = 0.4
+shader_parameter/spin_amount = 0.25
+shader_parameter/pixel_filter = 740.0
+shader_parameter/is_rotating = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gev2g"]
 size = Vector2(4, 4)
@@ -102,6 +117,20 @@ wait_time = 0.2
 one_shot = true
 
 [node name="Visuals" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Visuals"]
+material = SubResource("ShaderMaterial_mvr7f")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 19.0
+offset_bottom = 21.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="Visuals"]
 rotation = 1.5708

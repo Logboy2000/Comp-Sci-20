@@ -1,3 +1,5 @@
+MeshInstance2D
+ColorRect
 Bullet
 Node2D
 ObjectPool
@@ -10,6 +12,4 @@ VBoxContainer
 Panel
 SubViewport
 TextureRect
-ColorRect
 RigidBody2D
-Parallax2D

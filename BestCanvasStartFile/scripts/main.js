@@ -16,10 +16,8 @@ var camera = {
     zoom: 1
 }
 
-var player
-var fpsGraph
 
-function ready() {
+function engineReady() {
     var canvas = getElement('canvas')
     var ctx = canvas.getContext('2d')
 
@@ -40,22 +38,24 @@ function ready() {
         () =>
             requestAnimationFrame(
                 () =>
-                    process(canvas, ctx)
+                    engineProcess(canvas, ctx)
             ),
-        0
+        1
     )
 }
 
-function process(canvas, ctx) {
+function engineProcess(canvas, ctx) {
+    // FPS Calculations
     const currentTime = performance.now()
     deltaTime = (currentTime - lastUpdateTime) / 1000
     var timeDifference = currentTime - lastUpdateTime;
 
-    // Prevent division by zero or extremely small time differences
+    // Prevent division by zero
     if (timeDifference <= 0) {
-        timeDifference = 1; // Assign a small positive value to avoid Infinity
+        timeDifference = 1
     }
 
+    // Calculate FPS to 2 decimal places
     fps = (1000 / timeDifference).toFixed(2)
     lastUpdateTime = currentTime
 
@@ -65,37 +65,77 @@ function process(canvas, ctx) {
     canvasMiddle.x = canvas.width / 2
     canvasMiddle.y = canvas.height / 2
 
+    Input._process()
+    
 
-
-
+    process()
     ////DRAWiNG////
+    //clear screen
+    ctx.fillStyle = "#FFFFFF"
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
     // Apply Camera Zoom
     ctx.save()
     ctx.translate(-camera.x + canvas.width / 2, -camera.y + canvas.height / 2)
     ctx.scale(camera.zoom, camera.zoom)
 
-    //clear screen and draw
-    ctx.fillStyle = "#FFFFFF"
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    // draw stuff affected by camera
     draw(ctx)
 
     // Finish Camera Zoom
     ctx.restore()
 
-
+    // draw stuff not affected by camera
     drawUI(ctx)
 }
 
-function drawUI(ctx) {
-    ctx.fillStyle = "#000000"
-    fpsGraph.drawGraph(ctx, fps, 30, 30, 200, 100, "fps", "time", "")
-    console.log(fps)
+function process() {
+    // Input
+    if (Input.isKeyPressed("w")) {
+        camera.y -= 10
+    }
+    if (Input.isKeyPressed("a")) {
+        camera.x -= 10
+    }
+    if (Input.isKeyPressed("s")) {
+        camera.y += 10
+    }
+    if (Input.isKeyPressed("d")) {
+        camera.x += 10
+    }
+    if (Input.isKeyPressed("q")) {
+        if (camera.zoom > 0.1) {
+            camera.zoom -= 0.01
+        }
+        
+
+    }
+    if (Input.isKeyPressed("e")) {
+        camera.zoom += 0.01
+    }
+    if (Input.isKeyJustPressed("r")) {
+        camera.zoom = 1
+    }
+    if (Input.getScrollDelta() > 0) {
+        camera.zoom += 0.01
+    }
+    if (Input.getScrollDelta() < 0) {
+        if (camera.zoom > 0.1) {
+            camera.zoom -= 0.01
+        }
+    }
 }
 
 function draw(ctx) {
     ctx.fillStyle = '#000000'
-
+    ctx.fillRect(0, 0, 100, 100)
 }
+function drawUI(ctx) {
+    ctx.fillStyle = "#000000"
+    fpsGraph.drawGraph(ctx, fps, 30, 30, 200, 100, "fps", "time", "")
+}
+
+
 
 
 function getElement(id = '') {

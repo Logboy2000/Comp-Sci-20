@@ -94,7 +94,6 @@ func _ready() -> void:
 	add_child(shooting_timer)
 
 func _physics_process(_delta: float) -> void:
-	
 	input_direction = Vector2(Input.get_axis("left", "right"), Input.get_axis("up", "down")).normalized()
 	mouse_direction = (get_global_mouse_position() - global_position).normalized()
 	if keyboard_only_controls:

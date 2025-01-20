@@ -30,7 +30,7 @@ func _physics_process(_delta: float) -> void:
 
 func _process(delta: float) -> void:
 	# Upgrades
-	rotation_speed = (Upgrades.get_level("homing") - 1) * 1
+	rotation_speed = min(Upgrades.get_level("homing") - 1, 8)
 	bullet_knockback = Upgrades.get_level("punch") * 35
 	
 	if target == null: 

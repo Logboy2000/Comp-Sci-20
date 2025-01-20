@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bsrko37thm624"]
+[gd_scene load_steps=23 format=3 uid="uid://bsrko37thm624"]
 
 [ext_resource type="Script" path="res://scenes/rooms/room.gd" id="1_baw6i"]
 [ext_resource type="PackedScene" uid="uid://0bv25eepcj8y" path="res://scenes/objects/player.tscn" id="1_x4ct1"]
@@ -17,6 +17,10 @@
 [ext_resource type="PackedScene" uid="uid://oblkt1hwsrkq" path="res://scenes/object_pools/bullet_pool.tscn" id="15_jcv8q"]
 
 [sub_resource type="MultiMesh" id="MultiMesh_elscw"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_uhe55"]
+friction = 0.0
+bounce = 1.0
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_cmuvo"]
 
@@ -102,6 +106,7 @@ region_rect = Rect2(0, 0, 2198.01, 2014.13)
 [node name="BottomBound" type="StaticBody2D" parent="RoomBounds"]
 collision_layer = 15
 collision_mask = 0
+physics_material_override = SubResource("PhysicsMaterial_uhe55")
 
 [node name="BottomBoundShape" type="CollisionShape2D" parent="RoomBounds/BottomBound"]
 shape = SubResource("WorldBoundaryShape2D_cmuvo")
@@ -109,6 +114,7 @@ shape = SubResource("WorldBoundaryShape2D_cmuvo")
 [node name="TopBound" type="StaticBody2D" parent="RoomBounds"]
 collision_layer = 15
 collision_mask = 0
+physics_material_override = SubResource("PhysicsMaterial_uhe55")
 
 [node name="TopBoundShape" type="CollisionShape2D" parent="RoomBounds/TopBound"]
 shape = SubResource("WorldBoundaryShape2D_fmg2n")
@@ -116,6 +122,7 @@ shape = SubResource("WorldBoundaryShape2D_fmg2n")
 [node name="LeftBound" type="StaticBody2D" parent="RoomBounds"]
 collision_layer = 15
 collision_mask = 0
+physics_material_override = SubResource("PhysicsMaterial_uhe55")
 
 [node name="LeftBoundShape" type="CollisionShape2D" parent="RoomBounds/LeftBound"]
 shape = SubResource("WorldBoundaryShape2D_ed51v")
@@ -123,6 +130,7 @@ shape = SubResource("WorldBoundaryShape2D_ed51v")
 [node name="RightBound" type="StaticBody2D" parent="RoomBounds"]
 collision_layer = 15
 collision_mask = 0
+physics_material_override = SubResource("PhysicsMaterial_uhe55")
 
 [node name="RightBoundShape" type="CollisionShape2D" parent="RoomBounds/RightBound"]
 shape = SubResource("WorldBoundaryShape2D_5yetn")

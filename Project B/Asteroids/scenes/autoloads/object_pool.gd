@@ -13,6 +13,7 @@ func add_to_pool(object: Node2D) -> void:
 	object.set_process(false)
 	object.set_physics_process(false)
 	object.hide()
+	object.global_position = Vector2(-100,-100)
 
 func pull_from_pool() -> Node2D:
 	var object: Node2D
@@ -24,7 +25,6 @@ func pull_from_pool() -> Node2D:
 	object.set_process(true)
 	object.set_physics_process(true)
 	object.show()
-	print(object_pool.size())
 	if object.has_method("_pulled_from_pool"):
 		object._pulled_from_pool()
 	return object

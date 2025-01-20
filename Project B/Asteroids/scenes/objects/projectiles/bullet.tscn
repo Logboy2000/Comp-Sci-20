@@ -44,6 +44,7 @@ _data = {
 
 [node name="Bullet" type="Area2D"]
 collision_layer = 0
+monitorable = false
 script = ExtResource("1_gcnnn")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
