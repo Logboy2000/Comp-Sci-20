@@ -5,11 +5,15 @@ const zoom_mult = 1.1
 const max_zoom = 10
 const min_zoom = 0.5
 
+@onready var bullet_pool: ObjectPool = $BulletPool
+@onready var coin_pool: ObjectPool = $CoinPool
+
 @onready var entities: Node2D = $Entities
 @onready var camera: Node2D = $ProCam2D
 @onready var game_over_screen: CanvasLayer = $UI/GameOverScreen
 @onready var bg: Node2D = $BG
 @onready var fg: Node2D = $FG
+
 
 @onready var bottom_bound: StaticBody2D = $RoomBounds/BottomBound
 @onready var top_bound: StaticBody2D = $RoomBounds/TopBound
@@ -57,6 +61,4 @@ func _process(_delta: float) -> void:
 	camera.global_debug_draw = GameManager.debug_mode
 
 func add_entity(entity: Node):
-	entities.add_child(entity)
-
-@onready var bullet_pool: ObjectPool = $BulletPool
+	entities.call_deferred("add_child", entity)

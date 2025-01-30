@@ -82,9 +82,13 @@ func get_closest_target() -> DestructableObject:
 				closest_target = node as DestructableObject  # Explicitly cast to DestructableObject
 	return closest_target
 
+func _returned_to_pool():
+	monitoring = false
+
 func _pulled_from_pool():
 	animation_player.play("RESET")
 	timer.start()
+	monitoring = true
 
 
 func apply_velocity():

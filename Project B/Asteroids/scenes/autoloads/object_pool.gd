@@ -1,8 +1,9 @@
 class_name ObjectPool extends Node2D
-
+@export_category("i fucking hate object pooling")
 @export var object_scene: PackedScene
+@export var starting_size: int = 0
+
 var object_pool: Array = []
-@export var starting_size: int = 15
 
 func _ready() -> void:
 	for i in range(starting_size):
@@ -13,23 +14,21 @@ func add_to_pool(object: Node2D) -> void:
 	object.set_process(false)
 	object.set_physics_process(false)
 	object.hide()
-	object.global_position = Vector2(-100,-100)
+	if object.has_method("_returned_to_pool"):
+		object.call("_returned_to_pool")
 
 func pull_from_pool() -> Node2D:
-	var object: Node2D
 	if object_pool.is_empty():
 		add_new_object()
-		object = object_pool.pop_back()
-	else:
-		object = object_pool.pop_back()
+	var object: Node2D = object_pool.pop_back()
 	object.set_process(true)
 	object.set_physics_process(true)
 	object.show()
 	if object.has_method("_pulled_from_pool"):
-		object._pulled_from_pool()
+		object.call("_pulled_from_pool")
 	return object
 
-func add_new_object():
-	var object = object_scene.instantiate()
-	add_child(object)  # Add to the scene tree first
-	add_to_pool(object)  # Then deactivate and hide
+func add_new_object() -> void:
+	var object: Node2D = object_scene.instantiate() as Node2D
+	add_child(object)
+	add_to_pool(object)

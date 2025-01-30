@@ -1,6 +1,5 @@
 class_name DestructableObject extends RigidBody2D
 
-const COIN = preload("res://scenes/objects/collectables/coin.tscn")
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var sprite: Sprite2D = $Sprite2D
 @export var destroy_particle: PackedScene = preload("res://scenes/particles/asteroid_destroy_particle.tscn")
@@ -32,8 +31,9 @@ func hit(damage: int, damage_source_node: Node2D, knockback_force: float = 30):
 			if sprite_frames_for_health:
 				sprite.frame += damage
 			var particle: Node2D = hit_particle.instantiate()
-			particle.global_position = global_position
-			add_sibling(particle)
+			if particle:
+				particle.global_position = global_position
+				GameManager.add_entity(particle)
 			Audio.play_sound(hit_sound)
 			
 			# Get bullet velocity or knockback force depending on the damage source
@@ -60,15 +60,15 @@ func hit(damage: int, damage_source_node: Node2D, knockback_force: float = 30):
 
 
 	
-
+const COIN = preload("res://scenes/objects/collectables/coin.tscn")
 func destroy():
 	Audio.play_sound(destroy_sound)
 	for i in dropped_coins:
 		var coin = COIN.instantiate()
 		coin.global_position = global_position
 		call_deferred("add_sibling", coin)
+		print("pull:", coin.position)
 	var particle = destroy_particle.instantiate()
 	particle.global_position = global_position
-	add_sibling(particle)
-	
-	queue_free()
+	GameManager.add_entity(particle)
+	call_deferred("queue_free")

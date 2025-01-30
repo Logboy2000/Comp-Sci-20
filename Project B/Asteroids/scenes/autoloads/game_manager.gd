@@ -9,6 +9,7 @@ var player: Player
 var can_pause = true
 var camera
 var coins: int = 0
+var difficulty: int = 1
 
 var settings: Dictionary = {
 	"camera_shake": true,

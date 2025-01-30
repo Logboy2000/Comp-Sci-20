@@ -16,22 +16,16 @@ var camera = {
     zoom: 1
 }
 
+var gameObjects = []
+
 
 function engineReady() {
     var canvas = getElement('canvas')
     var ctx = canvas.getContext('2d')
 
     lastUpdateTime = performance.now()
+    _ready()
 
-    fpsGraph = new Graph({
-        yellowThreshold: 30,
-        greenThreshold: 600,
-        labelCount: 5,
-        stepSize: 0.1,
-        minYScale: 1,
-        decimalPlaces: 2,
-        higherIsBetter: true
-    });
 
 
     setInterval(
@@ -66,9 +60,9 @@ function engineProcess(canvas, ctx) {
     canvasMiddle.y = canvas.height / 2
 
     Input._process()
-    
 
-    process()
+
+
     ////DRAWiNG////
     //clear screen
     ctx.fillStyle = "#FFFFFF"
@@ -80,7 +74,11 @@ function engineProcess(canvas, ctx) {
     ctx.scale(camera.zoom, camera.zoom)
 
     // draw stuff affected by camera
-    draw(ctx)
+    _process()
+    for (var i = 0; i < gameObjects.length; i++) {
+        gameObjects[i]._process()
+        gameObjects[i]._draw(ctx)
+    }
 
     // Finish Camera Zoom
     ctx.restore()
@@ -89,54 +87,42 @@ function engineProcess(canvas, ctx) {
     drawUI(ctx)
 }
 
-function process() {
+function _ready() {
+    fpsGraph = new Graph({
+        yellowThreshold: 30,
+        greenThreshold: 600,
+        labelCount: 5,
+        stepSize: 0.1,
+        minYScale: 1,
+        decimalPlaces: 2,
+        higherIsBetter: true
+    })
+    gameObjects.push(new Sprite('images/layer1.png', 0, 0, 5))
+}
+
+function _process() {
     // Input
     if (Input.isKeyPressed("w")) {
-        camera.y -= 10
+        camera.y -= 100 * deltaTime
     }
     if (Input.isKeyPressed("a")) {
-        camera.x -= 10
+        camera.x -= 100 * deltaTime
     }
     if (Input.isKeyPressed("s")) {
-        camera.y += 10
+        camera.y += 100 * deltaTime
     }
     if (Input.isKeyPressed("d")) {
-        camera.x += 10
-    }
-    if (Input.isKeyPressed("q")) {
-        if (camera.zoom > 0.1) {
-            camera.zoom -= 0.01
-        }
-        
-
-    }
-    if (Input.isKeyPressed("e")) {
-        camera.zoom += 0.01
+        camera.x += 100 * deltaTime
     }
     if (Input.isKeyJustPressed("r")) {
         camera.zoom = 1
     }
-    if (Input.getScrollDelta() > 0) {
-        camera.zoom += 0.01
-    }
-    if (Input.getScrollDelta() < 0) {
-        if (camera.zoom > 0.1) {
-            camera.zoom -= 0.01
-        }
-    }
 }
 
-function draw(ctx) {
-    ctx.fillStyle = '#000000'
-    ctx.fillRect(0, 0, 100, 100)
-}
 function drawUI(ctx) {
     ctx.fillStyle = "#000000"
     fpsGraph.drawGraph(ctx, fps, 30, 30, 200, 100, "fps", "time", "")
 }
-
-
-
 
 function getElement(id = '') {
     return document.getElementById(id)

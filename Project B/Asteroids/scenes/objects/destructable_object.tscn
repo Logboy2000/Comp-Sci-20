@@ -4,7 +4,7 @@
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vqih8"]
 rough = true
-bounce = 1.0
+bounce = 0.64
 
 [sub_resource type="Animation" id="Animation_fjxej"]
 length = 0.001

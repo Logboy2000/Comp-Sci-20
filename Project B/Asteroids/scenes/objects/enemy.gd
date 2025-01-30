@@ -2,6 +2,7 @@ class_name Enemy
 extends DestructableObject # extends rigidbody2d
 
 @export var do_follow: bool = true
+@export var follow_player: bool = false
 @export var rotate_toward_velocity: bool = false
 @export var follow_speed: float = 1
 @export var do_contact_damage: bool = true
@@ -10,7 +11,7 @@ var follow_target: Node2D = null
 
 func _ready() -> void:
 	super._ready()
-	if GameManager.player:
+	if GameManager.player and follow_player:
 		follow_target = GameManager.player
 
 func _physics_process(_delta: float) -> void:

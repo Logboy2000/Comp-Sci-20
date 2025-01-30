@@ -1,7 +1,5 @@
 class_name EndlessRoom extends Room
 
-var difficulty: int = 0
-
 const MUSIC_CHILL = preload("res://assets/audio/music_chill.ogg")
 
 const OBJECTS = [
@@ -15,21 +13,15 @@ const OBJECTS = [
 		"weight": 25,
 		"min_difficulty": 1
 	},
-	
-	{
-		"scene": preload("res://scenes/objects/enemies/enemy_1.tscn"),
-		"weight": 10,
-		"min_difficulty": 3
-	},
 	{
 		"scene": preload("res://scenes/objects/asteroids/explosive_asteroid.tscn"),
 		"weight": 20,
-		"min_difficulty": 5
+		"min_difficulty": 3
 	},
 	{
-		"scene": preload("res://scenes/objects/enemies/worm_boss.tscn"),
-		"weight": 100,
-		"min_difficulty": 1
+		"scene": preload("res://scenes/objects/enemies/worm/worm_boss.tscn"),
+		"weight": 6,
+		"min_difficulty": 5
 	},
 
 ]
@@ -38,8 +30,9 @@ const OBJECTS = [
 
 @onready var spawn_timer: Timer = $SpawnTimer
 @export var asteroid_speed: float = 10
-@export var spawn_delay_seconds: float = 2
-@export var min_spawn_delay_seconds = 0.5
+@export var spawn_delay_seconds: float = 5
+@export var min_spawn_delay_seconds = 1
+var do_spawning = true
 
 const SPAWN_SOUND = preload("res://assets/audio/spawn.ogg")
 
@@ -60,15 +53,17 @@ func _on_difficulty_increase_timer_timeout() -> void:
 	increase_difficulty()
 
 func increase_difficulty():
-	difficulty += 1
-	spawn_timer.wait_time = max(spawn_delay_seconds / difficulty, min_spawn_delay_seconds)
-	DebugMenu.modify_label("difficulty", "Diff: " + str(difficulty))
+	GameManager.difficulty += 1
+	spawn_timer.wait_time = max(spawn_delay_seconds / GameManager.difficulty, min_spawn_delay_seconds)
+	DebugMenu.modify_label("difficulty", "Diff: " + str(GameManager.difficulty))
 
 func _on_spawn_timer_timeout() -> void:
+	if do_spawning == false:
+		return
 	# Filter objects by difficulty
 	var eligible_objects = []
 	for obj in OBJECTS:
-		if difficulty >= obj["min_difficulty"]:
+		if GameManager.difficulty >= obj["min_difficulty"]:
 			eligible_objects.append(obj)
 	
 	# If no objects are eligible, do nothing

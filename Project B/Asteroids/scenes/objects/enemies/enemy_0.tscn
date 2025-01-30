@@ -6,6 +6,9 @@
 size = Vector2(16, 16)
 
 [node name="Enemy0" instance=ExtResource("1_s4rrw")]
+do_follow = true
+follow_player = true
+rotate_toward_velocity = false
 dropped_coins = 3
 
 [node name="AnimationPlayer" parent="." index="0"]

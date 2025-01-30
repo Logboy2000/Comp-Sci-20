@@ -7,6 +7,9 @@
 radius = 17.0294
 
 [node name="Enemy1" instance=ExtResource("1_t2h6q")]
+do_follow = true
+follow_player = true
+rotate_toward_velocity = false
 follow_speed = -1.0
 dropped_coins = 20
 

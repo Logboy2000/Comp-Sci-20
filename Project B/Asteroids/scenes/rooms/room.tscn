@@ -10,13 +10,12 @@
 [ext_resource type="Texture2D" uid="uid://lf6ihlcdc2fc" path="res://assets/sprites/bg/layer4.png" id="4_wr7gp"]
 [ext_resource type="PackedScene" uid="uid://ce42ygo6hx81o" path="res://scenes/ui/pause_menu.tscn" id="5_2iira"]
 [ext_resource type="PackedScene" uid="uid://qka3marnmtaa" path="res://scenes/ui/game_over_screen.tscn" id="6_8oovr"]
-[ext_resource type="Texture2D" uid="uid://2vxk33nux3cr" path="res://assets/sprites/bullet.png" id="7_a0ubl"]
 [ext_resource type="Script" path="res://addons/ProCam2D/scripts/core/nds/a.gd" id="7_s34sh"]
 [ext_resource type="Script" path="res://addons/ProCam2D/scripts/core/addns/pcam_shake.gd" id="8_4xrid"]
 [ext_resource type="PackedScene" uid="uid://fab4mmfsxbxn" path="res://scenes/ui/room_selector.tscn" id="13_25dvw"]
-[ext_resource type="PackedScene" uid="uid://oblkt1hwsrkq" path="res://scenes/object_pools/bullet_pool.tscn" id="15_jcv8q"]
-
-[sub_resource type="MultiMesh" id="MultiMesh_elscw"]
+[ext_resource type="Script" path="res://scenes/autoloads/object_pool.gd" id="15_ovs5x"]
+[ext_resource type="PackedScene" uid="uid://bt5gntkfgkcg6" path="res://scenes/objects/projectiles/bullet.tscn" id="15_v73hg"]
+[ext_resource type="PackedScene" uid="uid://d2wai4lnjhkfw" path="res://scenes/objects/collectables/coin.tscn" id="16_8g4hf"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_uhe55"]
 friction = 0.0
@@ -83,10 +82,6 @@ region_rect = Rect2(0, 0, 2198.01, 2014.13)
 
 [node name="PCamTarget" type="Node2D" parent="Entities/Player"]
 script = ExtResource("4_pybdd")
-
-[node name="BulletContainer" type="MultiMeshInstance2D" parent="Entities"]
-multimesh = SubResource("MultiMesh_elscw")
-texture = ExtResource("7_a0ubl")
 
 [node name="FG" type="Node2D" parent="."]
 
@@ -185,4 +180,10 @@ visible = false
 
 [node name="RoomSelector" parent="UI" instance=ExtResource("13_25dvw")]
 
-[node name="BulletPool" parent="." instance=ExtResource("15_jcv8q")]
+[node name="BulletPool" type="Node2D" parent="."]
+script = ExtResource("15_ovs5x")
+object_scene = ExtResource("15_v73hg")
+
+[node name="CoinPool" type="Node2D" parent="."]
+script = ExtResource("15_ovs5x")
+object_scene = ExtResource("16_8g4hf")

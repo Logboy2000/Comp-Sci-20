@@ -10,7 +10,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Control:position")
+tracks/0/path = NodePath("Control/MarginContainer:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -22,7 +22,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:visible")
+tracks/1/path = NodePath("Control/MarginContainer:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -38,7 +38,7 @@ length = 0.25
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Control:position")
+tracks/0/path = NodePath("Control/MarginContainer:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -50,7 +50,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:visible")
+tracks/1/path = NodePath("Control/MarginContainer:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -66,7 +66,7 @@ length = 0.25
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Control:position")
+tracks/0/path = NodePath("Control/MarginContainer:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -78,7 +78,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:visible")
+tracks/1/path = NodePath("Control/MarginContainer:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -94,7 +94,7 @@ length = 0.25
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Control:position")
+tracks/0/path = NodePath("Control/MarginContainer:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -106,7 +106,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:visible")
+tracks/1/path = NodePath("Control/MarginContainer:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -122,7 +122,7 @@ length = 0.25
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Control:position")
+tracks/0/path = NodePath("Control/MarginContainer:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -134,7 +134,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:visible")
+tracks/1/path = NodePath("Control/MarginContainer:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -150,7 +150,7 @@ length = 0.25
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Control:position")
+tracks/0/path = NodePath("Control/MarginContainer:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -162,7 +162,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:visible")
+tracks/1/path = NodePath("Control/MarginContainer:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -178,7 +178,7 @@ length = 0.25
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Control:position")
+tracks/0/path = NodePath("Control/MarginContainer:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -190,7 +190,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:visible")
+tracks/1/path = NodePath("Control/MarginContainer:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -206,7 +206,7 @@ length = 0.25
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Control:position")
+tracks/0/path = NodePath("Control/MarginContainer:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -218,7 +218,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:visible")
+tracks/1/path = NodePath("Control/MarginContainer:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -234,7 +234,7 @@ length = 0.25
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Control:position")
+tracks/0/path = NodePath("Control/MarginContainer:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -246,7 +246,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:visible")
+tracks/1/path = NodePath("Control/MarginContainer:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -278,27 +278,45 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 648.0
-offset_bottom = 648.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 theme = ExtResource("2_6jnyg")
 
-[node name="Panel" type="Panel" parent="Control"]
-clip_contents = true
+[node name="ProgressBar" type="ProgressBar" parent="Control"]
+visible = false
+layout_mode = 2
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 121.0
+offset_top = -19.0
+offset_right = 1031.0
+offset_bottom = 32.0
+grow_vertical = 2
+max_value = 1.0
+value = 1.0
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="Control"]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.1
-anchor_top = 0.15
-anchor_right = 0.9
-anchor_bottom = 0.85
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 648.0
+offset_bottom = 648.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="Panel" type="Panel" parent="Control/MarginContainer"]
+layout_mode = 2
 size_flags_vertical = 3
 metadata/_edit_group_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -311,20 +329,20 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_group_ = true
 
-[node name="Label" type="Label" parent="Control/Panel/VBoxContainer"]
+[node name="Label" type="Label" parent="Control/MarginContainer/Panel/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 1
 theme_override_font_sizes/font_size = 36
 text = "Upgrades"
 horizontal_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Control/Panel/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/MarginContainer/Panel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 follow_focus = true
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/Panel/VBoxContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/Panel/VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -333,25 +351,25 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="UpgradeContainer" type="GridContainer" parent="Control/Panel/VBoxContainer/ScrollContainer/MarginContainer"]
+[node name="UpgradeContainer" type="GridContainer" parent="Control/MarginContainer/Panel/VBoxContainer/ScrollContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/Panel/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/Panel/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_top = 35
 theme_override_constants/margin_bottom = 35
 
-[node name="RestockShop" type="Control" parent="Control/Panel/VBoxContainer/MarginContainer"]
+[node name="RestockShop" type="Control" parent="Control/MarginContainer/Panel/VBoxContainer/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.37
 theme = ExtResource("2_6jnyg")
 script = ExtResource("4_7ucpu")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/Panel/VBoxContainer/MarginContainer/RestockShop"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/Panel/VBoxContainer/MarginContainer/RestockShop"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -365,11 +383,11 @@ offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="RestockButton" type="Button" parent="Control/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer"]
+[node name="RestockButton" type="Button" parent="Control/MarginContainer/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer/RestockButton"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer/RestockButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -384,28 +402,28 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer/RestockButton/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer/RestockButton/MarginContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="Name" type="Label" parent="Control/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer/RestockButton/MarginContainer/HBoxContainer"]
+[node name="Name" type="Label" parent="Control/MarginContainer/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer/RestockButton/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 1
 text = "Restock"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Control" type="HBoxContainer" parent="Control/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer"]
+[node name="Control" type="HBoxContainer" parent="Control/MarginContainer/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="Control/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer/Control"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer/Control"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource("5_mt14o")
 
-[node name="PriceLabel" type="Label" parent="Control/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer/Control"]
+[node name="PriceLabel" type="Label" parent="Control/MarginContainer/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer/Control"]
 layout_mode = 2
 text = "1223"
 horizontal_alignment = 1
@@ -416,5 +434,9 @@ libraries = {
 }
 speed_scale = 2.0
 
-[connection signal="pressed" from="Control/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer/RestockButton" to="." method="_on_restock_button_pressed"]
-[connection signal="pressed" from="Control/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer/RestockButton" to="Control/Panel/VBoxContainer/MarginContainer/RestockShop" method="_on_button_pressed"]
+[node name="UnpauseTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="pressed" from="Control/MarginContainer/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer/RestockButton" to="." method="_on_restock_button_pressed"]
+[connection signal="pressed" from="Control/MarginContainer/Panel/VBoxContainer/MarginContainer/RestockShop/VBoxContainer/RestockButton" to="Control/MarginContainer/Panel/VBoxContainer/MarginContainer/RestockShop" method="_on_button_pressed"]
+[connection signal="timeout" from="UnpauseTimer" to="." method="_on_unpause_timer_timeout"]

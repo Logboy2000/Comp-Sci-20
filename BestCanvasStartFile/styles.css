@@ -7,4 +7,5 @@ html, body, canvas {
 #canvas {
     display: block;
     height: 100%;
+    image-rendering: pixelated;
 }

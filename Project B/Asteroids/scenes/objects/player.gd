@@ -41,7 +41,7 @@ const COIN_SOUNDS = [
 
 @export var player_index: int = 1
 @export var keyboard_only_controls = false
-@export var coin_collection_speed: float = 20
+@export var coin_collection_speed: float = -20
 
 @export_group("Health")
 @export var starting_max_hp: int = 20
@@ -117,7 +117,8 @@ func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ability") and state == States.NORMAL and input_direction != Vector2.ZERO:
 		dash()
 	if Input.is_action_just_pressed("die"):
-		hit(max_hp, self)
+		can_die = true
+		die()
 	
 	
 	if can_die:
@@ -153,6 +154,8 @@ func _physics_process(_delta: float) -> void:
 	for body in collection_area.get_overlapping_bodies():
 		if body is Coin:
 			GameManager.change_coins_by(round(Upgrades.get_level("greed") * body.value))
+			#i fucking hate object pooling
+			#GameManager.current_room.coin_pool.add_to_pool(body)
 			body.queue_free()
 			Audio.play_sound(COIN_SOUNDS.pick_random(), 0.9, 1.1)
 
@@ -202,10 +205,10 @@ func hit(damage: int, damage_source_node: Node2D):
 		
 		# Calculate direction away from the damage source
 		var direction_away = (global_position - damage_source_node.global_position).normalized()
-		var knockback_force = 600
+		var owie_knockback_force = 600
 		
 		# Apply knockback to velocity
-		velocity += direction_away * knockback_force
+		velocity += direction_away * owie_knockback_force
 		
 		# Apply damage
 		hp -= damage

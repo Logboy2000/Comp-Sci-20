@@ -184,10 +184,12 @@ func add_default_upgrades() -> void:
 		"Punch",
 		10,
 		1.1,
+		preload("res://assets/sprites/upgrade_icons/punch.png")
 	)
 	add_upgrade(
 		"homing",
 		"Homing",
 		100,
 		1.6,
+		preload("res://assets/sprites/upgrade_icons/homing.png")
 	)

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ptyouhgu3dr6"]
+
+[ext_resource type="Script" path="res://scenes/objects/enemies/worm/worm_boss.gd" id="1_fqlch"]
+
+[node name="WormBoss" type="Node2D"]
+script = ExtResource("1_fqlch")

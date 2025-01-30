@@ -86,12 +86,13 @@ _data = {
 [node name="EndlessMode" instance=ExtResource("1_56is4")]
 script = ExtResource("2_eu4y7")
 asteroid_speed = 10.0
-spawn_delay_seconds = 2.0
-min_spawn_delay_seconds = 0.5
+spawn_delay_seconds = 5.0
+min_spawn_delay_seconds = 1
 room_size = Vector2(1280, 720)
+metadata/_edit_lock_ = true
 
 [node name="DifficultyIncreaseTimer" type="Timer" parent="." index="0"]
-wait_time = 20.0
+wait_time = 60.0
 autostart = true
 
 [node name="SpawnTimer" type="Timer" parent="." index="1"]
@@ -123,7 +124,7 @@ metadata/_edit_lock_ = true
 metadata/_edit_lock_ = true
 
 [node name="Player" parent="Entities" index="0"]
-position = Vector2(962, 533)
+position = Vector2(962, 534)
 metadata/_edit_group_ = true
 
 [node name="FG" parent="." index="4"]
@@ -183,6 +184,7 @@ layout_mode = 1
 offset_right = 48.0
 offset_bottom = 22.0
 script = ExtResource("6_gmyru")
+metadata/_edit_lock_ = true
 
 [node name="TextureRect" type="TextureRect" parent="UI/Control/CoinContainer" index="0"]
 layout_mode = 2
@@ -241,6 +243,9 @@ script = ExtResource("7_cvdda")
 libraries = {
 "": SubResource("AnimationLibrary_uuv2n")
 }
+
+[node name="BulletPool" parent="." index="8"]
+metadata/_edit_lock_ = true
 
 [connection signal="timeout" from="DifficultyIncreaseTimer" to="." method="_on_difficulty_increase_timer_timeout"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]

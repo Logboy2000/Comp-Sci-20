@@ -79,7 +79,7 @@ max_bullet_spread = 100.0
 deceleration = 20.0
 dash_mult = 1.5
 dash_damage = 1.0
-dash_knockback = 100.0
+dash_knockback = 50.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

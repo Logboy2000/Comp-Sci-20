@@ -6,6 +6,9 @@
 
 [node name="Enemy" instance=ExtResource("1_827mr")]
 script = ExtResource("2_fbtf1")
+do_follow = true
+follow_player = false
+rotate_toward_velocity = false
 follow_speed = 1.0
 do_contact_damage = true
 contact_damage = 1
