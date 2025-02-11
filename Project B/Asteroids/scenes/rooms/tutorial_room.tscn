@@ -1,5 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bsq8xkw27hpd6"]
-
-[ext_resource type="PackedScene" uid="uid://b642te4ed7el7" path="res://scenes/rooms/endless_mode.tscn" id="1_uhp6e"]
-
-[node name="TutorialRoom" instance=ExtResource("1_uhp6e")]

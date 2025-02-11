@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bomj1cu58hop0"]
-
-[ext_resource type="Script" path="res://scenes/rooms/intro_room.gd" id="1_jh0ti"]
-
-[node name="IntroRoom" type="Node2D"]
-script = ExtResource("1_jh0ti")

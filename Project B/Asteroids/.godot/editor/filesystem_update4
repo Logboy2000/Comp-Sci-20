@@ -1,7 +1,0 @@
-res://default_bus_layout.tres
-res://scenes/ui/upgrade_menu.tscn
-res://shaders/crt.gdshader
-res://theme.tres
-res://shaders/distortion.gdshader
-res://scenes/objects/destructable_object.tscn
-res://scenes/autoloads/game_manager.gd
