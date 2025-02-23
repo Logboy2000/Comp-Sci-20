@@ -1,5 +1,5 @@
 # Comp-Sci-20  
-## Project List  
+## HTML Projects List  
 
 ### Computer Science 2  
 - [Encryption](https://logboy2000.github.io/Comp-Sci-20/Computer%20Science%202/Encryption/)  
