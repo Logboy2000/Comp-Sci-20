@@ -1,4 +1,6 @@
 # Comp-Sci-20  
+Contains my Computer Science 20 project source code 
+
 ## HTML Projects List  
 
 ### Computer Science 2  
